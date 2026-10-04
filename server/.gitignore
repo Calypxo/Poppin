@@ -1,20 +1,26 @@
+# Dependencies
 node_modules/
 client/node_modules/
 server/node_modules/
 
+# Environment / secrets
 .env
 client/.env
 server/.env
 .env.local
 .env.*.local
 
+# Build output
 dist/
 client/dist/
+server/dist/
 
+# Logs
 *.log
 npm-debug.log*
 
-.DS_Store
-Thumbs.db
+# Editor / OS
 .vscode/
 .idea/
+.DS_Store
+Thumbs.db
