@@ -1,45 +1,28 @@
-import type { Category } from "./event";
-
+import type { Category, Event } from "./event";
 export interface VendorApplicationListItem {
   _id: string;
-
+  user?: string;
+  event?: string;
   applicationCode: string;
-
   businessName: string;
-
   representativeName: string;
-
   email: string;
-
   contactNumber: string;
-
   category: Category;
-
   products: string;
-
   businessDescription: string;
-
   socialMedia: string;
-
   notes: string;
-
-  status:
-    | "pending"
-    | "approved"
-    | "rejected"
-    | "withdrawn";
-
+  status: "pending" | "accepted" | "rejected" | "withdrawn";
   organizerRemarks: string;
-
   reviewedAt: string | null;
-
   createdAt: string;
   updatedAt: string;
-
+  vendor?: { _id: string; businessName: string; logoUrl: string; user: string };
   vendorCall: {
     _id: string;
     title: string;
-    event: string;
+    event: Event;
     applicationStartDate: string;
     applicationDeadline: string;
     totalSlots: number;
@@ -48,50 +31,13 @@ export interface VendorApplicationListItem {
   };
 }
 
-export interface TrackedApplication {
-  applicationCode: string;
-
+export interface VendorLineupItem {
+  _id: string;
   businessName: string;
-
-  representativeName: string;
-
-  category: {
-    _id: string;
-    name: string;
-  };
-
-  status:
-    | "pending"
-    | "approved"
-    | "rejected"
-    | "withdrawn";
-
-  organizerRemarks: string;
-
-  reviewedAt: string | null;
-
-  submittedAt: string;
-
-  vendorCall: {
-    _id: string;
-
-    title: string;
-
-    applicationStartDate: string;
-
-    applicationDeadline: string;
-
-    boothFee: number;
-
-    status: string;
-
-    event: {
-      _id: string;
-      title: string;
-      startDate: string;
-      endDate: string;
-      startTime: string;
-      endTime: string;
-    };
-  };
+  category: Category | null;
+  products: string;
+  description: string;
+  socialMedia?: string;
+  logoUrl?: string;
+  vendorId?: string;
 }

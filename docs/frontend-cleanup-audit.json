@@ -1,0 +1,18 @@
+{
+  "recordedAt": "2026-10-07T14:22:39.418Z",
+  "temporaryAccountsRemoved": 10,
+  "temporaryOrganizerProfilesRemoved": 3,
+  "temporaryVendorProfilesRemoved": 5,
+  "temporaryEventsRemoved": 2,
+  "temporaryCallsRemoved": 2,
+  "temporaryPostsRemoved": 3,
+  "temporaryApplicationsRemoved": 7,
+  "temporaryCategoriesRemoved": 1,
+  "temporaryVenuesRemoved": 1,
+  "temporaryUploadsRemoved": 5,
+  "originalEventsPreserved": 16,
+  "originalPublishedEventsPreserved": 13,
+  "originalEventIdsHashBefore": "29037a12afe19d875204fb3906647b614e2a122dbde27924ca673f8d81f96a1a",
+  "originalEventIdsHashAfter": "29037a12afe19d875204fb3906647b614e2a122dbde27924ca673f8d81f96a1a",
+  "remainingQaAccounts": 0
+}

@@ -1,131 +1,53 @@
-import {
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-
-import {
-  Link,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
-
-import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
-
 import api from "../../api/client";
-
+import { localDateKey } from "../../components/home/weeklyCalendar";
+import FieldGroup from "../../components/forms/FieldGroup";
+import ImageUploader from "../../components/forms/ImageUploader";
 import {
-  uploadImage,
-} from "../../services/uploadService";
-
-import type {
-  Category,
-  Event,
-  Venue,
-} from "../../types/event";
-
-import {
-  eventSchema,
-  type EventFormData,
-} from "../../schemas/eventSchema";
-
+  Input,
+  Textarea,
+  Select,
+  Checkbox,
+} from "../../components/ui/FormControls";
+import Button from "../../components/ui/Button";
+import Alert from "../../components/ui/Alert";
+import { LoadingState, ErrorState } from "../../components/ui/States";
+import { PageContainer, PageHeader } from "../../components/layout/Page";
+import { useUI } from "../../components/ui/context";
+import { useAuth } from "../../auth/context";
+import useResource, { errorMessage } from "../../hooks/useResource";
+import StatusBadge from "../../components/shared/StatusBadge";
+import type { Category, Event, Venue } from "../../types/event";
+import { eventSchema, type EventFormData } from "../../schemas/eventSchema";
+function timeForInput(value: string) {
+  const match = value.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+  if (!match) return /^\d{2}:\d{2}$/.test(value) ? value : "";
+  const hour =
+    (Number(match[1]) % 12) + (match[3].toUpperCase() === "PM" ? 12 : 0);
+  return String(hour).padStart(2, "0") + ":" + match[2];
+}
 export default function OrganizerEventFormPage() {
-  const navigate =
-    useNavigate();
-
-  const { eventId } =
-    useParams();
-
-  const [searchParams] =
-    useSearchParams();
-
-  const organizerId =
-    searchParams.get(
-      "organizerId"
-    ) || "";
-
-  const isEditing =
-    Boolean(eventId);
-
-  const fileInputRef =
-    useRef<HTMLInputElement | null>(
-      null
-    );
-
-  const [venues, setVenues] =
-    useState<Venue[]>([]);
-
-  const [
-    categories,
-    setCategories,
-  ] =
-    useState<Category[]>([]);
-
-  const [
-    currentEvent,
-    setCurrentEvent,
-  ] =
-    useState<Event | null>(
-      null
-    );
-
-  const [loading, setLoading] =
-    useState(true);
-
-  const [
-    pageError,
-    setPageError,
-  ] =
-    useState("");
-
-  const [
-    submitError,
-    setSubmitError,
-  ] =
-    useState("");
-
-  const [
-    successMessage,
-    setSuccessMessage,
-  ] =
-    useState("");
-
-  const [
-    posterError,
-    setPosterError,
-  ] =
-    useState("");
-
-  const [
-    uploadingPoster,
-    setUploadingPoster,
-  ] =
-    useState(false);
-
-  const [action, setAction] =
-    useState<
-      "save" | "submit"
-    >("save");
-
+  const navigate = useNavigate();
+  const { eventId } = useParams();
+  const { user } = useAuth();
+  const { toast } = useUI();
+  const venues = useResource<Venue[]>("/venues");
+  const categories = useResource<Category[]>("/categories");
+  const current = useResource<Event>(eventId ? `/events/${eventId}` : null);
+  const [error, setError] = useState("");
+  const [uploading, setUploading] = useState(false);
   const {
     register,
     handleSubmit,
     reset,
     setValue,
-    watch,
-    formState: {
-      errors,
-      isSubmitting,
-    },
+    control,
+    formState: { errors, isSubmitting },
   } = useForm<EventFormData>({
-    resolver:
-      zodResolver(
-        eventSchema
-      ),
-
+    resolver: zodResolver(eventSchema),
     defaultValues: {
       title: "",
       description: "",
@@ -138,1122 +60,183 @@ export default function OrganizerEventFormPage() {
       posterUrl: "",
     },
   });
-
-  const posterUrl =
-    watch("posterUrl");
-
-  // ----------------------------------------------------
-  // FORMAT DATE FOR HTML DATE INPUT
-  // ----------------------------------------------------
-  function formatDateForInput(
-    dateValue: string
-  ) {
-    return new Date(
-      dateValue
-    )
-      .toISOString()
-      .split("T")[0];
-  }
-
-  // ----------------------------------------------------
-  // LOAD VENUES, CATEGORIES, EVENT
-  // ----------------------------------------------------
+  const poster = useWatch({ control, name: "posterUrl" });
   useEffect(() => {
-    async function loadData() {
-      try {
-        setLoading(true);
-        setPageError("");
-
-        const [
-          venueResponse,
-          categoryResponse,
-        ] =
-          await Promise.all([
-            api.get<Venue[]>(
-              "/venues"
-            ),
-
-            api.get<Category[]>(
-              "/categories"
-            ),
-          ]);
-
-        setVenues(
-          venueResponse.data
-        );
-
-        setCategories(
-          categoryResponse.data
-        );
-
-        if (eventId) {
-          const eventResponse =
-            await api.get<Event>(
-              `/events/${eventId}`
-            );
-
-          const event =
-            eventResponse.data;
-
-          setCurrentEvent(
-            event
-          );
-
-          reset({
-            title:
-              event.title,
-
-            description:
-              event.description,
-
-            venue:
-              event.venue
-                ?._id || "",
-
-            categories:
-              event.categories?.map(
-                (category) =>
-                  category._id
-              ) || [],
-
-            startDate:
-              formatDateForInput(
-                event.startDate
-              ),
-
-            endDate:
-              formatDateForInput(
-                event.endDate
-              ),
-
-            startTime:
-              event.startTime,
-
-            endTime:
-              event.endTime,
-
-            posterUrl:
-              event.posterUrl ||
-              "",
-          });
-        }
-      } catch (err) {
-        console.error(
-          "Failed to load event form:",
-          err
-        );
-
-        setPageError(
-          "Unable to load event form."
-        );
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    loadData();
-  }, [
-    eventId,
-    reset,
-  ]);
-
-  // ----------------------------------------------------
-  // SELECT AND UPLOAD POSTER
-  // ----------------------------------------------------
-  async function handlePosterChange(
-    event:
-      React.ChangeEvent<HTMLInputElement>
-  ) {
-    const file =
-      event.target.files?.[0];
-
-    if (!file) {
-      return;
-    }
-
-    setPosterError("");
-    setSubmitError("");
-    setSuccessMessage("");
-
-    const allowedTypes = [
-      "image/jpeg",
-      "image/png",
-      "image/webp",
-    ];
-
-    if (
-      !allowedTypes.includes(
-        file.type
-      )
-    ) {
-      setPosterError(
-        "Only JPG, PNG, and WEBP images are allowed."
-      );
-
-      event.target.value =
-        "";
-
-      return;
-    }
-
-    const maxFileSize =
-      10 * 1024 * 1024;
-
-    if (
-      file.size >
-      maxFileSize
-    ) {
-      setPosterError(
-        "Image must be 10 MB or smaller."
-      );
-
-      event.target.value =
-        "";
-
-      return;
-    }
-
+    const event = current.data;
+    if (!event) return;
+    reset({
+      title: event.title,
+      description: event.description,
+      venue: event.venue?._id || "",
+      categories: event.categories?.map((category) => category._id) || [],
+      startDate: localDateKey(event.startDate),
+      endDate: localDateKey(event.endDate),
+      startTime: timeForInput(event.startTime),
+      endTime: timeForInput(event.endTime),
+      posterUrl: event.posterUrl || "",
+    });
+  }, [current.data, reset]);
+  async function save(data: EventFormData, publish: boolean) {
+    if (uploading) return;
+    setError("");
     try {
-      setUploadingPoster(
-        true
-      );
-
-      const result =
-        await uploadImage(
-          file
-        );
-
-      setValue(
-        "posterUrl",
-        result.secureUrl,
-        {
-          shouldDirty:
-            true,
-
-          shouldValidate:
-            true,
-        }
-      );
-
-      setSuccessMessage(
-        "Event poster uploaded successfully."
-      );
-    } catch (err) {
-      console.error(
-        "Poster upload failed:",
-        err
-      );
-
-      if (
-        axios.isAxiosError(
-          err
-        )
-      ) {
-        setPosterError(
-          err.response?.data
-            ?.message ||
-            "Unable to upload event poster."
-        );
-      } else {
-        setPosterError(
-          "Unable to upload event poster."
-        );
-      }
-    } finally {
-      setUploadingPoster(
-        false
-      );
-
-      event.target.value =
-        "";
-    }
-  }
-
-  // ----------------------------------------------------
-  // REMOVE POSTER
-  // ----------------------------------------------------
-  function removePoster() {
-    setValue(
-      "posterUrl",
-      "",
-      {
-        shouldDirty:
-          true,
-
-        shouldValidate:
-          true,
-      }
-    );
-
-    setPosterError("");
-    setSuccessMessage(
-      "Poster removed from this event."
-    );
-
-    if (
-      fileInputRef.current
-    ) {
-      fileInputRef.current.value =
-        "";
-    }
-  }
-
-  // ----------------------------------------------------
-  // SAVE / SUBMIT EVENT
-  // ----------------------------------------------------
-  async function onSubmit(
-    data: EventFormData
-  ) {
-    if (!organizerId) {
-      setSubmitError(
-        "Organizer is missing."
-      );
-
-      return;
-    }
-
-    if (
-      uploadingPoster
-    ) {
-      setSubmitError(
-        "Please wait for the poster upload to finish."
-      );
-
-      return;
-    }
-
-    try {
-      setSubmitError("");
-      setSuccessMessage("");
-
       const payload = {
-        title:
-          data.title,
-
-        description:
-          data.description,
-
-        organizer:
-          organizerId,
-
-        venue:
-          data.venue,
-
-        categories:
-          data.categories,
-
-        startDate:
-          data.startDate,
-
-        endDate:
-          data.endDate,
-
-        startTime:
-          data.startTime,
-
-        endTime:
-          data.endTime,
-
-        posterUrl:
-          data.posterUrl ||
-          "",
+        ...data,
+        organizer: user?.organizerId,
+        posterUrl: data.posterUrl || "",
       };
-
-      let savedEvent:
-        Event;
-
-      // ----------------------------------------------
-      // EDIT EVENT
-      // ----------------------------------------------
-      if (eventId) {
-        const response =
-          await api.patch<Event>(
-            `/events/${eventId}`,
-            payload
-          );
-
-        savedEvent =
-          response.data;
-      }
-
-      // ----------------------------------------------
-      // CREATE EVENT
-      // ----------------------------------------------
-      else {
-        const response =
-          await api.post<Event>(
-            "/events",
-            payload
-          );
-
-        savedEvent =
-          response.data;
-      }
-
-      // ----------------------------------------------
-      // SUBMIT FOR ADMIN REVIEW
-      // ----------------------------------------------
-      if (
-        action ===
-        "submit"
-      ) {
-        await api.patch(
-          `/events/${savedEvent._id}/status`,
-          {
-            status:
-              "pending",
-          }
-        );
-
-        setSuccessMessage(
-          "Event submitted for admin review."
-        );
-      } else {
-        if (
-          isEditing &&
-          currentEvent?.status ===
-            "published"
-        ) {
-          setSuccessMessage(
-            "Event updated and sent back for admin review."
-          );
-        } else {
-          setSuccessMessage(
-            isEditing
-              ? "Event updated successfully."
-              : "Event saved as draft."
-          );
-        }
-      }
-
-      setTimeout(() => {
-        navigate(
-          `/organizer?organizerId=${organizerId}`
-        );
-      }, 700);
-    } catch (err) {
-      console.error(
-        "Failed to save event:",
-        err
+      const saved = eventId
+        ? (await api.patch<Event>(`/events/${eventId}`, payload)).data
+        : (await api.post<Event>("/events", payload)).data;
+      if (publish)
+        await api.patch(`/events/${saved._id}/status`, { status: "published" });
+      toast.success(
+        publish
+          ? "Your event is live. See you at the market!"
+          : eventId
+            ? "Event updated."
+            : "Your draft is saved.",
       );
-
-      if (
-        axios.isAxiosError(
-          err
-        )
-      ) {
-        setSubmitError(
-          err.response?.data
-            ?.message ||
-            "Unable to save event."
-        );
-      } else {
-        setSubmitError(
-          "Unable to save event."
-        );
-      }
+      navigate(`/events/${saved._id}`);
+    } catch (err) {
+      setError(errorMessage(err));
     }
   }
-
-  // ----------------------------------------------------
-  // LOADING
-  // ----------------------------------------------------
-  if (loading) {
-    return (
-      <main
-        style={{
-          maxWidth:
-            "850px",
-
-          margin:
-            "0 auto",
-
-          padding:
-            "40px 24px",
-        }}
-      >
-        <p>
-          Loading event
-          form...
-        </p>
-      </main>
-    );
-  }
-
-  // ----------------------------------------------------
-  // PAGE ERROR
-  // ----------------------------------------------------
-  if (pageError) {
-    return (
-      <main
-        style={{
-          maxWidth:
-            "850px",
-
-          margin:
-            "0 auto",
-
-          padding:
-            "40px 24px",
-        }}
-      >
-        <p>
-          {pageError}
-        </p>
-      </main>
-    );
-  }
-
+  const loading = venues.loading || categories.loading || current.loading;
+  const loadError =
+    venues.error ||
+    categories.error ||
+    current.error ||
+    (current.data?.status === "cancelled"
+      ? "Cancelled events cannot be edited."
+      : "") ||
+    (current.data && current.data.organizer.user !== user?._id
+      ? "You can only edit your own events."
+      : "");
   return (
-    <main
-      style={{
-        maxWidth:
-          "850px",
-
-        margin:
-          "0 auto",
-
-        padding:
-          "40px 24px",
-      }}
-    >
-      <Link
-        to={`/organizer?organizerId=${organizerId}`}
-      >
-        ← Back to
-        Dashboard
-      </Link>
-
-      <header
-        style={{
-          marginTop:
-            "28px",
-        }}
-      >
-        <h1>
-          {isEditing
-            ? "Edit Event"
-            : "Create Event"}
-        </h1>
-
-        {currentEvent && (
-          <p>
-            Current Status:{" "}
-            <strong>
-              {
-                currentEvent.status
-              }
-            </strong>
-          </p>
-        )}
-      </header>
-
-      {successMessage && (
-        <div
-          style={{
-            padding:
-              "14px",
-
-            marginTop:
-              "20px",
-
-            background:
-              "#f1fff3",
-
-            border:
-              "1px solid #b7d8ba",
-
-            borderRadius:
-              "10px",
+    <PageContainer width="form">
+      <Link to="/my-events">← Back to my events</Link>
+      <PageHeader
+        eyebrow="Make room for something local"
+        title={eventId ? "Edit your event" : "Create an event"}
+        description="Set the scene, save your draft, and share it with your local circle when you’re ready."
+      />
+      {loading ? (
+        <LoadingState label="Preparing your event notes…" />
+      ) : loadError ? (
+        <ErrorState
+          description={loadError}
+          onRetry={() => {
+            venues.reload();
+            categories.reload();
+            current.reload();
           }}
-        >
-          {successMessage}
-        </div>
-      )}
-
-      {submitError && (
-        <div
-          style={{
-            padding:
-              "14px",
-
-            marginTop:
-              "20px",
-
-            background:
-              "#fff4f4",
-
-            border:
-              "1px solid #e0b4b4",
-
-            borderRadius:
-              "10px",
-          }}
-        >
-          {submitError}
-        </div>
-      )}
-
-      <form
-        onSubmit={
-          handleSubmit(
-            onSubmit
-          )
-        }
-        style={{
-          marginTop:
-            "28px",
-
-          padding:
-            "28px",
-
-          background:
-            "white",
-
-          border:
-            "1px solid #ddd",
-
-          borderRadius:
-            "16px",
-        }}
-      >
-        {/* TITLE */}
-        <FieldGroup
-          label="Event Title"
-          error={
-            errors.title
-              ?.message
-          }
-        >
-          <input
-            {...register(
-              "title"
-            )}
-            style={
-              inputStyle
-            }
-          />
-        </FieldGroup>
-
-        {/* DESCRIPTION */}
-        <FieldGroup
-          label="Description"
-          error={
-            errors.description
-              ?.message
-          }
-        >
-          <textarea
-            rows={6}
-            {...register(
-              "description"
-            )}
-            style={
-              inputStyle
-            }
-          />
-        </FieldGroup>
-
-        {/* VENUE */}
-        <FieldGroup
-          label="Venue"
-          error={
-            errors.venue
-              ?.message
-          }
-        >
-          <select
-            {...register(
-              "venue"
-            )}
-            style={
-              inputStyle
-            }
-          >
-            <option value="">
-              Select venue
-            </option>
-
-            {venues.map(
-              (venue) => (
-                <option
-                  key={
-                    venue._id
-                  }
-                  value={
-                    venue._id
-                  }
-                >
-                  {
-                    venue.name
-                  }{" "}
-                  -{" "}
-                  {
-                    venue.city
-                  }
-                </option>
-              )
-            )}
-          </select>
-        </FieldGroup>
-
-        {/* CATEGORIES */}
-        <FieldGroup
-          label="Categories"
-          error={
-            errors.categories
-              ?.message
-          }
-        >
-          <div
-            style={{
-              display:
-                "grid",
-
-              gap:
-                "8px",
-            }}
-          >
-            {categories.map(
-              (
-                category
-              ) => (
-                <label
-                  key={
-                    category._id
-                  }
-                >
-                  <input
-                    type="checkbox"
-                    value={
-                      category._id
-                    }
-                    {...register(
-                      "categories"
-                    )}
-                  />{" "}
-                  {
-                    category.name
-                  }
-                </label>
-              )
-            )}
-          </div>
-        </FieldGroup>
-
-        {/* START DATE */}
-        <FieldGroup
-          label="Start Date"
-          error={
-            errors.startDate
-              ?.message
-          }
-        >
-          <input
-            type="date"
-            {...register(
-              "startDate"
-            )}
-            style={
-              inputStyle
-            }
-          />
-        </FieldGroup>
-
-        {/* END DATE */}
-        <FieldGroup
-          label="End Date"
-          error={
-            errors.endDate
-              ?.message
-          }
-        >
-          <input
-            type="date"
-            {...register(
-              "endDate"
-            )}
-            style={
-              inputStyle
-            }
-          />
-        </FieldGroup>
-
-        {/* START TIME */}
-        <FieldGroup
-          label="Start Time"
-          error={
-            errors.startTime
-              ?.message
-          }
-        >
-          <input
-            type="time"
-            {...register(
-              "startTime"
-            )}
-            style={
-              inputStyle
-            }
-          />
-        </FieldGroup>
-
-        {/* END TIME */}
-        <FieldGroup
-          label="End Time"
-          error={
-            errors.endTime
-              ?.message
-          }
-        >
-          <input
-            type="time"
-            {...register(
-              "endTime"
-            )}
-            style={
-              inputStyle
-            }
-          />
-        </FieldGroup>
-
-        {/* HIDDEN POSTER URL */}
-        <input
-          type="hidden"
-          {...register(
-            "posterUrl"
-          )}
         />
-
-        {/* EVENT POSTER */}
-        <FieldGroup
-          label="Event Poster"
-          error={
-            errors.posterUrl
-              ?.message
-          }
-        >
-          <div
-            style={{
-              padding:
-                "18px",
-
-              border:
-                "1px solid #ddd",
-
-              borderRadius:
-                "12px",
-
-              background:
-                "#fafafa",
-            }}
-          >
-            {posterUrl ? (
-              <>
-                <img
-                  src={
-                    posterUrl
-                  }
-                  alt="Event poster preview"
-                  style={{
-                    display:
-                      "block",
-
-                    width:
-                      "100%",
-
-                    maxWidth:
-                      "420px",
-
-                    maxHeight:
-                      "420px",
-
-                    objectFit:
-                      "cover",
-
-                    borderRadius:
-                      "12px",
-
-                    marginBottom:
-                      "16px",
-                  }}
-                />
-
-                <div
-                  style={{
-                    display:
-                      "flex",
-
-                    gap:
-                      "10px",
-
-                    flexWrap:
-                      "wrap",
-                  }}
-                >
-                  <button
-                    type="button"
-                    disabled={
-                      uploadingPoster
-                    }
-                    onClick={() =>
-                      fileInputRef.current?.click()
-                    }
-                  >
-                    {uploadingPoster
-                      ? "Uploading..."
-                      : "Change Image"}
-                  </button>
-
-                  <button
-                    type="button"
-                    disabled={
-                      uploadingPoster
-                    }
-                    onClick={
-                      removePoster
-                    }
-                  >
-                    Remove Image
-                  </button>
-                </div>
-              </>
-            ) : (
-              <>
-                <p
-                  style={{
-                    marginTop:
-                      0,
-
-                    marginBottom:
-                      "12px",
-                  }}
-                >
-                  Upload a poster
-                  for this event.
-                </p>
-
-                <button
-                  type="button"
-                  disabled={
-                    uploadingPoster
-                  }
-                  onClick={() =>
-                    fileInputRef.current?.click()
-                  }
-                >
-                  {uploadingPoster
-                    ? "Uploading..."
-                    : "Choose Event Poster"}
-                </button>
-              </>
-            )}
-
-            <input
-              ref={
-                fileInputRef
-              }
-              type="file"
-              accept="image/jpeg,image/png,image/webp"
-              onChange={
-                handlePosterChange
-              }
-              style={{
-                display:
-                  "none",
-              }}
-            />
-
-            <small
-              style={{
-                display:
-                  "block",
-
-                marginTop:
-                  "12px",
-              }}
-            >
-              JPG, PNG, or
-              WEBP. Maximum
-              10 MB.
-            </small>
-
-            {posterError && (
-              <p
-                style={{
-                  color:
-                    "#b42318",
-
-                  fontSize:
-                    "14px",
-
-                  marginTop:
-                    "10px",
-
-                  marginBottom:
-                    0,
-                }}
-              >
-                {
-                  posterError
-                }
-              </p>
-            )}
-
-            {uploadingPoster && (
-              <p
-                style={{
-                  marginBottom:
-                    0,
-
-                  marginTop:
-                    "10px",
-                }}
-              >
-                Uploading poster
-                to Cloudinary...
-              </p>
-            )}
-          </div>
-        </FieldGroup>
-
-        {/* ACTIONS */}
-        <div
-          style={{
-            display:
-              "flex",
-
-            gap:
-              "12px",
-
-            flexWrap:
-              "wrap",
-
-            marginTop:
-              "30px",
-          }}
-        >
-          <button
-            type="submit"
-            disabled={
-              isSubmitting ||
-              uploadingPoster
-            }
-            onClick={() =>
-              setAction(
-                "save"
-              )
-            }
-          >
-            {uploadingPoster
-              ? "Uploading Poster..."
-              : isSubmitting &&
-                  action ===
-                    "save"
-                ? "Saving..."
-                : isEditing
-                  ? "Save Changes"
-                  : "Save Draft"}
-          </button>
-
-          {(currentEvent?.status ===
-            "draft" ||
-            currentEvent?.status ===
-              "rejected" ||
-            !currentEvent) && (
-            <button
-              type="submit"
-              disabled={
-                isSubmitting ||
-                uploadingPoster
-              }
-              onClick={() =>
-                setAction(
-                  "submit"
-                )
-              }
-            >
-              {uploadingPoster
-                ? "Uploading Poster..."
-                : isSubmitting &&
-                    action ===
-                      "submit"
-                  ? "Submitting..."
-                  : "Submit for Review"}
-            </button>
+      ) : (
+        <>
+          {current.data && (
+            <p>
+              Current status: <StatusBadge status={current.data.status} />
+            </p>
           )}
-        </div>
-      </form>
-    </main>
-  );
-}
-
-// ------------------------------------------------------
-// REUSABLE FIELD
-// ------------------------------------------------------
-function FieldGroup({
-  label,
-  error,
-  children,
-}: {
-  label: string;
-  error?: string;
-  children:
-    React.ReactNode;
-}) {
-  return (
-    <div
-      style={{
-        marginBottom:
-          "22px",
-      }}
-    >
-      <label
-        style={{
-          display:
-            "block",
-
-          fontWeight:
-            600,
-
-          marginBottom:
-            "8px",
-        }}
-      >
-        {label}
-      </label>
-
-      {children}
-
-      {error && (
-        <p
-          style={{
-            color:
-              "#b42318",
-
-            fontSize:
-              "14px",
-
-            marginTop:
-              "6px",
-          }}
-        >
-          {error}
-        </p>
+          <form noValidate onSubmit={handleSubmit((data) => save(data, false))}>
+            <section className="poppin-form-section">
+              <h2>The little details</h2>
+              <p>Give your event a name and a story worth showing up for.</p>
+              <FieldGroup label="Event Title" error={errors.title?.message}>
+                <Input {...register("title")} />
+              </FieldGroup>
+              <FieldGroup
+                label="Description"
+                error={errors.description?.message}
+              >
+                <Textarea rows={6} {...register("description")} />
+              </FieldGroup>
+              <FieldGroup label="Venue" error={errors.venue?.message}>
+                <Select {...register("venue")}>
+                  <option value="">Select venue</option>
+                  {venues.data?.map((venue) => (
+                    <option key={venue._id} value={venue._id}>
+                      {venue.name} - {venue.city}
+                    </option>
+                  ))}
+                </Select>
+              </FieldGroup>
+              <FieldGroup label="Categories" error={errors.categories?.message}>
+                <div className="poppin-checkbox-grid">
+                  {categories.data?.map((category) => (
+                    <label key={category._id}>
+                      <Checkbox
+                        value={category._id}
+                        {...register("categories")}
+                      />
+                      {category.name}
+                    </label>
+                  ))}
+                </div>
+              </FieldGroup>
+            </section>
+            <section className="poppin-form-section">
+              <h2>Save the date</h2>
+              <p>Your event dates and hours, in local Pampanga time.</p>
+              <div className="poppin-field-pair">
+                <FieldGroup
+                  label="Start Date"
+                  error={errors.startDate?.message}
+                >
+                  <Input type="date" {...register("startDate")} />
+                </FieldGroup>
+                <FieldGroup label="End Date" error={errors.endDate?.message}>
+                  <Input type="date" {...register("endDate")} />
+                </FieldGroup>
+                <FieldGroup
+                  label="Start Time"
+                  error={errors.startTime?.message}
+                >
+                  <Input type="time" {...register("startTime")} />
+                </FieldGroup>
+                <FieldGroup label="End Time" error={errors.endTime?.message}>
+                  <Input type="time" {...register("endTime")} />
+                </FieldGroup>
+              </div>
+            </section>
+            <input type="hidden" {...register("posterUrl")} />
+            <ImageUploader
+              label="Event Poster"
+              value={poster || ""}
+              onChange={(value) =>
+                setValue("posterUrl", value, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                })
+              }
+              onBusy={setUploading}
+            />
+            {errors.posterUrl?.message && (
+              <Alert variant="error">{errors.posterUrl.message}</Alert>
+            )}
+            {error && <Alert variant="error">{error}</Alert>}
+            <div className="poppin-actions">
+              <Button
+                type="submit"
+                variant="outline"
+                loading={isSubmitting}
+                disabled={uploading}
+              >
+                {eventId ? "Save Changes" : "Save Draft"}
+              </Button>
+              {(!current.data || current.data.status === "draft") && (
+                <Button
+                  disabled={uploading || isSubmitting}
+                  onClick={handleSubmit((data) => save(data, true))}
+                >
+                  Publish Event
+                </Button>
+              )}
+            </div>
+          </form>
+        </>
       )}
-    </div>
+    </PageContainer>
   );
 }
-
-const inputStyle:
-  React.CSSProperties = {
-    width: "100%",
-    padding:
-      "12px 14px",
-    border:
-      "1px solid #ccc",
-    borderRadius:
-      "8px",
-    background:
-      "white",
-  };

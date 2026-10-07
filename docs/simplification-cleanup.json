@@ -1,0 +1,24 @@
+{
+  "checkedAt": "2026-10-07T15:45:43.932Z",
+  "deleted": {
+    "applications": 2,
+    "posts": 0,
+    "calls": 2,
+    "events": 2,
+    "organizers": 2,
+    "vendorProfiles": 0,
+    "users": 2
+  },
+  "cloudResults": [
+    {
+      "publicId": "poppin/events/ir91tdtc1eaiwbehf58v",
+      "result": "ok"
+    }
+  ],
+  "remainingQaUsers": 0,
+  "publicEventsPreserved": true,
+  "publicEvents": 13,
+  "totalEvents": 16,
+  "localQaBrowserClosed": true,
+  "localQaProfileAndCredentialsRemoved": true
+}

@@ -1,0 +1,330 @@
+{
+  "checkedAt": "2026-10-04T18:36:17.540Z",
+  "results": [
+    {
+      "name": "home",
+      "route": "/",
+      "width": 375,
+      "viewport": 375,
+      "scrollWidth": 375,
+      "heading": "What’sPopp’inaround Pampanga?",
+      "overflow": [
+        {
+          "tag": "DIV",
+          "cls": "poppin-marquee flex w-max font-body text-xl italic sm:text-2xl",
+          "text": "WHAT’S POPP’IN?  ✳  WHAT’S NEAR YOU?  ✳  PAMPANGA  ✳  LOCAL FINDS  ✳  ",
+          "right": 2811.25
+        },
+        {
+          "tag": "SPAN",
+          "cls": "whitespace-pre",
+          "text": "WHAT’S POPP’IN?  ✳  WHAT’S NEAR YOU?  ✳  PAMPANGA  ✳  LOCAL FINDS  ✳  ",
+          "right": 1405.625
+        },
+        {
+          "tag": "SPAN",
+          "cls": "whitespace-pre",
+          "text": "WHAT’S POPP’IN?  ✳  WHAT’S NEAR YOU?  ✳  PAMPANGA  ✳  LOCAL FINDS  ✳  ",
+          "right": 2811.25
+        },
+        {
+          "tag": "DIV",
+          "cls": "poppin-banner-image absolute inset-y-0 right-0 w-full opacity-25 sm:w-1/2 sm:opacity-60",
+          "text": "",
+          "right": 396.54214096069336
+        },
+        {
+          "tag": "IMG",
+          "cls": "h-full w-full object-contain ",
+          "text": "",
+          "right": 396.54214096069336
+        }
+      ],
+      "grassTop": 680,
+      "alerts": []
+    },
+    {
+      "name": "discover",
+      "route": "/discover",
+      "width": 375,
+      "viewport": 375,
+      "scrollWidth": 375,
+      "heading": "Discover what’s Popp’in",
+      "overflow": [],
+      "alerts": []
+    },
+    {
+      "name": "event",
+      "route": "/events/6ac2709303d754942083e943",
+      "width": 375,
+      "viewport": 375,
+      "scrollWidth": 375,
+      "heading": "Likha Lokal",
+      "overflow": [],
+      "alerts": []
+    },
+    {
+      "name": "vendor-application",
+      "route": "/vendor-application/6ac1d95e6a014b525e068769",
+      "width": 375,
+      "viewport": 375,
+      "scrollWidth": 375,
+      "heading": "Apply as a Vendor",
+      "overflow": [],
+      "alerts": []
+    },
+    {
+      "name": "track-application",
+      "route": "/track-application",
+      "width": 375,
+      "viewport": 375,
+      "scrollWidth": 375,
+      "heading": "Track Vendor Application",
+      "overflow": [],
+      "alerts": []
+    },
+    {
+      "name": "organizer",
+      "route": "/organizer?organizerId=6ac2708803d754942083e939",
+      "width": 375,
+      "viewport": 375,
+      "scrollWidth": 375,
+      "heading": "Organizer Dashboard",
+      "overflow": [],
+      "alerts": []
+    },
+    {
+      "name": "new-event",
+      "route": "/organizer/events/new?organizerId=6ac2708803d754942083e939",
+      "width": 375,
+      "viewport": 375,
+      "scrollWidth": 375,
+      "heading": "Create Event",
+      "overflow": [],
+      "alerts": []
+    },
+    {
+      "name": "edit-event",
+      "route": "/organizer/events/6ac2709303d754942083e943/edit?organizerId=6ac2708803d754942083e939",
+      "width": 375,
+      "viewport": 375,
+      "scrollWidth": 375,
+      "heading": "Edit Event",
+      "overflow": [],
+      "alerts": []
+    },
+    {
+      "name": "vendor-calls",
+      "route": "/organizer/vendor-calls?organizerId=6ac2708803d754942083e939",
+      "width": 375,
+      "viewport": 375,
+      "scrollWidth": 375,
+      "heading": "Vendor Call Management",
+      "overflow": [],
+      "alerts": []
+    },
+    {
+      "name": "announcements",
+      "route": "/organizer/announcements?organizerId=6ac2708803d754942083e939",
+      "width": 375,
+      "viewport": 375,
+      "scrollWidth": 375,
+      "heading": "Announcement Management",
+      "overflow": [],
+      "alerts": []
+    },
+    {
+      "name": "admin",
+      "route": "/admin",
+      "width": 375,
+      "viewport": 375,
+      "scrollWidth": 375,
+      "heading": "Popp'in Admin Dashboard",
+      "overflow": [],
+      "alerts": []
+    },
+    {
+      "name": "management",
+      "route": "/admin/manage",
+      "width": 375,
+      "viewport": 375,
+      "scrollWidth": 375,
+      "heading": "Manage market details",
+      "overflow": [],
+      "alerts": []
+    },
+    {
+      "name": "not-found",
+      "route": "/nonexistent-page",
+      "width": 375,
+      "viewport": 375,
+      "scrollWidth": 375,
+      "heading": "404",
+      "overflow": [],
+      "alerts": []
+    },
+    {
+      "name": "home",
+      "route": "/",
+      "width": 1425,
+      "viewport": 1440,
+      "scrollWidth": 1425,
+      "heading": "What’sPopp’inaround Pampanga?",
+      "overflow": [
+        {
+          "tag": "DIV",
+          "cls": "poppin-marquee flex w-max font-body text-xl italic sm:text-2xl",
+          "text": "WHAT’S POPP’IN?  ✳  WHAT’S NEAR YOU?  ✳  PAMPANGA  ✳  LOCAL FINDS  ✳  ",
+          "right": 3373.5
+        },
+        {
+          "tag": "SPAN",
+          "cls": "whitespace-pre",
+          "text": "WHAT’S POPP’IN?  ✳  WHAT’S NEAR YOU?  ✳  PAMPANGA  ✳  LOCAL FINDS  ✳  ",
+          "right": 1686.75
+        },
+        {
+          "tag": "SPAN",
+          "cls": "whitespace-pre",
+          "text": "WHAT’S POPP’IN?  ✳  WHAT’S NEAR YOU?  ✳  PAMPANGA  ✳  LOCAL FINDS  ✳  ",
+          "right": 3373.5
+        },
+        {
+          "tag": "DIV",
+          "cls": "poppin-banner-image absolute inset-y-0 right-0 w-full opacity-25 sm:w-1/2 sm:opacity-60",
+          "text": "",
+          "right": 1463.2550048828125
+        },
+        {
+          "tag": "IMG",
+          "cls": "h-full w-full object-contain ",
+          "text": "",
+          "right": 1463.2550048828125
+        }
+      ],
+      "grassTop": 809.5,
+      "alerts": []
+    },
+    {
+      "name": "discover",
+      "route": "/discover",
+      "width": 1425,
+      "viewport": 1440,
+      "scrollWidth": 1425,
+      "heading": "Discover what’s Popp’in",
+      "overflow": [],
+      "alerts": []
+    },
+    {
+      "name": "event",
+      "route": "/events/6ac2709303d754942083e943",
+      "width": 1425,
+      "viewport": 1440,
+      "scrollWidth": 1425,
+      "heading": "Likha Lokal",
+      "overflow": [],
+      "alerts": []
+    },
+    {
+      "name": "vendor-application",
+      "route": "/vendor-application/6ac1d95e6a014b525e068769",
+      "width": 1425,
+      "viewport": 1440,
+      "scrollWidth": 1425,
+      "heading": "Apply as a Vendor",
+      "overflow": [],
+      "alerts": []
+    },
+    {
+      "name": "track-application",
+      "route": "/track-application",
+      "width": 1425,
+      "viewport": 1440,
+      "scrollWidth": 1425,
+      "heading": "Track Vendor Application",
+      "overflow": [],
+      "alerts": []
+    },
+    {
+      "name": "organizer",
+      "route": "/organizer?organizerId=6ac2708803d754942083e939",
+      "width": 1425,
+      "viewport": 1440,
+      "scrollWidth": 1425,
+      "heading": "Organizer Dashboard",
+      "overflow": [],
+      "alerts": []
+    },
+    {
+      "name": "new-event",
+      "route": "/organizer/events/new?organizerId=6ac2708803d754942083e939",
+      "width": 1425,
+      "viewport": 1440,
+      "scrollWidth": 1425,
+      "heading": "Create Event",
+      "overflow": [],
+      "alerts": []
+    },
+    {
+      "name": "edit-event",
+      "route": "/organizer/events/6ac2709303d754942083e943/edit?organizerId=6ac2708803d754942083e939",
+      "width": 1425,
+      "viewport": 1440,
+      "scrollWidth": 1425,
+      "heading": "Edit Event",
+      "overflow": [],
+      "alerts": []
+    },
+    {
+      "name": "vendor-calls",
+      "route": "/organizer/vendor-calls?organizerId=6ac2708803d754942083e939",
+      "width": 1425,
+      "viewport": 1440,
+      "scrollWidth": 1425,
+      "heading": "Vendor Call Management",
+      "overflow": [],
+      "alerts": []
+    },
+    {
+      "name": "announcements",
+      "route": "/organizer/announcements?organizerId=6ac2708803d754942083e939",
+      "width": 1425,
+      "viewport": 1440,
+      "scrollWidth": 1425,
+      "heading": "Announcement Management",
+      "overflow": [],
+      "alerts": []
+    },
+    {
+      "name": "admin",
+      "route": "/admin",
+      "width": 1425,
+      "viewport": 1440,
+      "scrollWidth": 1425,
+      "heading": "Popp'in Admin Dashboard",
+      "overflow": [],
+      "alerts": []
+    },
+    {
+      "name": "management",
+      "route": "/admin/manage",
+      "width": 1425,
+      "viewport": 1440,
+      "scrollWidth": 1425,
+      "heading": "Manage market details",
+      "overflow": [],
+      "alerts": []
+    },
+    {
+      "name": "not-found",
+      "route": "/nonexistent-page",
+      "width": 1440,
+      "viewport": 1440,
+      "scrollWidth": 1440,
+      "heading": "404",
+      "overflow": [],
+      "alerts": []
+    }
+  ],
+  "runtimeErrors": []
+}

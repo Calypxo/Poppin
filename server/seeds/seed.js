@@ -3,6 +3,9 @@ require("dotenv").config();
 const dns = require("dns");
 const mongoose = require("mongoose");
 
+const User = require("../models/User");
+const VendorProfile = require("../models/VendorProfile");
+const bcrypt = require("bcryptjs");
 const Organizer = require("../models/Organizer");
 const Venue = require("../models/Venue");
 const Category = require("../models/Category");
@@ -16,21 +19,38 @@ dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 async function seedDatabase() {
   try {
+    if (
+      !process.env.DEMO_PASSWORD ||
+      process.env.DEMO_PASSWORD.length < 8 ||
+      Buffer.byteLength(process.env.DEMO_PASSWORD) > 72
+    )
+      throw new Error(
+        "Set DEMO_PASSWORD to 8?72 bytes for the optional empty-database seed",
+      );
     await mongoose.connect(process.env.MONGO_URI);
 
     console.log("Connected to MongoDB");
 
-    // Clear existing sample data
-    await VendorApplication.deleteMany({});
-    await VendorCall.deleteMany({});
-    await Announcement.deleteMany({});
-    await Event.deleteMany({});
-    await Category.deleteMany({});
-    await Venue.deleteMany({});
-    await Organizer.deleteMany({});
+    const collections = [
+      User,
+      VendorProfile,
+      Organizer,
+      Venue,
+      Category,
+      Event,
+      Announcement,
+      VendorCall,
+      VendorApplication,
+    ];
+    const existing = await Promise.all(
+      collections.map((model) => model.exists({})),
+    );
+    if (existing.some(Boolean))
+      throw new Error(
+        "Seed requires an empty database. Use a separate demo database to preserve existing records.",
+      );
 
-    console.log("Old data cleared");
-
+    // Existing databases are never cleared or seeded.
     // Categories
     const categories = await Category.insertMany([
       {
@@ -96,40 +116,68 @@ async function seedDatabase() {
 
     console.log("Venues created");
 
+    const passwordHash = await bcrypt.hash(process.env.DEMO_PASSWORD, 12);
+    const users = await User.insertMany([
+      {
+        name: "Demo Explorer",
+        email: "explorer@example.invalid",
+        passwordHash,
+      },
+      {
+        name: "Kulitan Organizer",
+        email: "kulitan@demo.com",
+        passwordHash,
+      },
+      {
+        name: "Weekend Organizer",
+        email: "weekendcollective@demo.com",
+        passwordHash,
+      },
+      {
+        name: "Anna Cruz",
+        email: "matchamama@example.com",
+        passwordHash,
+      },
+      {
+        name: "Mia Santos",
+        email: "bakeandbloom@example.com",
+        passwordHash,
+      },
+    ]);
     // Organizers
     const organizers = await Organizer.insertMany([
       {
+        user: users[1]._id,
         name: "Kulitan Flea Market",
         description: "Community flea market organizer in Pampanga.",
         email: "kulitan@demo.com",
         contactNumber: "09123456781",
         city: "Angeles City",
         socialMedia: "@kulitan.demo",
-        status: "verified",
       },
       {
+        user: users[2]._id,
         name: "Pampanga Weekend Collective",
         description: "Organizer of local markets and community pop-up events.",
         email: "weekendcollective@demo.com",
         contactNumber: "09123456782",
         city: "City of San Fernando",
         socialMedia: "@weekendcollective.demo",
-        status: "verified",
       },
     ]);
 
     console.log("Organizers created");
 
     const fleaMarketCategory = categories.find(
-      (category) => category.name === "Flea Market"
+      (category) => category.name === "Flea Market",
     );
 
     const foodCategory = categories.find(
-      (category) => category.name === "Food & Drinks"
+      (category) => category.name === "Food & Drinks",
     );
 
     const matchaCategory = categories.find(
-      (category) => category.name === "Coffee & Matcha"
+      (category) => category.name === "Coffee & Matcha",
     );
 
     // Events
@@ -210,7 +258,7 @@ async function seedDatabase() {
     console.log("Vendor call created");
 
     // Sample Vendor Applications
-    await VendorApplication.insertMany([
+    const applications = [
       {
         vendorCall: vendorCall._id,
         applicationCode: "POP-APP-0001",
@@ -237,11 +285,16 @@ async function seedDatabase() {
         businessDescription:
           "A Pampanga-based home bakery specializing in fresh pastries.",
         socialMedia: "@bakeandbloom",
-        status: "approved",
-        organizerRemarks: "Approved for Matcha Fest.",
+        status: "accepted",
+        organizerRemarks: "Accepted for Matcha Fest.",
         reviewedAt: new Date(),
       },
-    ]);
+    ];
+    for (const [index, application] of applications.entries()) {
+      application.user = users[3 + index]._id;
+      application.event = vendorCall.event;
+    }
+    await VendorApplication.insertMany(applications);
 
     console.log("Vendor applications created");
 

@@ -1,803 +1,240 @@
-const express = require("express");
-
-const VendorApplication = require(
-  "../models/VendorApplication"
-);
-
-const VendorCall = require(
-  "../models/VendorCall"
-);
-
-const Category = require(
-  "../models/Category"
-);
-
-// Register referenced model
-require("../models/Event");
-
+﻿const express = require("express");
+const mongoose = require("mongoose");
+const { randomUUID } = require("node:crypto");
+const Application = require("../models/VendorApplication");
+const Call = require("../models/VendorCall");
+const Category = require("../models/Category");
+const { requireAuth } = require("../middleware/auth");
+const {
+  fail,
+  ownedEvent,
+  ownEventIds,
+  emailPattern,
+} = require("../utils/access");
+const {
+  applicantFilter,
+  applicationEventFilter,
+} = require("../utils/applicationAccess");
+const { callAvailability } = require("../utils/callAvailability");
 const router = express.Router();
-
-// ------------------------------------------------------
-// HELPER: POPULATE APPLICATION
-// ------------------------------------------------------
-async function getPopulatedApplication(
-  applicationId
-) {
-  return VendorApplication.findById(
-    applicationId
-  )
-    .populate(
-      "category",
-      "name"
-    )
+router.use(requireAuth);
+const populate = (query) =>
+  query
+    .populate("category")
+    .populate("vendor", "businessName logoUrl user")
     .populate({
       path: "vendorCall",
-      select:
-        "title event applicationStartDate applicationDeadline totalSlots boothFee boothSize status isActive",
       populate: {
         path: "event",
-        select:
-          "title startDate endDate startTime endTime status",
+        populate: { path: "organizer", select: "name user logoUrl" },
       },
     });
-}
-
-// ------------------------------------------------------
-// HELPER: GET VENDOR CALL + EVENT
-// ------------------------------------------------------
-async function getVendorCallWithEvent(
-  vendorCallId
-) {
-  return VendorCall.findById(
-    vendorCallId
-  ).populate(
-    "event",
-    "title startDate endDate startTime endTime status"
-  );
-}
-
-// ------------------------------------------------------
-// HELPER: CHECK APPLICATION WINDOW
-// ------------------------------------------------------
-function checkApplicationWindow(
-  vendorCall
-) {
-  const now = new Date();
-
-  const startDate = new Date(
-    vendorCall.applicationStartDate
-  );
-
-  const deadline = new Date(
-    vendorCall.applicationDeadline
-  );
-
-  if (now < startDate) {
-    return {
-      valid: false,
-      message:
-        "Vendor applications have not opened yet",
-    };
-  }
-
-  if (now > deadline) {
-    return {
-      valid: false,
-      message:
-        "Vendor application deadline has passed",
-    };
-  }
-
+function serialize(app) {
   return {
-    valid: true,
+    ...app.toObject(),
+    status: app.status === "approved" ? "accepted" : app.status,
   };
 }
-
-// ------------------------------------------------------
-// HELPER: CHECK VENDOR CALL CAN ACCEPT APPLICATIONS
-// ------------------------------------------------------
-async function validateVendorCallForApplication(
-  vendorCall
-) {
-  if (!vendorCall) {
-    return {
-      valid: false,
-      status: 404,
-      message:
-        "Vendor call not found",
-    };
-  }
-
-  // ----------------------------------------------
-  // PARENT EVENT MUST STILL BE PUBLISHED
-  // ----------------------------------------------
+async function ownApplication(user, app) {
+  if (!app) fail(404, "Application not found");
   if (
-    !vendorCall.event ||
-    vendorCall.event.status !==
-      "published"
-  ) {
-    return {
-      valid: false,
-      status: 400,
-      message:
-        "Vendor applications are unavailable because the event is not currently published",
-    };
-  }
-
-  // ----------------------------------------------
-  // VENDOR CALL MUST BE ACTIVE
-  // ----------------------------------------------
-  if (!vendorCall.isActive) {
-    return {
-      valid: false,
-      status: 400,
-      message:
-        "This vendor call is inactive",
-    };
-  }
-
-  // ----------------------------------------------
-  // VENDOR CALL MUST BE OPEN
-  // ----------------------------------------------
+    !(await Application.exists({
+      $and: [{ _id: app._id }, await applicantFilter(user)],
+    }))
+  )
+    fail(403, "You can only change your own applications");
+}
+async function readableApplication(user, app) {
+  if (!app) fail(404, "Application not found");
   if (
-    vendorCall.status !== "open"
-  ) {
-    return {
-      valid: false,
-      status: 400,
-      message:
-        "This vendor call is not open for applications",
-    };
+    await Application.exists({
+      $and: [{ _id: app._id }, await applicantFilter(user)],
+    })
+  )
+    return;
+  const call = await Call.findById(app.vendorCall);
+  if (!call) fail(404, "Vendor call not found");
+  await ownedEvent(user, call.event);
+}
+router.get("/", async (req, res) => {
+  for (const key of ["event", "vendorCall"])
+    if (
+      req.query[key] !== undefined &&
+      !mongoose.isObjectIdOrHexString(req.query[key])
+    )
+      fail(400, `Choose a valid ${key}`);
+  let filter;
+  const view = req.query.view || "outgoing";
+  if (!["outgoing", "incoming"].includes(view))
+    fail(400, "Choose an application view");
+  if (view === "outgoing") {
+    filter = await applicantFilter(req.user);
+  } else {
+    const calls = await Call.find({
+      event: { $in: await ownEventIds(req.user) },
+    }).select("_id");
+    filter = { vendorCall: { $in: calls.map((c) => c._id) } };
   }
-
-  // ----------------------------------------------
-  // APPLICATION DATE MUST BE VALID
-  // ----------------------------------------------
-  const windowCheck =
-    checkApplicationWindow(
-      vendorCall
+  const filters = [filter];
+  if (req.query.vendorCall) filters.push({ vendorCall: req.query.vendorCall });
+  if (req.query.event)
+    filters.push(await applicationEventFilter(req.query.event));
+  res.json(
+    (
+      await populate(
+        Application.find({ $and: filters }).sort({ createdAt: -1 }),
+      )
+    ).map(serialize),
+  );
+});
+router.get("/:id", async (req, res) => {
+  const app = await Application.findById(req.params.id);
+  await readableApplication(req.user, app);
+  res.json(serialize(await populate(Application.findById(app._id))));
+});
+router.post("/", async (req, res) => {
+  if (!mongoose.isObjectIdOrHexString(req.body.vendorCall))
+    fail(400, "Choose a valid vendor call");
+  if (!mongoose.isObjectIdOrHexString(req.body.category))
+    fail(400, "Choose a valid business category");
+  const fields = {};
+  for (const [key, maximum, required] of [
+    ["businessName", 150, true],
+    ["products", 2000, true],
+    ["contactNumber", 50, true],
+    ["email", 254, true],
+    ["businessDescription", 5000, false],
+    ["socialMedia", 500, false],
+    ["notes", 2000, false],
+  ]) {
+    const value = req.body[key] ?? "";
+    if (
+      typeof value !== "string" ||
+      value.length > maximum ||
+      (required && !value.trim())
+    )
+      fail(
+        400,
+        `Provide ${key} of ${required ? "1" : "0"}–${maximum} characters`,
+      );
+    fields[key] = value.trim();
+  }
+  if (!emailPattern.test(fields.email))
+    fail(400, "Provide a valid contact email");
+  if (
+    !req.body.category ||
+    !(await Category.exists({ _id: req.body.category }))
+  )
+    fail(400, "Choose an existing business category");
+  let app;
+  await mongoose.connection.transaction(async (session) => {
+    // Lock recruitment while submitting so close/capacity changes cannot be missed.
+    const call = await Call.findOneAndUpdate(
+      { _id: req.body.vendorCall },
+      { $inc: { __v: 1 } },
+      { new: true, session },
+    ).populate("event");
+    if (!call) fail(404, "Vendor call not found");
+    if (!(await callAvailability(call, session)).availability.canApply)
+      fail(400, "This vendor call is not accepting applications");
+    if (
+      call.acceptedCategories.length &&
+      !call.acceptedCategories.some(
+        (c) => String(c) === String(req.body.category),
+      )
+    )
+      fail(400, "Your business category is not accepted by this event");
+    if (
+      await Application.exists({
+        $and: [
+          await applicantFilter(req.user, session),
+          await applicationEventFilter(call.event._id, session),
+        ],
+      }).session(session)
+    )
+      fail(409, "You already applied to this event");
+    [app] = await Application.create(
+      [
+        {
+          ...fields,
+          user: req.user._id,
+          event: call.event._id,
+          vendorCall: call._id,
+          applicationCode: "POP-" + randomUUID(),
+          representativeName: req.user.name,
+          category: req.body.category,
+          status: "pending",
+        },
+      ],
+      { session },
     );
-
-  if (!windowCheck.valid) {
-    return {
-      valid: false,
-      status: 400,
-      message:
-        windowCheck.message,
-    };
-  }
-
-  // ----------------------------------------------
-  // CHECK REMAINING SLOTS
-  // ----------------------------------------------
-  const approvedCount =
-    await VendorApplication.countDocuments({
-      vendorCall:
-        vendorCall._id,
-
-      status:
-        "approved",
-    });
-
+  });
+  res
+    .status(201)
+    .json(serialize(await populate(Application.findById(app._id))));
+});
+router.patch("/:id/status", async (req, res) => {
+  if (!["accepted", "rejected"].includes(req.body.status))
+    fail(400, "Choose accepted or rejected");
   if (
-    approvedCount >=
-    vendorCall.totalSlots
-  ) {
-    return {
-      valid: false,
-      status: 400,
-      message:
-        "No vendor slots are available",
-    };
-  }
-
-  return {
-    valid: true,
-  };
-}
-
-// ------------------------------------------------------
-// GET ALL VENDOR APPLICATIONS
-// ------------------------------------------------------
-router.get(
-  "/",
-  async (req, res, next) => {
-    try {
-      const applications =
-        await VendorApplication.find()
-          .populate(
-            "category",
-            "name"
-          )
-          .populate({
-            path: "vendorCall",
-            select:
-              "title event applicationStartDate applicationDeadline totalSlots boothFee boothSize status isActive",
-            populate: {
-              path: "event",
-              select:
-                "title startDate endDate startTime endTime status",
-            },
-          })
-          .sort({
-            createdAt: -1,
-          });
-
-      res.status(200).json(
-        applications
-      );
-    } catch (err) {
-      next(err);
+    typeof req.body.organizerRemarks !== "string" ||
+    req.body.organizerRemarks.length > 2000 ||
+    (req.body.status === "rejected" && !req.body.organizerRemarks.trim())
+  )
+    fail(400, "Provide a brief review note (required for rejection)");
+  await mongoose.connection.transaction(async (session) => {
+    const app = await Application.findById(req.params.id).session(session);
+    if (!app) fail(404, "Application not found");
+    if (app.status !== "pending")
+      fail(400, "Only pending applications can be reviewed");
+    // Both competing acceptances write this call, so transaction retry rechecks capacity.
+    const call = await Call.findOneAndUpdate(
+      { _id: app.vendorCall },
+      { $inc: { __v: 1 } },
+      { new: true, session },
+    ).populate("event");
+    if (!call) fail(404, "Vendor call not found");
+    await ownedEvent(req.user, call.event._id, session);
+    if (req.body.status === "accepted") {
+      const available = await callAvailability(call, session);
+      if (available.statistics.slotsRemaining <= 0)
+        fail(400, "No vendor slots remaining for this event.");
+      if (!available.availability.canApply)
+        fail(400, "The vendor call is closed or past its deadline");
     }
+    app.status = req.body.status;
+    app.organizerRemarks = req.body.organizerRemarks.trim();
+    app.reviewedAt = new Date();
+    await app.save({ session });
+  });
+  res.json(serialize(await populate(Application.findById(req.params.id))));
+});
+router.patch("/:id", async (req, res) => {
+  const app = await Application.findById(req.params.id);
+  await ownApplication(req.user, app);
+  if (app.status !== "pending")
+    fail(400, "Only pending applications can be changed");
+  if (req.body.status === "withdrawn") app.status = "withdrawn";
+  else {
+    if (typeof req.body.notes !== "string" || req.body.notes.length > 2000)
+      fail(400, "Provide notes of at most 2000 characters");
+    app.notes = req.body.notes;
   }
-);
-
-// ------------------------------------------------------
-// TRACK APPLICATION
-// IMPORTANT: Keep this BEFORE /:id
-//
-// GET /api/vendor-applications/status
-// ?applicationCode=...
-// &email=...
-// ------------------------------------------------------
-router.get(
-  "/status",
-  async (req, res, next) => {
-    try {
-      const {
-        applicationCode,
-        email,
-      } = req.query;
-
-      if (
-        !applicationCode ||
-        !email
-      ) {
-        return res.status(400).json({
-          message:
-            "Application code and email are required",
-        });
-      }
-
-      const normalizedEmail =
-        String(email)
-          .trim()
-          .toLowerCase();
-
-      const application =
-        await VendorApplication.findOne({
-          applicationCode:
-            String(
-              applicationCode
-            ).trim(),
-
-          email:
-            normalizedEmail,
-        })
-          .populate(
-            "category",
-            "name"
-          )
-          .populate({
-            path: "vendorCall",
-            select:
-              "title event applicationStartDate applicationDeadline totalSlots boothFee boothSize status isActive",
-            populate: {
-              path: "event",
-              select:
-                "title startDate endDate startTime endTime status",
-            },
-          });
-
-      if (!application) {
-        return res.status(404).json({
-          message:
-            "Application not found. Check your application code and email.",
-        });
-      }
-
-      // Return the format expected
-      // by TrackApplicationPage
-      res.status(200).json({
-        applicationCode:
-          application.applicationCode,
-
-        businessName:
-          application.businessName,
-
-        representativeName:
-          application.representativeName,
-
-        category:
-          application.category,
-
-        status:
-          application.status,
-
-        organizerRemarks:
-          application.organizerRemarks ||
-          "",
-
-        reviewedAt:
-          application.reviewedAt ||
-          null,
-
-        submittedAt:
-          application.createdAt,
-
-        vendorCall:
-          application.vendorCall,
-      });
-    } catch (err) {
-      next(err);
-    }
-  }
-);
-
-// ------------------------------------------------------
-// CHANGE APPLICATION STATUS
-// PATCH /api/vendor-applications/:id/status
-// ------------------------------------------------------
-router.patch(
-  "/:id/status",
-  async (req, res, next) => {
-    try {
-      const {
-        status,
-        organizerRemarks,
-      } = req.body;
-
-      if (
-        ![
-          "approved",
-          "rejected",
-        ].includes(status)
-      ) {
-        return res.status(400).json({
-          message:
-            "Status must be approved or rejected",
-        });
-      }
-
-      const application =
-        await VendorApplication.findById(
-          req.params.id
-        );
-
-      if (!application) {
-        return res.status(404).json({
-          message:
-            "Vendor application not found",
-        });
-      }
-
-      // ----------------------------------------------
-      // ONLY PENDING APPLICATIONS CAN BE REVIEWED
-      // ----------------------------------------------
-      if (
-        application.status !==
-        "pending"
-      ) {
-        return res.status(400).json({
-          message:
-            "Only pending applications can be reviewed",
-        });
-      }
-
-      // ----------------------------------------------
-      // APPROVAL NEEDS FULL BUSINESS RULE CHECK
-      // ----------------------------------------------
-      if (
-        status === "approved"
-      ) {
-        const vendorCall =
-          await getVendorCallWithEvent(
-            application.vendorCall
-          );
-
-        const validation =
-          await validateVendorCallForApplication(
-            vendorCall
-          );
-
-        if (!validation.valid) {
-          return res
-            .status(
-              validation.status
-            )
-            .json({
-              message:
-                validation.message,
-            });
-        }
-      }
-
-      // ----------------------------------------------
-      // REJECTION
-      // ----------------------------------------------
-      if (
-        status === "rejected"
-      ) {
-        if (
-          !organizerRemarks ||
-          !organizerRemarks.trim()
-        ) {
-          return res.status(400).json({
-            message:
-              "A rejection reason is required",
-          });
-        }
-      }
-
-      application.status =
-        status;
-
-      application.organizerRemarks =
-        organizerRemarks
-          ? organizerRemarks.trim()
-          : "";
-
-      application.reviewedAt =
-        new Date();
-
-      await application.save();
-
-      const populatedApplication =
-        await getPopulatedApplication(
-          application._id
-        );
-
-      res.status(200).json({
-        message:
-          status === "approved"
-            ? "Vendor application approved successfully"
-            : "Vendor application rejected successfully",
-
-        application:
-          populatedApplication,
-      });
-    } catch (err) {
-      next(err);
-    }
-  }
-);
-
-// ------------------------------------------------------
-// GET ONE APPLICATION
-// ------------------------------------------------------
-router.get(
-  "/:id",
-  async (req, res, next) => {
-    try {
-      const application =
-        await getPopulatedApplication(
-          req.params.id
-        );
-
-      if (!application) {
-        return res.status(404).json({
-          message:
-            "Vendor application not found",
-        });
-      }
-
-      res.status(200).json(
-        application
-      );
-    } catch (err) {
-      next(err);
-    }
-  }
-);
-
-// ------------------------------------------------------
-// CREATE VENDOR APPLICATION
-// ------------------------------------------------------
-router.post(
-  "/",
-  async (req, res, next) => {
-    try {
-      const {
-        vendorCall,
-        businessName,
-        representativeName,
-        email,
-        contactNumber,
-        category,
-        products,
-        businessDescription,
-        socialMedia,
-        notes,
-      } = req.body;
-
-      // ----------------------------------------------
-      // REQUIRED FIELDS
-      // ----------------------------------------------
-      if (!vendorCall) {
-        return res.status(400).json({
-          message:
-            "Vendor call is required",
-        });
-      }
-
-      if (!category) {
-        return res.status(400).json({
-          message:
-            "Category is required",
-        });
-      }
-
-      if (!email) {
-        return res.status(400).json({
-          message:
-            "Email is required",
-        });
-      }
-
-      const normalizedEmail =
-        email
-          .trim()
-          .toLowerCase();
-
-      // ----------------------------------------------
-      // GET VENDOR CALL + PARENT EVENT
-      // ----------------------------------------------
-      const selectedVendorCall =
-        await getVendorCallWithEvent(
-          vendorCall
-        );
-
-      // ----------------------------------------------
-      // IMPORTANT BUSINESS RULES
-      // ----------------------------------------------
-      const validation =
-        await validateVendorCallForApplication(
-          selectedVendorCall
-        );
-
-      if (!validation.valid) {
-        return res
-          .status(
-            validation.status
-          )
-          .json({
-            message:
-              validation.message,
-          });
-      }
-
-      // ----------------------------------------------
-      // CATEGORY MUST BE ACCEPTED
-      // ----------------------------------------------
-      const acceptedCategory =
-        selectedVendorCall.acceptedCategories.some(
-          (acceptedCategoryId) =>
-            acceptedCategoryId.toString() ===
-            category.toString()
-        );
-
-      if (!acceptedCategory) {
-        return res.status(400).json({
-          message:
-            "The selected category is not accepted for this vendor call",
-        });
-      }
-
-      // ----------------------------------------------
-      // CATEGORY MUST EXIST
-      // ----------------------------------------------
-      const categoryExists =
-        await Category.exists({
-          _id: category,
-        });
-
-      if (!categoryExists) {
-        return res.status(404).json({
-          message:
-            "Category not found",
-        });
-      }
-
-      // ----------------------------------------------
-      // PREVENT DUPLICATE APPLICATION
-      // Same email + same Vendor Call
-      // ----------------------------------------------
-      const existingApplication =
-        await VendorApplication.findOne({
-          vendorCall:
-            selectedVendorCall._id,
-
-          email:
-            normalizedEmail,
-        });
-
-      if (existingApplication) {
-        return res.status(400).json({
-          message:
-            "This email has already submitted an application for this vendor call",
-        });
-      }
-
-      // ----------------------------------------------
-      // GENERATE TRACKING CODE
-      // ----------------------------------------------
-      const applicationCode =
-        `POP-APP-${Date.now()}`;
-
-      // ----------------------------------------------
-      // CREATE APPLICATION
-      // Client cannot control:
-      // - status
-      // - applicationCode
-      // - reviewedAt
-      // - organizerRemarks
-      // ----------------------------------------------
-      const application =
-        await VendorApplication.create({
-          vendorCall:
-            selectedVendorCall._id,
-
-          applicationCode,
-
-          businessName,
-
-          representativeName,
-
-          email:
-            normalizedEmail,
-
-          contactNumber,
-
-          category,
-
-          products,
-
-          businessDescription,
-
-          socialMedia:
-            socialMedia || "",
-
-          notes:
-            notes || "",
-
-          status:
-            "pending",
-
-          organizerRemarks:
-            "",
-
-          reviewedAt:
-            null,
-        });
-
-      const populatedApplication =
-        await getPopulatedApplication(
-          application._id
-        );
-
-      res.status(201).json(
-        populatedApplication
-      );
-    } catch (err) {
-      next(err);
-    }
-  }
-);
-
-// ------------------------------------------------------
-// UPDATE APPLICATION DETAILS
-// ------------------------------------------------------
-router.patch(
-  "/:id",
-  async (req, res, next) => {
-    try {
-      const application =
-        await VendorApplication.findById(
-          req.params.id
-        );
-
-      if (!application) {
-        return res.status(404).json({
-          message:
-            "Vendor application not found",
-        });
-      }
-
-      // Only pending applications
-      // should have editable details.
-      if (
-        application.status !==
-        "pending"
-      ) {
-        return res.status(400).json({
-          message:
-            "Only pending applications can be edited",
-        });
-      }
-
-      const updates = {
-        ...req.body,
-      };
-
-      // ----------------------------------------------
-      // PROTECT SYSTEM-CONTROLLED FIELDS
-      // ----------------------------------------------
-      delete updates.vendorCall;
-      delete updates.applicationCode;
-      delete updates.status;
-      delete updates.organizerRemarks;
-      delete updates.reviewedAt;
-
-      if (updates.email) {
-        updates.email =
-          updates.email
-            .trim()
-            .toLowerCase();
-      }
-
-      Object.assign(
-        application,
-        updates
-      );
-
-      await application.save();
-
-      const populatedApplication =
-        await getPopulatedApplication(
-          application._id
-        );
-
-      res.status(200).json(
-        populatedApplication
-      );
-    } catch (err) {
-      next(err);
-    }
-  }
-);
-
-// ------------------------------------------------------
-// DELETE APPLICATION
-// ------------------------------------------------------
-router.delete(
-  "/:id",
-  async (req, res, next) => {
-    try {
-      const application =
-        await VendorApplication.findById(
-          req.params.id
-        );
-
-      if (!application) {
-        return res.status(404).json({
-          message:
-            "Vendor application not found",
-        });
-      }
-
-      // Keep reviewed application records.
-      if (
-        application.status !==
-        "pending" &&
-        application.status !==
-        "withdrawn"
-      ) {
-        return res.status(400).json({
-          message:
-            "Reviewed vendor applications cannot be deleted",
-        });
-      }
-
-      await application.deleteOne();
-
-      res.status(200).json({
-        message:
-          "Vendor application deleted successfully",
-      });
-    } catch (err) {
-      next(err);
-    }
-  }
-);
-
+  await app.save();
+  res.json(serialize(await populate(Application.findById(app._id))));
+});
+router.delete("/:id", async (req, res) => {
+  const app = await Application.findById(req.params.id);
+  await ownApplication(req.user, app);
+  if (!["pending", "withdrawn"].includes(app.status))
+    fail(400, "Reviewed applications cannot be deleted");
+  const deleted = await Application.deleteOne({
+    _id: app._id,
+    __v: app.__v,
+    status: { $in: ["pending", "withdrawn"] },
+  });
+  if (!deleted.deletedCount)
+    fail(409, "This application changed. Refresh and try again.");
+  res.json({ message: "Application deleted" });
+});
 module.exports = router;

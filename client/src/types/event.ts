@@ -7,12 +7,8 @@ export interface Organizer {
   city: string;
   socialMedia?: string;
 
-  status:
-    | "pending"
-    | "verified"
-    | "rejected";
-
-  rejectionReason?: string;
+  user?: string;
+  logoUrl?: string;
   isActive?: boolean;
 
   createdAt?: string;
@@ -26,11 +22,13 @@ export interface Venue {
   city: string;
   province: string;
   venueType: string;
+  createdBy?: string;
   description?: string;
   isActive?: boolean;
 }
 
 export interface Category {
+  createdBy?: string;
   _id: string;
   name: string;
   description?: string;
@@ -55,23 +53,20 @@ export interface Event {
 
   posterUrl: string;
 
-  status:
-    | "draft"
-    | "pending"
-    | "published"
-    | "rejected"
-    | "cancelled";
-
-  rejectionReason?: string;
+  status: "draft" | "published" | "cancelled";
 
   isFeatured: boolean;
 
-  eventState?:
-    | "upcoming"
-    | "ongoing"
-    | "completed";
+  eventState?: "upcoming" | "ongoing" | "completed";
 
   daysUntilStart?: number;
+  managementStats?: {
+    totalApplications: number;
+    pendingApplications: number;
+    acceptedVendors: number;
+    totalSlots: number;
+    remainingSlots: number;
+  };
 
   createdAt: string;
   updatedAt: string;

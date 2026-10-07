@@ -3,7 +3,28 @@ const express = require("express");
 const Venue = require("../models/Venue");
 const Event = require("../models/Event");
 
+const { requireAuth } = require("../middleware/auth");
+const { fail, pick } = require("../utils/access");
 const router = express.Router();
+router.use((req, res, next) => {
+  if (["GET", "HEAD"].includes(req.method)) return next();
+  requireAuth(req, res, (err) => {
+    if (err) return next(err);
+    next();
+  });
+});
+router.use(async (req, res, next) => {
+  if (!["PATCH", "DELETE"].includes(req.method)) return next();
+  try {
+    const item = await Venue.findById(req.params.id || req.path.split("/")[1]);
+    if (!item) fail(404, "Record not found");
+    if (String(item.createdBy) !== String(req.user._id))
+      fail(403, "Only the creator can change this record");
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
 
 // ------------------------------------------------------
 // GET ALL VENUES
@@ -25,9 +46,7 @@ router.get("/", async (req, res, next) => {
 // ------------------------------------------------------
 router.get("/:id", async (req, res, next) => {
   try {
-    const venue = await Venue.findById(
-      req.params.id
-    );
+    const venue = await Venue.findById(req.params.id);
 
     if (!venue) {
       return res.status(404).json({
@@ -46,8 +65,18 @@ router.get("/:id", async (req, res, next) => {
 // ------------------------------------------------------
 router.post("/", async (req, res, next) => {
   try {
-    const venue =
-      await Venue.create(req.body);
+    const venue = await Venue.create({
+      ...pick(req.body, [
+        "name",
+        "address",
+        "city",
+        "province",
+        "venueType",
+        "description",
+        "isActive",
+      ]),
+      createdBy: req.user._id,
+    });
 
     res.status(201).json(venue);
   } catch (err) {
@@ -60,15 +89,22 @@ router.post("/", async (req, res, next) => {
 // ------------------------------------------------------
 router.patch("/:id", async (req, res, next) => {
   try {
-    const venue =
-      await Venue.findByIdAndUpdate(
-        req.params.id,
-        req.body,
-        {
-          new: true,
-          runValidators: true,
-        }
-      );
+    const venue = await Venue.findByIdAndUpdate(
+      req.params.id,
+      pick(req.body, [
+        "name",
+        "address",
+        "city",
+        "province",
+        "venueType",
+        "description",
+        "isActive",
+      ]),
+      {
+        new: true,
+        runValidators: true,
+      },
+    );
 
     if (!venue) {
       return res.status(404).json({
@@ -87,10 +123,7 @@ router.patch("/:id", async (req, res, next) => {
 // ------------------------------------------------------
 router.delete("/:id", async (req, res, next) => {
   try {
-    const venue =
-      await Venue.findById(
-        req.params.id
-      );
+    const venue = await Venue.findById(req.params.id);
 
     if (!venue) {
       return res.status(404).json({
@@ -101,10 +134,9 @@ router.delete("/:id", async (req, res, next) => {
     // --------------------------------------------------
     // CHECK IF ANY EVENT USES THIS VENUE
     // --------------------------------------------------
-    const eventCount =
-      await Event.countDocuments({
-        venue: venue._id,
-      });
+    const eventCount = await Event.countDocuments({
+      venue: venue._id,
+    });
 
     if (eventCount > 0) {
       return res.status(400).json({
@@ -116,8 +148,7 @@ router.delete("/:id", async (req, res, next) => {
     await venue.deleteOne();
 
     res.status(200).json({
-      message:
-        "Venue deleted successfully",
+      message: "Venue deleted successfully",
     });
   } catch (err) {
     next(err);

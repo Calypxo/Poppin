@@ -1,4 +1,8 @@
 @import "tailwindcss";
+@import "./styles/public.css";
+@import "./styles/app.css";
+@import "./styles/ui.css";
+@import "./styles/scrapbook.css";
 
 * {
   box-sizing: border-box;
@@ -12,9 +16,9 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #fffaf7;
-  color: #252525;
+  font-family: var(--font-body);
+  background: var(--color-paper);
+  color: var(--color-ink);
 }
 
 button,

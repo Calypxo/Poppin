@@ -2,6 +2,13 @@ const mongoose = require("mongoose");
 
 const organizerSchema = new mongoose.Schema(
   {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      unique: true,
+      sparse: true,
+    },
+    logoUrl: { type: String, default: "" },
     name: {
       type: String,
       required: [true, "Organizer name is required"],
@@ -10,7 +17,7 @@ const organizerSchema = new mongoose.Schema(
 
     description: {
       type: String,
-      required: [true, "Description is required"],
+      default: "",
       trim: true,
     },
 
@@ -24,33 +31,17 @@ const organizerSchema = new mongoose.Schema(
 
     contactNumber: {
       type: String,
-      required: [true, "Contact number is required"],
+      default: "",
       trim: true,
     },
 
     city: {
       type: String,
-      required: [true, "City is required"],
+      default: "",
       trim: true,
     },
 
     socialMedia: {
-      type: String,
-      trim: true,
-      default: "",
-    },
-
-    status: {
-      type: String,
-      enum: [
-        "pending",
-        "verified",
-        "rejected",
-      ],
-      default: "pending",
-    },
-
-    rejectionReason: {
       type: String,
       trim: true,
       default: "",
@@ -63,10 +54,7 @@ const organizerSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
-module.exports = mongoose.model(
-  "Organizer",
-  organizerSchema
-);
+module.exports = mongoose.model("Organizer", organizerSchema);

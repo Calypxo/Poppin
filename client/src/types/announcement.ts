@@ -1,4 +1,6 @@
 export interface AnnouncementEvent {
+  organizer?: import("./event").Organizer;
+  status?: string;
   _id: string;
   title: string;
   startDate: string;
@@ -14,11 +16,15 @@ export interface Announcement {
   content: string;
 
   type:
+    | "announcement"
+    | "vendor_call"
+    | "lineup"
     | "general"
     | "schedule_update"
     | "reminder"
     | "important";
 
+  imageUrl?: string;
   isPublished: boolean;
 
   publishedAt: string | null;

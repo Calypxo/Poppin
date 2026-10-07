@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-10-07T15:38:12.204Z",
+  "removedIndexes": [
+    {
+      "name": "vendorCall_1_email_1",
+      "key": {
+        "vendorCall": 1,
+        "email": 1
+      }
+    }
+  ],
+  "userEventIndex": {
+    "name": "user_1_event_1",
+    "key": {
+      "user": 1,
+      "event": 1
+    },
+    "unique": true,
+    "partialFilterExpression": {
+      "user": {
+        "$type": "objectId"
+      },
+      "event": {
+        "$type": "objectId"
+      }
+    }
+  },
+  "applicationsBefore": 2,
+  "applicationsAfter": 2,
+  "recordsUpdated": 0,
+  "recordsDeleted": 0
+}

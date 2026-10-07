@@ -1,0 +1,12 @@
+{
+  "checkedAt": "2026-10-07T14:50:06.629Z",
+  "temporaryAccountsRemoved": 5,
+  "temporaryOrganizerProfilesRemoved": 2,
+  "temporaryVendorProfilesRemoved": 1,
+  "originalAccountsPreserved": 0,
+  "originalEventsPreserved": 16,
+  "publishedEventsPreserved": 13,
+  "remainingReferenceQaAccounts": 0,
+  "originalEventIdsHashBefore": "29037a12afe19d875204fb3906647b614e2a122dbde27924ca673f8d81f96a1a",
+  "originalEventIdsHashAfter": "29037a12afe19d875204fb3906647b614e2a122dbde27924ca673f8d81f96a1a"
+}

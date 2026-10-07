@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const announcementSchema = new mongoose.Schema(
   {
+    imageUrl: { type: String, default: "" },
     event: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Event",
@@ -23,6 +24,9 @@ const announcementSchema = new mongoose.Schema(
     type: {
       type: String,
       enum: [
+        "announcement",
+        "vendor_call",
+        "lineup",
         "general",
         "schedule_update",
         "reminder",
@@ -43,7 +47,7 @@ const announcementSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 module.exports = mongoose.model("Announcement", announcementSchema);

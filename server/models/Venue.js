@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const venueSchema = new mongoose.Schema(
   {
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     name: {
       type: String,
       required: [true, "Venue name is required"],
@@ -54,7 +55,7 @@ const venueSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 module.exports = mongoose.model("Venue", venueSchema);

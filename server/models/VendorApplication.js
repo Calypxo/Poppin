@@ -2,6 +2,11 @@ const mongoose = require("mongoose");
 
 const vendorApplicationSchema = new mongoose.Schema(
   {
+    // Older applications retain their explicit VendorProfile link. New requests
+    // always set user and event from authentication and the selected vendor call.
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    event: { type: mongoose.Schema.Types.ObjectId, ref: "Event" },
+    vendor: { type: mongoose.Schema.Types.ObjectId, ref: "VendorProfile" },
     vendorCall: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "VendorCall",
@@ -19,6 +24,7 @@ const vendorApplicationSchema = new mongoose.Schema(
       type: String,
       required: [true, "Business name is required"],
       trim: true,
+      maxlength: 150,
     },
 
     representativeName: {
@@ -32,12 +38,14 @@ const vendorApplicationSchema = new mongoose.Schema(
       required: [true, "Email is required"],
       trim: true,
       lowercase: true,
+      maxlength: 254,
     },
 
     contactNumber: {
       type: String,
       required: [true, "Contact number is required"],
       trim: true,
+      maxlength: 50,
     },
 
     category: {
@@ -50,29 +58,33 @@ const vendorApplicationSchema = new mongoose.Schema(
       type: String,
       required: [true, "Products or services are required"],
       trim: true,
+      maxlength: 2000,
     },
 
     businessDescription: {
       type: String,
-      required: [true, "Business description is required"],
+      default: "",
       trim: true,
+      maxlength: 5000,
     },
 
     socialMedia: {
       type: String,
       trim: true,
       default: "",
+      maxlength: 500,
     },
 
     notes: {
       type: String,
       trim: true,
       default: "",
+      maxlength: 2000,
     },
 
     status: {
       type: String,
-      enum: ["pending", "approved", "rejected", "withdrawn"],
+      enum: ["pending", "accepted", "rejected", "withdrawn"],
       default: "pending",
     },
 
@@ -80,6 +92,7 @@ const vendorApplicationSchema = new mongoose.Schema(
       type: String,
       trim: true,
       default: "",
+      maxlength: 2000,
     },
 
     reviewedAt: {
@@ -89,16 +102,24 @@ const vendorApplicationSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+    optimisticConcurrency: true,
+  },
 );
 
-// Prevent the same email from applying twice to the same vendor call
 vendorApplicationSchema.index(
-  { vendorCall: 1, email: 1 },
-  { unique: true }
+  { user: 1, event: 1 },
+  {
+    unique: true,
+    partialFilterExpression: {
+      user: { $type: "objectId" },
+      event: { $type: "objectId" },
+    },
+  },
 );
 
-module.exports = mongoose.model(
-  "VendorApplication",
-  vendorApplicationSchema
+vendorApplicationSchema.index(
+  { vendorCall: 1, vendor: 1 },
+  { unique: true, partialFilterExpression: { vendor: { $type: "objectId" } } },
 );
+
+module.exports = mongoose.model("VendorApplication", vendorApplicationSchema);

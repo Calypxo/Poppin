@@ -64,13 +64,7 @@ const eventSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: [
-        "draft",
-        "pending",
-        "published",
-        "rejected",
-        "cancelled",
-      ],
+      enum: ["draft", "published", "cancelled"],
       default: "draft",
     },
 
@@ -79,15 +73,11 @@ const eventSchema = new mongoose.Schema(
       default: false,
     },
 
-    rejectionReason: {
-      type: String,
-      trim: true,
-      default: "",
-    },
+    publishedAt: { type: Date, default: null },
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 module.exports = mongoose.model("Event", eventSchema);

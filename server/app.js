@@ -17,7 +17,6 @@ const categoryRoutes = require("./routes/categories");
 const announcementRoutes = require("./routes/announcements");
 const vendorCallRoutes = require("./routes/vendorCalls");
 const vendorApplicationRoutes = require("./routes/vendorApplications");
-const analyticsRoutes = require("./routes/analytics");
 
 const uploadRoutes = require("./routes/uploads");
 
@@ -33,8 +32,22 @@ app.use(requestLogger);
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
-  })
+    origin(origin, callback) {
+      const frontendOrigin =
+        process.env.CLIENT_ORIGIN || "http://localhost:5173";
+      // Vite can choose another port when its default port is occupied.
+      const localDevelopmentOrigin =
+        process.env.NODE_ENV !== "production" &&
+        /^http:\/\/(?:localhost|127\.0\.0\.1|\[::1\]):\d{1,5}$/.test(
+          origin || "",
+        );
+
+      callback(
+        null,
+        !origin || origin === frontendOrigin || localDevelopmentOrigin,
+      );
+    },
+  }),
 );
 
 app.use(express.json());
@@ -48,7 +61,11 @@ app.use("/api/categories", categoryRoutes);
 app.use("/api/announcements", announcementRoutes);
 app.use("/api/vendor-calls", vendorCallRoutes);
 app.use("/api/vendor-applications", vendorApplicationRoutes);
-app.use("/api/analytics", analyticsRoutes);
+app.use("/api/auth", require("./routes/auth").router);
+app.use("/api/profiles", require("./routes/profiles"));
+app.use("/api/vendors", require("./routes/vendors"));
+app.use("/api/posts", announcementRoutes);
+app.use("/api/feed", require("./routes/feed"));
 app.use("/api/uploads", uploadRoutes);
 
 // 404 Catch-All
@@ -60,7 +77,9 @@ app.use(errorHandler);
 // Connect to MongoDB first, then start server
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => {
+  .then(async () => {
+    // The user/event unique index must exist before accepting concurrent applications.
+    await require("./models/VendorApplication").init();
     console.log("Connected to MongoDB");
 
     app.listen(PORT, () => {

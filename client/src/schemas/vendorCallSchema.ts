@@ -2,13 +2,9 @@ import { z } from "zod";
 
 export const vendorCallSchema = z
   .object({
-    event: z
-      .string()
-      .min(1, "Please select an event"),
+    event: z.string().min(1, "Please select an event"),
 
-    title: z
-      .string()
-      .min(3, "Title must be at least 3 characters"),
+    title: z.string().min(3, "Title must be at least 3 characters"),
 
     description: z
       .string()
@@ -18,17 +14,15 @@ export const vendorCallSchema = z
       .string()
       .min(1, "Application start date is required"),
 
-    applicationDeadline: z
-      .string()
-      .min(1, "Application deadline is required"),
+    applicationDeadline: z.string().min(1, "Application deadline is required"),
 
     totalSlots: z.coerce
       .number()
-      .min(1, "There must be at least 1 vendor slot"),
+      .int("Slots must be a whole number")
+      .min(1, "There must be at least 1 vendor slot")
+      .max(1000, "Total slots cannot exceed 1000"),
 
-    boothFee: z.coerce
-      .number()
-      .min(0, "Booth fee cannot be negative"),
+    boothFee: z.coerce.number().min(0, "Booth fee cannot be negative"),
 
     boothSize: z.string().optional(),
 
@@ -40,17 +34,13 @@ export const vendorCallSchema = z
   })
   .refine(
     (data) =>
-      new Date(data.applicationDeadline) >=
-      new Date(data.applicationStartDate),
+      new Date(data.applicationDeadline) >= new Date(data.applicationStartDate),
     {
-      message:
-        "Application deadline cannot be earlier than the opening date",
+      message: "Application deadline cannot be earlier than the opening date",
       path: ["applicationDeadline"],
-    }
+    },
   );
 
-export type VendorCallFormInput =
-  z.input<typeof vendorCallSchema>;
+export type VendorCallFormInput = z.input<typeof vendorCallSchema>;
 
-export type VendorCallFormData =
-  z.output<typeof vendorCallSchema>;
+export type VendorCallFormData = z.infer<typeof vendorCallSchema>;

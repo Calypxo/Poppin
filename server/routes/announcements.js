@@ -1,250 +1,106 @@
-const express = require("express");
-const Announcement = require("../models/Announcement");
+﻿const express = require("express");
+const Post = require("../models/Announcement");
 const Event = require("../models/Event");
-
-// Register referenced model
-require("../models/Event");
-
+const { optionalAuth, requireAuth } = require("../middleware/auth");
+const {
+  ownedEvent,
+  ownEventIds,
+  readableEvent,
+  fail,
+  pick,
+  imageUrl,
+} = require("../utils/access");
 const router = express.Router();
-
-// ------------------------------------------------------
-// GET ALL ANNOUNCEMENTS
-// ------------------------------------------------------
-router.get("/", async (req, res, next) => {
-  try {
-    const announcements =
-      await Announcement.find()
-        .populate(
-          "event",
-          "title startDate endDate status"
-        )
-        .sort({
-          createdAt: -1,
-        });
-
-    res.status(200).json(
-      announcements
-    );
-  } catch (err) {
-    next(err);
-  }
+const populate = (query) =>
+  query.populate({
+    path: "event",
+    populate: { path: "organizer", select: "name logoUrl user city" },
+  });
+const fields = ["title", "content", "type", "imageUrl", "isPublished"];
+router.get("/mine", requireAuth, async (req, res) =>
+  res.json(
+    await populate(
+      Post.find({ event: { $in: await ownEventIds(req.user) } }).sort({
+        createdAt: -1,
+      }),
+    ),
+  ),
+);
+router.get("/", async (req, res) => {
+  const events = await Event.find({ status: "published" }).select("_id");
+  res.json(
+    await populate(
+      Post.find({
+        event: { $in: events.map((e) => e._id) },
+        isPublished: true,
+      }).sort({ publishedAt: -1 }),
+    ),
+  );
 });
-
-// ------------------------------------------------------
-// GET PUBLISHED ANNOUNCEMENTS FOR ONE EVENT
-// IMPORTANT: Keep this BEFORE /:id
-// ------------------------------------------------------
-// ------------------------------------------------------
-// GET PUBLIC ANNOUNCEMENTS FOR EVENT
-// Event itself must still be published.
-// ------------------------------------------------------
-router.get(
-  "/event/:eventId",
-  async (req, res, next) => {
+router.get("/event/:eventId", optionalAuth, async (req, res) => {
+  const event = await Event.findById(req.params.eventId);
+  if (!event) fail(404, "Event not found");
+  let owner = false;
+  if (req.user) {
     try {
-      const event =
-        await Event.findOne({
-          _id: req.params.eventId,
-          status: "published",
-        });
-
-      if (!event) {
-        return res.status(404).json({
-          message:
-            "Published event not found",
-        });
-      }
-
-      const announcements =
-        await Announcement.find({
-          event: event._id,
-          isPublished: true,
-        })
-          .populate(
-            "event",
-            "title startDate endDate status"
-          )
-          .sort({
-            publishedAt: -1,
-            createdAt: -1,
-          });
-
-      res.status(200).json(
-        announcements
-      );
-    } catch (err) {
-      next(err);
+      await ownedEvent(req.user, event._id);
+      owner = true;
+    } catch (error) {
+      if (error.status !== 403) throw error;
     }
   }
-);
-
-// ------------------------------------------------------
-// GET ONE ANNOUNCEMENT
-// ------------------------------------------------------
-router.get(
-  "/:id",
-  async (req, res, next) => {
-    try {
-      const announcement =
-        await Announcement.findById(
-          req.params.id
-        ).populate(
-          "event",
-          "title startDate endDate status"
-        );
-
-      if (!announcement) {
-        return res.status(404).json({
-          message:
-            "Announcement not found",
-        });
-      }
-
-      res.status(200).json(
-        announcement
-      );
-    } catch (err) {
-      next(err);
-    }
-  }
-);
-
-// ------------------------------------------------------
-// CREATE ANNOUNCEMENT
-// ------------------------------------------------------
-router.post(
-  "/",
-  async (req, res, next) => {
-    try {
-      const data = {
-        ...req.body,
-      };
-
-      // Server controls publication date
-      if (data.isPublished) {
-        data.publishedAt =
-          new Date();
-      } else {
-        data.publishedAt = null;
-      }
-
-      const announcement =
-        await Announcement.create(
-          data
-        );
-
-      const populated =
-        await Announcement.findById(
-          announcement._id
-        ).populate(
-          "event",
-          "title startDate endDate status"
-        );
-
-      res.status(201).json(
-        populated
-      );
-    } catch (err) {
-      next(err);
-    }
-  }
-);
-
-// ------------------------------------------------------
-// UPDATE ANNOUNCEMENT
-// ------------------------------------------------------
-router.patch(
-  "/:id",
-  async (req, res, next) => {
-    try {
-      const announcement =
-        await Announcement.findById(
-          req.params.id
-        );
-
-      if (!announcement) {
-        return res.status(404).json({
-          message:
-            "Announcement not found",
-        });
-      }
-
-      const wasPublished =
-        announcement.isPublished;
-
-      const updates = {
-        ...req.body,
-      };
-
-      // Do not allow client to directly
-      // control publication timestamp
-      delete updates.publishedAt;
-
-      Object.assign(
-        announcement,
-        updates
-      );
-
-      // Draft -> Published
-      if (
-        announcement.isPublished &&
-        !wasPublished
-      ) {
-        announcement.publishedAt =
-          new Date();
-      }
-
-      // Published -> Draft
-      if (
-        !announcement.isPublished
-      ) {
-        announcement.publishedAt =
-          null;
-      }
-
-      await announcement.save();
-
-      await announcement.populate(
-        "event",
-        "title startDate endDate status"
-      );
-
-      res.status(200).json(
-        announcement
-      );
-    } catch (err) {
-      next(err);
-    }
-  }
-);
-
-// ------------------------------------------------------
-// DELETE ANNOUNCEMENT
-// ------------------------------------------------------
-router.delete(
-  "/:id",
-  async (req, res, next) => {
-    try {
-      const announcement =
-        await Announcement.findByIdAndDelete(
-          req.params.id
-        );
-
-      if (!announcement) {
-        return res.status(404).json({
-          message:
-            "Announcement not found",
-        });
-      }
-
-      res.status(200).json({
-        message:
-          "Announcement deleted successfully",
-      });
-    } catch (err) {
-      next(err);
-    }
-  }
-);
-
+  if (event.status !== "published" && !owner)
+    await readableEvent(req.user, event);
+  res.json(
+    await populate(
+      Post.find({
+        event: event._id,
+        ...(owner ? {} : { isPublished: true }),
+      }).sort({ publishedAt: -1, createdAt: -1 }),
+    ),
+  );
+});
+router.get("/:id", optionalAuth, async (req, res) => {
+  const post = await populate(Post.findById(req.params.id));
+  if (!post) fail(404, "Post not found");
+  if (!post.isPublished) await ownedEvent(req.user, post.event._id);
+  else if (post.event.status !== "published")
+    await readableEvent(req.user, post.event);
+  res.json(post);
+});
+async function save(req, res, creating) {
+  const post = creating
+    ? new Post({ event: req.body.event })
+    : await Post.findById(req.params.id);
+  if (!post) fail(404, "Post not found");
+  const event = await ownedEvent(req.user, post.event);
+  if (
+    !creating &&
+    req.body.event &&
+    String(req.body.event) !== String(post.event)
+  )
+    fail(400, "A post cannot be moved to another event");
+  const wasPublished = post.isPublished;
+  Object.assign(post, pick(req.body, fields));
+  if (post.imageUrl && !imageUrl(post.imageUrl))
+    fail(400, "Use an uploaded post image");
+  if (post.isPublished && event.status !== "published")
+    fail(400, "Publish the event before publishing updates");
+  if (post.isPublished && (creating || !wasPublished))
+    post.publishedAt = new Date();
+  if (!post.isPublished) post.publishedAt = null;
+  await post.save();
+  res
+    .status(creating ? 201 : 200)
+    .json(await populate(Post.findById(post._id)));
+}
+router.post("/", requireAuth, (req, res) => save(req, res, true));
+router.patch("/:id", requireAuth, (req, res) => save(req, res, false));
+router.delete("/:id", requireAuth, async (req, res) => {
+  const post = await Post.findById(req.params.id);
+  if (!post) fail(404, "Post not found");
+  await ownedEvent(req.user, post.event);
+  await post.deleteOne();
+  res.json({ message: "Post deleted" });
+});
 module.exports = router;

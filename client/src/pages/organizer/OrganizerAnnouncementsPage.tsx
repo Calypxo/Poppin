@@ -1,759 +1,251 @@
-import { useEffect, useMemo, useState } from "react";
-import {
-  Link,
-  useSearchParams,
-} from "react-router-dom";
-
-import {
-  useForm,
-} from "react-hook-form";
-
-import {
-  zodResolver,
-} from "@hookform/resolvers/zod";
-
-import axios from "axios";
-
+import Button from "../../components/ui/Button";
+import Alert from "../../components/ui/Alert";
+import { Select, Input, Textarea } from "../../components/ui/FormControls";
+import { useEffect, useState } from "react";
+import { Link, useParams, useSearchParams } from "react-router-dom";
+import { useForm, useWatch } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import api from "../../api/client";
-
-import type { Event } from "../../types/event";
-
-import type { Announcement } from "../../types/announcement";
-
+import useResource, { errorMessage } from "../../hooks/useResource";
 import {
   announcementSchema,
   type AnnouncementFormData,
 } from "../../schemas/announcementSchema";
-
+import type { Announcement } from "../../types/announcement";
+import type { Event } from "../../types/event";
+import FormField from "../../components/forms/FormField";
+import ImageUploader from "../../components/forms/ImageUploader";
+import ResourceState from "../../components/shared/ResourceState";
+import EventPostCard from "../../components/shared/EventPostCard";
+import { PageHeader } from "../../components/layout/Page";
+import { useUI } from "../../components/ui/context";
+import { EmptyState } from "../../components/ui/States";
+import { ButtonLink } from "../../components/ui/Button";
 export default function OrganizerAnnouncementsPage() {
-  const [searchParams] =
-    useSearchParams();
-
-  const organizerId =
-    searchParams.get("organizerId") || "";
-
-  const [events, setEvents] =
-    useState<Event[]>([]);
-
-  const [
-    announcements,
-    setAnnouncements,
-  ] = useState<Announcement[]>([]);
-
-  const [editingId, setEditingId] =
-    useState("");
-
-  const [loading, setLoading] =
-    useState(true);
-
-  const [pageError, setPageError] =
-    useState("");
-
-  const [message, setMessage] =
-    useState("");
-
-  const [actionError, setActionError] =
-    useState("");
-
+  const { confirm, toast } = useUI();
+  const { eventId } = useParams();
+  const [params, setParams] = useSearchParams();
+  const events = useResource<Event[]>("/events/mine");
+  const resource = useResource<Announcement[]>("/posts/mine");
+  const editingId = params.get("edit") || "";
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+  const [busy, setBusy] = useState(false);
   const {
     register,
     handleSubmit,
     reset,
-    formState: {
-      errors,
-      isSubmitting,
-    },
+    setValue,
+    control,
+    formState: { errors, isSubmitting },
   } = useForm<AnnouncementFormData>({
-    resolver: zodResolver(
-      announcementSchema
-    ),
-
+    resolver: zodResolver(announcementSchema),
     defaultValues: {
-      event: "",
+      event: eventId || "",
       title: "",
       content: "",
-      type: "general",
+      type: "announcement",
+      imageUrl: "",
     },
   });
-
-  // ----------------------------------------------------
-  // LOAD DATA
-  // ----------------------------------------------------
-  async function loadData() {
-    try {
-      setLoading(true);
-      setPageError("");
-
-      const [
-        eventResponse,
-        announcementResponse,
-      ] = await Promise.all([
-        api.get<Event[]>("/events"),
-
-        api.get<Announcement[]>(
-          "/announcements"
-        ),
-      ]);
-
-      setEvents(eventResponse.data);
-
-      setAnnouncements(
-        announcementResponse.data
-      );
-    } catch (err) {
-      console.error(
-        "Failed to load announcements:",
-        err
-      );
-
-      setPageError(
-        "Unable to load announcements."
-      );
-    } finally {
-      setLoading(false);
-    }
-  }
-
+  const image = useWatch({ control, name: "imageUrl" });
+  const selectedEvents =
+    events.data?.filter((event) => !eventId || event._id === eventId) || [];
+  const posts =
+    resource.data?.filter((post) => !eventId || post.event._id === eventId) ||
+    [];
+  const edit = params.get("edit");
   useEffect(() => {
-    loadData();
-  }, []);
-
-  // ----------------------------------------------------
-  // ORGANIZER EVENTS
-  // ----------------------------------------------------
-  const organizerEvents =
-    useMemo(() => {
-      return events.filter(
-        (event) =>
-          event.organizer?._id ===
-          organizerId
-      );
-    }, [
-      events,
-      organizerId,
-    ]);
-
-  const organizerEventIds =
-    useMemo(() => {
-      return new Set(
-        organizerEvents.map(
-          (event) => event._id
-        )
-      );
-    }, [organizerEvents]);
-
-  // ----------------------------------------------------
-  // ORGANIZER ANNOUNCEMENTS
-  // ----------------------------------------------------
-  const organizerAnnouncements =
-    useMemo(() => {
-      return announcements.filter(
-        (announcement) =>
-          organizerEventIds.has(
-            announcement.event?._id
-          )
-      );
-    }, [
-      announcements,
-      organizerEventIds,
-    ]);
-
-  // ----------------------------------------------------
-  // EDIT ANNOUNCEMENT
-  // ----------------------------------------------------
-  function startEditing(
-    announcement: Announcement
-  ) {
-    setEditingId(
-      announcement._id
+    if (!edit || !resource.data) return;
+    const post = resource.data.find(
+      (value) =>
+        value._id === edit && (!eventId || value.event._id === eventId),
     );
-
-    reset({
-      event:
-        announcement.event?._id ||
-        "",
-
-      title:
-        announcement.title,
-
-      content:
-        announcement.content,
-
-      type:
-        announcement.type,
-    });
-
+    if (post) {
+      reset({
+        event: post.event._id,
+        title: post.title,
+        content: post.content,
+        type: post.type,
+        imageUrl: post.imageUrl || "",
+      });
+    }
+  }, [edit, resource.data, eventId, reset]);
+  async function save(data: AnnouncementFormData, publish: boolean) {
+    setError("");
     setMessage("");
-    setActionError("");
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  }
-
-  // ----------------------------------------------------
-  // RESET FORM
-  // ----------------------------------------------------
-  function resetForm() {
-    setEditingId("");
-
-    reset({
-      event: "",
-      title: "",
-      content: "",
-      type: "general",
-    });
-  }
-
-  // ----------------------------------------------------
-  // SAVE / PUBLISH ANNOUNCEMENT
-  // ----------------------------------------------------
-  async function saveAnnouncement(
-    data: AnnouncementFormData,
-    publish: boolean
-  ) {
     try {
-      setMessage("");
-      setActionError("");
-
-      const selectedEvent =
-        organizerEvents.find(
-          (event) =>
-            event._id === data.event
-        );
-
-      if (!selectedEvent) {
-        setActionError(
-          "You can only create announcements for your own events."
-        );
-
-        return;
-      }
-
-      const payload = {
-        event: data.event,
-
-        title:
-          data.title,
-
-        content:
-          data.content,
-
-        type:
-          data.type,
-
-        isPublished:
-          publish,
-
-        publishedAt:
-          publish
-            ? new Date()
-            : undefined,
-      };
-
-      if (editingId) {
-        await api.patch(
-          `/announcements/${editingId}`,
-          payload
-        );
-
-        setMessage(
-          publish
-            ? "Announcement updated and published."
-            : "Announcement saved as draft."
-        );
-      } else {
-        await api.post(
-          "/announcements",
-          payload
-        );
-
-        setMessage(
-          publish
-            ? "Announcement published successfully."
-            : "Announcement saved as draft."
-        );
-      }
-
-      resetForm();
-
-      await loadData();
+      if (editingId)
+        await api.patch(`/posts/${editingId}`, {
+          ...data,
+          isPublished: publish,
+        });
+      else await api.post("/posts", { ...data, isPublished: publish });
+      setMessage(publish ? "Your update is live." : "Draft saved.");
+      toast.success(
+        publish
+          ? "Your update is live on the local noticeboard."
+          : "Update draft saved.",
+      );
+      setParams({});
+      reset({
+        event: eventId || "",
+        title: "",
+        content: "",
+        type: "announcement",
+        imageUrl: "",
+      });
+      resource.reload();
     } catch (err) {
-      console.error(
-        "Failed to save announcement:",
-        err
-      );
-
-      if (axios.isAxiosError(err)) {
-        setActionError(
-          err.response?.data?.message ||
-            "Unable to save announcement."
-        );
-      } else {
-        setActionError(
-          "Unable to save announcement."
-        );
-      }
+      setError(errorMessage(err));
     }
   }
-
-  // ----------------------------------------------------
-  // DELETE ANNOUNCEMENT
-  // ----------------------------------------------------
-  async function deleteAnnouncement(
-    announcement: Announcement
-  ) {
-    const confirmed =
-      window.confirm(
-        `Delete announcement "${announcement.title}"?`
-      );
-
-    if (!confirmed) {
-      return;
-    }
-
-    try {
-      setMessage("");
-      setActionError("");
-
-      await api.delete(
-        `/announcements/${announcement._id}`
-      );
-
-      setMessage(
-        "Announcement deleted successfully."
-      );
-
-      if (
-        editingId ===
-        announcement._id
-      ) {
-        resetForm();
-      }
-
-      await loadData();
-    } catch (err) {
-      console.error(
-        "Failed to delete announcement:",
-        err
-      );
-
-      if (axios.isAxiosError(err)) {
-        setActionError(
-          err.response?.data?.message ||
-            "Unable to delete announcement."
-        );
-      } else {
-        setActionError(
-          "Unable to delete announcement."
-        );
-      }
-    }
-  }
-
-  if (loading) {
-    return (
-      <main style={pageStyle}>
-        <p>
-          Loading announcements...
-        </p>
-      </main>
-    );
-  }
-
-  if (pageError) {
-    return (
-      <main style={pageStyle}>
-        <p>{pageError}</p>
-      </main>
-    );
-  }
-
   return (
-    <main style={pageStyle}>
-      <Link
-        to={`/organizer?organizerId=${organizerId}`}
-      >
-        ← Back to Organizer Dashboard
+    <main className="poppin-page">
+      <Link to={eventId ? `/events/${eventId}` : "/my-events"}>
+        ← Your event
       </Link>
-
-      <header
-        style={{
-          marginTop: "28px",
-        }}
-      >
-        <h1>
-          Announcement Management
-        </h1>
-
-        <p>
-          Create updates and notices
-          for your events.
-        </p>
-      </header>
-
-      {message && (
-        <div style={successStyle}>
-          {message}
-        </div>
-      )}
-
-      {actionError && (
-        <div style={errorStyle}>
-          {actionError}
-        </div>
-      )}
-
-      {/* ANNOUNCEMENT FORM */}
-      <form
-        style={formStyle}
-        onSubmit={(event) =>
-          event.preventDefault()
-        }
-      >
-        <h2>
-          {editingId
-            ? "Edit Announcement"
-            : "Create Announcement"}
-        </h2>
-
-        {/* EVENT */}
-        <Field
-          label="Event"
-          error={
-            errors.event?.message
-          }
-        >
-          <select
-            {...register("event")}
-            style={inputStyle}
-          >
-            <option value="">
-              Select event
-            </option>
-
-            {organizerEvents.map(
-              (event) => (
-                <option
-                  key={event._id}
-                  value={event._id}
-                >
-                  {event.title}
-                </option>
-              )
-            )}
-          </select>
-        </Field>
-
-        {/* TYPE */}
-        <Field
-          label="Announcement Type"
-          error={
-            errors.type?.message
-          }
-        >
-          <select
-            {...register("type")}
-            style={inputStyle}
-          >
-            <option value="general">
-              General
-            </option>
-
-            <option value="schedule_update">
-              Schedule Update
-            </option>
-
-            <option value="reminder">
-              Reminder
-            </option>
-
-            <option value="important">
-              Important
-            </option>
-          </select>
-        </Field>
-
-        {/* TITLE */}
-        <Field
-          label="Title"
-          error={
-            errors.title?.message
-          }
-        >
-          <input
-            {...register("title")}
-            style={inputStyle}
-          />
-        </Field>
-
-        {/* CONTENT */}
-        <Field
-          label="Announcement"
-          error={
-            errors.content
-              ?.message
-          }
-        >
-          <textarea
-            rows={6}
-            {...register(
-              "content"
-            )}
-            style={inputStyle}
-          />
-        </Field>
-
-        {/* ACTIONS */}
-        <div style={actionStyle}>
-          <button
-            type="button"
-            disabled={isSubmitting}
-            onClick={handleSubmit(
-              (data) =>
-                saveAnnouncement(
-                  data,
-                  false
-                )
-            )}
-          >
-            {editingId
-              ? "Save as Draft"
-              : "Save Draft"}
-          </button>
-
-          <button
-            type="button"
-            disabled={isSubmitting}
-            onClick={handleSubmit(
-              (data) =>
-                saveAnnouncement(
-                  data,
-                  true
-                )
-            )}
-          >
-            Publish Announcement
-          </button>
-
-          {editingId && (
-            <button
-              type="button"
-              onClick={resetForm}
+      <PageHeader
+        eyebrow="From you, to your local circle"
+        title="Share a little update"
+        description="A new announcement, a helpful reminder, or a little news from the market."
+        motif="book-stack"
+      />
+      <ResourceState {...events} />
+      <ResourceState {...resource} />
+      {error && <Alert variant="error">{error}</Alert>}
+      {message && <Alert variant="success">{message}</Alert>}
+      {selectedEvents.length > 0 && (
+        <div className="poppin-management-grid">
+          <form noValidate onSubmit={handleSubmit((data) => save(data, true))}>
+            <h2>{editingId ? "Edit update" : "New update"}</h2>
+            <FormField
+              id="post-event"
+              label="Event"
+              error={errors.event?.message}
             >
-              Cancel Editing
-            </button>
-          )}
-        </div>
-      </form>
-
-      {/* EXISTING ANNOUNCEMENTS */}
-      <section
-        style={{
-          marginTop: "50px",
-          marginBottom: "80px",
-        }}
-      >
-        <h2>
-          My Announcements
-        </h2>
-
-        {organizerAnnouncements
-          .length === 0 ? (
-          <p>
-            No announcements found.
-          </p>
-        ) : (
-          <div style={listStyle}>
-            {organizerAnnouncements.map(
-              (announcement) => (
-                <article
-                  key={
-                    announcement._id
-                  }
-                  style={cardStyle}
+              <Select {...register("event")}>
+                <option value="">Choose your event</option>
+                {selectedEvents.map((event) => (
+                  <option key={event._id} value={event._id}>
+                    {event.title} ({event.status})
+                  </option>
+                ))}
+              </Select>
+            </FormField>
+            <FormField
+              id="post-title"
+              label="Title"
+              error={errors.title?.message}
+            >
+              <Input {...register("title")} maxLength={200} />
+            </FormField>
+            <FormField
+              id="post-content"
+              label="Update"
+              error={errors.content?.message}
+            >
+              <Textarea rows={6} {...register("content")} maxLength={10000} />
+            </FormField>
+            <FormField
+              id="post-type"
+              label="Post type"
+              error={errors.type?.message}
+            >
+              <Select {...register("type")}>
+                {[
+                  "announcement",
+                  "schedule_update",
+                  "vendor_call",
+                  "reminder",
+                  "lineup",
+                  "general",
+                  "important",
+                ].map((type) => (
+                  <option key={type} value={type}>
+                    {type.replaceAll("_", " ")}
+                  </option>
+                ))}
+              </Select>
+            </FormField>
+            <ImageUploader
+              label="Post image (optional)"
+              value={image || ""}
+              onChange={(value) => setValue("imageUrl", value)}
+              onBusy={setBusy}
+            />
+            <div className="poppin-actions">
+              <Button type="submit" disabled={busy || isSubmitting}>
+                Publish update
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                disabled={busy || isSubmitting}
+                onClick={handleSubmit((data) => save(data, false))}
+              >
+                Save draft
+              </Button>
+              {editingId && (
+                <Button
+                  type="button"
+                  onClick={() => {
+                    setParams({});
+                    reset({
+                      event: eventId || "",
+                      title: "",
+                      content: "",
+                      type: "announcement",
+                      imageUrl: "",
+                    });
+                  }}
                 >
-                  <h3>
-                    {
-                      announcement.title
-                    }
-                  </h3>
-
-                  <p>
-                    <strong>
-                      Event:
-                    </strong>{" "}
-                    {
-                      announcement.event
-                        ?.title
-                    }
-                  </p>
-
-                  <p>
-                    <strong>
-                      Type:
-                    </strong>{" "}
-                    {
-                      announcement.type
-                    }
-                  </p>
-
-                  <p>
-                    {
-                      announcement.content
-                    }
-                  </p>
-
-                  <p>
-                    <strong>
-                      Status:
-                    </strong>{" "}
-                    {announcement.isPublished
-                      ? "Published"
-                      : "Draft"}
-                  </p>
-
-                    {announcement.isPublished &&
-                    announcement.publishedAt && (
-                        <p>
-                        <strong>
-                            Published:
-                        </strong>{" "}
-                        {new Date(
-                            announcement.publishedAt
-                        ).toLocaleString()}
-                        </p>
-                    )}
-
-                  <div style={actionStyle}>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        startEditing(
-                          announcement
-                        )
+                  Cancel edit
+                </Button>
+              )}
+            </div>
+          </form>
+          <section>
+            <h2>Your updates</h2>
+            <ResourceState
+              loading={false}
+              error=""
+              empty={!posts.length ? "No updates for this event yet." : ""}
+            />
+            <div className="poppin-record-list">
+              {posts.map((post) => (
+                <div key={post._id}>
+                  <EventPostCard
+                    post={post}
+                    onDelete={async (value) => {
+                      if (
+                        !(await confirm({
+                          title: `Delete “${value.title}”?`,
+                          description:
+                            "This removes the update from your event and the shared feed.",
+                          confirmLabel: "Delete post",
+                          cancelLabel: "Keep post",
+                        }))
+                      )
+                        return;
+                      try {
+                        await api.delete(`/posts/${value._id}`);
+                        toast.success("Post deleted.");
+                        resource.reload();
+                      } catch (err) {
+                        setError(errorMessage(err));
                       }
-                    >
-                      Edit
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() =>
-                        deleteAnnouncement(
-                          announcement
-                        )
-                      }
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </article>
-              )
-            )}
-          </div>
-        )}
-      </section>
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+          </section>
+        </div>
+      )}
+      {!events.loading && !selectedEvents.length && (
+        <EmptyState description="Create your own event before sharing updates with your local circle." action={<ButtonLink to="/events/new">Create an event</ButtonLink>} />
+      )}
     </main>
   );
 }
-
-function Field({
-  label,
-  error,
-  children,
-}: {
-  label: string;
-  error?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div
-      style={{
-        marginBottom: "22px",
-      }}
-    >
-      <label
-        style={{
-          display: "block",
-          fontWeight: 600,
-          marginBottom: "8px",
-        }}
-      >
-        {label}
-      </label>
-
-      {children}
-
-      {error && (
-        <p
-          style={{
-            color: "#b42318",
-            fontSize: "14px",
-          }}
-        >
-          {error}
-        </p>
-      )}
-    </div>
-  );
-}
-
-const pageStyle: React.CSSProperties = {
-  maxWidth: "950px",
-  margin: "0 auto",
-  padding: "40px 24px",
-};
-
-const formStyle: React.CSSProperties = {
-  marginTop: "30px",
-  padding: "28px",
-  background: "white",
-  border: "1px solid #ddd",
-  borderRadius: "16px",
-};
-
-const inputStyle: React.CSSProperties = {
-  width: "100%",
-  padding: "12px 14px",
-  border: "1px solid #ccc",
-  borderRadius: "8px",
-  background: "white",
-};
-
-const actionStyle: React.CSSProperties = {
-  display: "flex",
-  gap: "10px",
-  flexWrap: "wrap",
-  marginTop: "20px",
-};
-
-const listStyle: React.CSSProperties = {
-  display: "grid",
-  gap: "16px",
-  marginTop: "20px",
-};
-
-const cardStyle: React.CSSProperties = {
-  padding: "22px",
-  background: "white",
-  border: "1px solid #ddd",
-  borderRadius: "14px",
-};
-
-const successStyle: React.CSSProperties = {
-  marginTop: "22px",
-  padding: "14px",
-  background: "#f1fff3",
-  border: "1px solid #b7d8ba",
-  borderRadius: "10px",
-};
-
-const errorStyle: React.CSSProperties = {
-  marginTop: "22px",
-  padding: "14px",
-  background: "#fff4f4",
-  border: "1px solid #e0b4b4",
-  borderRadius: "10px",
-};

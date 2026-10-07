@@ -1,588 +1,242 @@
-import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
-
-import api from "../../api/client";
-
-import type { VendorCall } from "../../types/vendorCall";
-
 import {
-  vendorApplicationSchema,
-  type VendorApplicationFormData,
-} from "../../schemas/vendorApplicationSchema";
+  applicationSchema,
+  type ApplicationFormData,
+} from "../../schemas/applicationSchema";
+import { useAuth } from "../../auth/context";
+import api from "../../api/client";
+import useResource, { errorMessage } from "../../hooks/useResource";
+import type { Category } from "../../types/event";
+import type {
+  VendorCall,
+  VendorCallAvailability,
+} from "../../types/vendorCall";
+import type { VendorApplicationListItem } from "../../types/vendorApplication";
+import Button from "../../components/ui/Button";
+import Alert from "../../components/ui/Alert";
+import { Input, Select, Textarea } from "../../components/ui/FormControls";
+import FormField from "../../components/forms/FormField";
+import ResourceState from "../../components/shared/ResourceState";
+import { PageHeader } from "../../components/layout/Page";
+import { useUI } from "../../components/ui/context";
 
 export default function VendorApplicationPage() {
+  const { user } = useAuth();
+  const { toast } = useUI();
   const { vendorCallId } = useParams();
-
-  const [vendorCall, setVendorCall] =
-    useState<VendorCall | null>(null);
-
-  const [loading, setLoading] =
-    useState(true);
-
-  const [pageError, setPageError] =
-    useState("");
-
-  const [submitError, setSubmitError] =
-    useState("");
-
-  const [successMessage, setSuccessMessage] =
-    useState("");
-
-  const [applicationCode, setApplicationCode] =
-    useState("");
-
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
+  const call = useResource<VendorCall>(`/vendor-calls/${vendorCallId}`);
+  const categories = useResource<Category[]>("/categories");
+  const availability = useResource<VendorCallAvailability>(
+    `/vendor-calls/${vendorCallId}/availability`,
+  );
+  const applications = useResource<VendorApplicationListItem[]>(
+    call.data ? `/vendor-applications?event=${call.data.event._id}` : null,
+  );
   const {
     register,
     handleSubmit,
-    reset,
-    formState: {
-      errors,
-      isSubmitting,
-    },
-  } = useForm<VendorApplicationFormData>({
-    resolver: zodResolver(
-      vendorApplicationSchema
-    ),
+    formState: { errors, isSubmitting },
+  } = useForm<ApplicationFormData>({
+    resolver: zodResolver(applicationSchema),
     defaultValues: {
       businessName: "",
-      representativeName: "",
-      email: "",
-      contactNumber: "",
       category: "",
       products: "",
       businessDescription: "",
+      contactNumber: user?.contactNumber || "",
+      email: user?.email || "",
       socialMedia: "",
       notes: "",
     },
   });
-
-  // ----------------------------------------------------
-  // LOAD VENDOR CALL
-  // ----------------------------------------------------
-  useEffect(() => {
-    async function fetchVendorCall() {
-      if (!vendorCallId) {
-        setPageError(
-          "Vendor call ID is missing."
-        );
-
-        setLoading(false);
-        return;
-      }
-
-      try {
-        setLoading(true);
-        setPageError("");
-
-        const response =
-          await api.get<VendorCall>(
-            `/vendor-calls/${vendorCallId}`
-          );
-
-        setVendorCall(response.data);
-      } catch (err) {
-        console.error(
-          "Failed to load vendor call:",
-          err
-        );
-
-        setPageError(
-          "Unable to load this vendor application."
-        );
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchVendorCall();
-  }, [vendorCallId]);
-
-  // ----------------------------------------------------
-  // SUBMIT APPLICATION
-  // ----------------------------------------------------
-  async function onSubmit(
-    data: VendorApplicationFormData
-  ) {
-    if (!vendorCallId) {
-      return;
-    }
-
-    try {
-      setSubmitError("");
-      setSuccessMessage("");
-      setApplicationCode("");
-
-      const response = await api.post(
-        "/vendor-applications",
-        {
-          vendorCall: vendorCallId,
-
-          businessName:
-            data.businessName,
-
-          representativeName:
-            data.representativeName,
-
-          email: data.email,
-
-          contactNumber:
-            data.contactNumber,
-
-          category: data.category,
-
-          products: data.products,
-
-          businessDescription:
-            data.businessDescription,
-
-          socialMedia:
-            data.socialMedia || "",
-
-          notes:
-            data.notes || "",
-        }
-      );
-
-      setSuccessMessage(
-        response.data.message
-      );
-
-      setApplicationCode(
-        response.data.application
-          .applicationCode
-      );
-
-      reset();
-    } catch (err) {
-      console.error(
-        "Application failed:",
-        err
-      );
-
-      if (axios.isAxiosError(err)) {
-        setSubmitError(
-          err.response?.data?.message ||
-            "Unable to submit application."
-        );
-      } else {
-        setSubmitError(
-          "Unable to submit application."
-        );
-      }
-    }
-  }
-
-  // ----------------------------------------------------
-  // LOADING
-  // ----------------------------------------------------
-  if (loading) {
-    return (
-      <main
-        style={{
-          maxWidth: "850px",
-          margin: "0 auto",
-          padding: "40px 24px",
-        }}
-      >
-        <p>
-          Loading vendor application...
-        </p>
-      </main>
-    );
-  }
-
-  // ----------------------------------------------------
-  // PAGE ERROR
-  // ----------------------------------------------------
-  if (pageError) {
-    return (
-      <main
-        style={{
-          maxWidth: "850px",
-          margin: "0 auto",
-          padding: "40px 24px",
-        }}
-      >
-        <h1>
-          Vendor Application
-        </h1>
-
-        <p>{pageError}</p>
-
-        <Link to="/discover">
-          Back to Discover
-        </Link>
-      </main>
-    );
-  }
-
-  if (!vendorCall) {
-    return null;
-  }
-
+  const loading =
+    call.loading ||
+    categories.loading ||
+    availability.loading ||
+    applications.loading;
+  const loadError =
+    call.error || categories.error || availability.error || applications.error;
+  const acceptedCategories = call.data?.acceptedCategories || [];
+  const options =
+    categories.data?.filter(
+      (category) =>
+        !acceptedCategories.length ||
+        acceptedCategories.some((accepted) => accepted._id === category._id),
+    ) || [];
   return (
-    <main
-      style={{
-        maxWidth: "850px",
-        margin: "0 auto",
-        padding: "40px 24px",
-      }}
-    >
-      <Link to="/discover">
-        ← Back to Discover
-      </Link>
-
-      <section
-        style={{
-          marginTop: "24px",
-        }}
+    <main className="poppin-page poppin-form-page">
+      <Link
+        to={call.data ? `/events/${call.data.event._id}` : "/opportunities"}
       >
-        <h1>
-          Apply as a Vendor
-        </h1>
-
-        <h2>
-          {vendorCall.title}
-        </h2>
-
-        <p>
-          {vendorCall.description}
-        </p>
-
-        <p>
-          <strong>Event:</strong>{" "}
-          {vendorCall.event?.title}
-        </p>
-
-        <p>
-          <strong>
-            Application Deadline:
-          </strong>{" "}
-          {new Date(
-            vendorCall.applicationDeadline
-          ).toLocaleDateString()}
-        </p>
-
-        <p>
-          <strong>Booth Fee:</strong>{" "}
-          ₱
-          {vendorCall.boothFee.toLocaleString()}
-        </p>
-
-        {vendorCall.boothSize && (
-          <p>
-            <strong>
-              Booth Size:
-            </strong>{" "}
-            {vendorCall.boothSize}
-          </p>
-        )}
-
-        {vendorCall.requirements.length >
-          0 && (
-          <>
-            <h3>Requirements</h3>
-
-            <ul>
-              {vendorCall.requirements.map(
-                (requirement) => (
-                  <li key={requirement}>
-                    {requirement}
-                  </li>
-                )
-              )}
-            </ul>
-          </>
-        )}
-      </section>
-
-      <hr
-        style={{
-          margin: "30px 0",
+        Back to {call.data ? "the event" : "opportunities"}
+      </Link>
+      <PageHeader
+        eyebrow="Bring your good finds"
+        title="Apply as a vendor"
+        description="Tell the organizer what you will bring. Your application is for this event."
+      />
+      <ResourceState
+        loading={loading}
+        error={loadError}
+        reload={() => {
+          call.reload();
+          categories.reload();
+          availability.reload();
+          applications.reload();
         }}
       />
-
-      {successMessage && (
-        <section
-          style={{
-            padding: "20px",
-            marginBottom: "24px",
-            background: "#f1fff3",
-            border: "1px solid #aaa",
-            borderRadius: "12px",
-          }}
-        >
-          <h2>
-            Application Submitted
-          </h2>
-
-          <p>{successMessage}</p>
-
-          <p>
-            <strong>
-              Your Application Code:
-            </strong>
-          </p>
-
-          <p
-            style={{
-              fontSize: "22px",
-              fontWeight: "bold",
-            }}
-          >
-            {applicationCode}
-          </p>
-
-          <p>
-            Save this code. You will
-            need it together with your
-            email to track your
-            application.
-          </p>
-
-          <Link to="/track-application">
-            Track Application
-          </Link>
-        </section>
-      )}
-
-      {submitError && (
-        <p>
-          {submitError}
-        </p>
-      )}
-
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <div>
-          <label>
-            Business Name
-          </label>
-
-          <br />
-
-          <input
-            {...register(
-              "businessName"
-            )}
-          />
-
-          {errors.businessName && (
-            <p>
-              {
-                errors.businessName
-                  .message
-              }
-            </p>
-          )}
-        </div>
-
-        <br />
-
-        <div>
-          <label>
-            Representative Name
-          </label>
-
-          <br />
-
-          <input
-            {...register(
-              "representativeName"
-            )}
-          />
-
-          {errors.representativeName && (
-            <p>
-              {
-                errors
-                  .representativeName
-                  .message
-              }
-            </p>
-          )}
-        </div>
-
-        <br />
-
-        <div>
-          <label>Email</label>
-
-          <br />
-
-          <input
-            type="email"
-            {...register("email")}
-          />
-
-          {errors.email && (
-            <p>
-              {errors.email.message}
-            </p>
-          )}
-        </div>
-
-        <br />
-
-        <div>
-          <label>
-            Contact Number
-          </label>
-
-          <br />
-
-          <input
-            {...register(
-              "contactNumber"
-            )}
-          />
-
-          {errors.contactNumber && (
-            <p>
-              {
-                errors.contactNumber
-                  .message
-              }
-            </p>
-          )}
-        </div>
-
-        <br />
-
-        <div>
-          <label>
-            Business Category
-          </label>
-
-          <br />
-
-          <select
-            {...register("category")}
-          >
-            <option value="">
-              Select category
-            </option>
-
-            {vendorCall.acceptedCategories.map(
-              (category) => (
-                <option
-                  key={category._id}
-                  value={category._id}
+      {!loading && !loadError && call.data && (
+        <>
+          <h2>{call.data.event.title}</h2>
+          <p>{call.data.title}</p>
+          {applications.data?.length ? (
+            <Alert variant="info">
+              You already applied to this event.{" "}
+              <Link to="/my-applications">View your application</Link>
+            </Alert>
+          ) : !availability.data?.availability.canApply ? (
+            <Alert variant="info">
+              Applications are closed, the deadline has passed or all spaces are
+              filled.
+            </Alert>
+          ) : (
+            <form
+              noValidate
+              onSubmit={handleSubmit(async (values) => {
+                setError("");
+                try {
+                  await api.post("/vendor-applications", {
+                    ...values,
+                    vendorCall: vendorCallId,
+                  });
+                  toast.success(
+                    "Application sent. The organizer will review your business.",
+                  );
+                  navigate("/my-applications", {
+                    state: {
+                      message:
+                        "Application sent. You can follow its status here.",
+                    },
+                  });
+                } catch (err) {
+                  setError(errorMessage(err));
+                }
+              })}
+            >
+              <section className="poppin-form-section">
+                <h2>Your business at this event</h2>
+                <FormField
+                  id="application-business"
+                  label="Business name"
+                  required
+                  error={errors.businessName?.message}
                 >
-                  {category.name}
-                </option>
-              )
-            )}
-          </select>
-
-          {errors.category && (
-            <p>
-              {
-                errors.category
-                  .message
-              }
-            </p>
+                  <Input
+                    maxLength={150}
+                    autoComplete="organization"
+                    {...register("businessName")}
+                  />
+                </FormField>
+                <FormField
+                  id="application-category"
+                  label="Business category"
+                  required
+                  error={errors.category?.message}
+                >
+                  <Select {...register("category")}>
+                    <option value="">Choose a category</option>
+                    {options.map((category) => (
+                      <option key={category._id} value={category._id}>
+                        {category.name}
+                      </option>
+                    ))}
+                  </Select>
+                </FormField>
+                <FormField
+                  id="application-products"
+                  label="Products or services"
+                  required
+                  error={errors.products?.message}
+                >
+                  <Textarea
+                    rows={3}
+                    maxLength={2000}
+                    {...register("products")}
+                  />
+                </FormField>
+                <FormField
+                  id="application-description"
+                  label="About your business (optional)"
+                  error={errors.businessDescription?.message}
+                >
+                  <Textarea
+                    rows={4}
+                    maxLength={5000}
+                    {...register("businessDescription")}
+                  />
+                </FormField>
+                <p className="poppin-field-hint">
+                  If accepted, your business name, category, products and
+                  description appear in this event's vendor lineup.
+                </p>
+              </section>
+              <section className="poppin-form-section">
+                <h2>Contact for the organizer</h2>
+                <div className="poppin-field-pair">
+                  <FormField
+                    id="application-email"
+                    label="Contact email"
+                    required
+                    error={errors.email?.message}
+                  >
+                    <Input
+                      type="email"
+                      autoComplete="email"
+                      {...register("email")}
+                    />
+                  </FormField>
+                  <FormField
+                    id="application-contact"
+                    label="Contact number"
+                    required
+                    error={errors.contactNumber?.message}
+                  >
+                    <Input
+                      type="tel"
+                      autoComplete="tel"
+                      maxLength={50}
+                      {...register("contactNumber")}
+                    />
+                  </FormField>
+                </div>
+                <FormField
+                  id="application-social"
+                  label="Social page (optional)"
+                  error={errors.socialMedia?.message}
+                >
+                  <Input maxLength={500} {...register("socialMedia")} />
+                </FormField>
+                <FormField
+                  id="application-notes"
+                  label="Anything the organizer should know? (optional)"
+                  error={errors.notes?.message}
+                >
+                  <Textarea rows={4} maxLength={2000} {...register("notes")} />
+                </FormField>
+              </section>
+              {error && <Alert variant="error">{error}</Alert>}
+              <Button type="submit" loading={isSubmitting}>
+                Send application
+              </Button>
+            </form>
           )}
-        </div>
-
-        <br />
-
-        <div>
-          <label>
-            Products / Services
-          </label>
-
-          <br />
-
-          <textarea
-            rows={4}
-            {...register("products")}
-          />
-
-          {errors.products && (
-            <p>
-              {
-                errors.products
-                  .message
-              }
-            </p>
-          )}
-        </div>
-
-        <br />
-
-        <div>
-          <label>
-            Business Description
-          </label>
-
-          <br />
-
-          <textarea
-            rows={5}
-            {...register(
-              "businessDescription"
-            )}
-          />
-
-          {errors.businessDescription && (
-            <p>
-              {
-                errors
-                  .businessDescription
-                  .message
-              }
-            </p>
-          )}
-        </div>
-
-        <br />
-
-        <div>
-          <label>
-            Social Media
-          </label>
-
-          <br />
-
-          <input
-            placeholder="@yourbusiness"
-            {...register(
-              "socialMedia"
-            )}
-          />
-        </div>
-
-        <br />
-
-        <div>
-          <label>
-            Additional Notes
-          </label>
-
-          <br />
-
-          <textarea
-            rows={4}
-            {...register("notes")}
-          />
-        </div>
-
-        <br />
-
-        <button
-          type="submit"
-          disabled={isSubmitting}
-        >
-          {isSubmitting
-            ? "Submitting..."
-            : "Submit Application"}
-        </button>
-      </form>
+        </>
+      )}
     </main>
   );
 }

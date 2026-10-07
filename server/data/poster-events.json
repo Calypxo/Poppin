@@ -1,0 +1,184 @@
+{
+  "organizers": [
+    {
+      "name": "Moderno Market",
+      "city": "City of San Fernando",
+      "email": "moderno-market@example.invalid"
+    },
+    {
+      "name": "The Flea Club",
+      "city": "City of San Fernando",
+      "email": "the-flea-club@example.invalid"
+    },
+    {
+      "name": "The Snatch Club",
+      "city": "City of San Fernando",
+      "email": "the-snatch-club@example.invalid"
+    },
+    {
+      "name": "The Weekend Club",
+      "city": "City of San Fernando",
+      "email": "the-weekend-club@example.invalid"
+    }
+  ],
+  "venues": [
+    {
+      "name": "Nepomuceno Street Market",
+      "address": "Nepomuceno Street, in front of Holy Rosary Parish",
+      "city": "Angeles City",
+      "venueType": "Outdoor Market"
+    },
+    {
+      "name": "The Atrium, SM City Telabastagan",
+      "address": "SM City Telabastagan, Telabastagan",
+      "city": "City of San Fernando",
+      "venueType": "Mall"
+    },
+    {
+      "name": "Silung Café",
+      "address": "Silung Café, Mabalacat",
+      "city": "Mabalacat City",
+      "venueType": "Cafe"
+    },
+    {
+      "name": "Nepo Quad",
+      "address": "Nepo Quad, Nepo Center",
+      "city": "Angeles City",
+      "venueType": "Lifestyle Center"
+    },
+    {
+      "name": "Jungle Base",
+      "address": "Jungle Base, San Fernando",
+      "city": "City of San Fernando",
+      "venueType": "Other"
+    },
+    {
+      "name": "West Aeropark",
+      "address": "West Aeropark, Clark",
+      "city": "Clark",
+      "venueType": "Other"
+    }
+  ],
+  "events": [
+    {
+      "title": "Kulitan: Matcha × Coffee",
+      "organizer": "Kulitan Flea Market",
+      "venue": "Nepomuceno Street Market",
+      "poster": "kulitan-matcha-coffee.jpg",
+      "start": "2026-08-22",
+      "end": "2026-08-23",
+      "startTime": "TBA",
+      "endTime": "TBA",
+      "categories": ["Flea Market", "Coffee & Matcha"],
+      "description": "Matcha, coffee and local finds at Kulitan Flea Market on Nepomuceno Street, in front of Holy Rosary Parish. Hours were not printed on the supplied poster."
+    },
+    {
+      "title": "The Matcha Club",
+      "organizer": "The Snatch Club",
+      "venue": "The Atrium, SM City Telabastagan",
+      "poster": "the-matcha-club.jpg",
+      "start": "2026-09-11",
+      "end": "2026-09-13",
+      "startTime": "10:00",
+      "endTime": "21:00",
+      "categories": ["Coffee & Matcha", "Flea Market"],
+      "description": "The Matcha Club by The Snatch Club at The Atrium, SM City Telabastagan, September 11–13, 10 AM–9 PM. The year is set to 2026 for this demo because it is not printed on the poster."
+    },
+    {
+      "title": "Feria Mabalacat",
+      "organizer": "The Snatch Club",
+      "venue": "Silung Café",
+      "poster": "feria-mabalacat.jpg",
+      "start": "2026-09-25",
+      "end": "2026-09-27",
+      "startTime": "17:00",
+      "endTime": "22:00",
+      "categories": ["Flea Market", "Food & Drinks"],
+      "description": "A local market by The Snatch Club at Silung Café, Mabalacat, September 25–27, 5 PM–10 PM. The year is set to 2026 for this demo because it is not printed on the poster."
+    },
+    {
+      "title": "Likha Lokal",
+      "organizer": "The Weekend Club",
+      "venue": "Nepo Quad",
+      "poster": "likha-lokal.jpg",
+      "start": "2026-08-21",
+      "end": "2026-08-23",
+      "startTime": "15:00",
+      "endTime": "22:00",
+      "categories": ["Flea Market", "Art & Creative", "Community"],
+      "description": "OPM busking, a flea market and a photobooth at Likha Lokal by The Weekend Club. August 21–23, 2026, 3 PM–10 PM at Nepo Quad, Angeles City."
+    },
+    {
+      "title": "Wheels & Deals",
+      "organizer": "Moderno Market",
+      "venue": "Orchard: A Community Place",
+      "poster": "wheels-and-deals.jpg",
+      "start": "2026-10-02",
+      "end": "2026-10-04",
+      "startTime": "15:00",
+      "endTime": "22:00",
+      "categories": ["Flea Market", "Community"],
+      "description": "Wheels & Deals by Moderno Market at Orchard Community Place, Telabastagan, October 2–4, 3 PM–10 PM. The year is set to 2026 for this demo because it is not printed on the poster."
+    },
+    {
+      "title": "Masquerade of Smiles",
+      "organizer": "The Flea Club",
+      "venue": "Orchard: A Community Place",
+      "poster": "masquerade-of-smiles.jpg",
+      "start": "2026-10-16",
+      "end": "2026-10-18",
+      "startTime": "15:00",
+      "endTime": "00:00",
+      "categories": ["Flea Market", "Community"],
+      "description": "A celebration of color, culture and community by The Flea Club at Orchard Community Place, October 16–18, 3 PM–midnight. The year is set to 2026 for this demo because it is not printed on the poster."
+    },
+    {
+      "title": "Kulitan Flea Market: Angeles City Youthfest",
+      "organizer": "Kulitan Flea Market",
+      "venue": "Nepomuceno Street Market",
+      "poster": "kulitan-youthfest.jpg",
+      "start": "2026-10-09",
+      "end": "2026-10-12",
+      "startTime": "TBA",
+      "endTime": "TBA",
+      "categories": ["Flea Market", "Community"],
+      "description": "Kulitan Flea Market at Angeles City Youthfest, October 9–12, 2026. Find the market on Nepomuceno Street, in front of Holy Rosary Parish. Hours were not printed on the supplied poster."
+    },
+    {
+      "title": "The Weekend Club Anniversary",
+      "organizer": "The Weekend Club",
+      "venue": "Orchard: A Community Place",
+      "poster": "weekend-club-october.jpg",
+      "start": "2026-10-09",
+      "end": "2026-10-11",
+      "startTime": "TBA",
+      "endTime": "TBA",
+      "categories": ["Flea Market", "Community"],
+      "description": "The Weekend Club Anniversary at Orchard, San Fernando, October 9–11. Hours were not printed on the poster. The year is set to 2026 for this demo."
+    },
+    {
+      "title": "Weekend Finds Market — Jungle Base",
+      "organizer": "The Weekend Club",
+      "venue": "Jungle Base",
+      "poster": "weekend-club-october.jpg",
+      "start": "2026-10-17",
+      "end": "2026-10-18",
+      "startTime": "TBA",
+      "endTime": "TBA",
+      "categories": ["Flea Market", "Fashion & Thrift"],
+      "description": "Weekend Finds Market by The Weekend Club at Jungle Base, San Fernando, October 17–18. Hours were not printed on the poster. The year is set to 2026 for this demo."
+    },
+    {
+      "title": "Weekend Finds Market — West Aeropark",
+      "organizer": "The Weekend Club",
+      "venue": "West Aeropark",
+      "poster": "weekend-club-october.jpg",
+      "start": "2026-10-23",
+      "end": "2026-10-25",
+      "startTime": "TBA",
+      "endTime": "TBA",
+      "categories": ["Flea Market", "Fashion & Thrift"],
+      "description": "Weekend Finds Market by The Weekend Club at West Aeropark, Clark, October 23–25. Hours were not printed on the poster. The year is set to 2026 for this demo."
+    }
+  ]
+}

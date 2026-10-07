@@ -1,0 +1,384 @@
+/* Shared presentation for public forms and account management. */
+:root {
+  --poppin-line: color-mix(in srgb, var(--color-ink) 22%, var(--color-paper));
+  --poppin-pink-wash: color-mix(
+    in srgb,
+    var(--color-pink) 30%,
+    var(--color-paper)
+  );
+}
+.poppin-page {
+  width: min(1200px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 36px 0 64px;
+  font-family: var(--font-body);
+  color: var(--color-ink);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.poppin-page h1,
+.poppin-page h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.25;
+}
+.poppin-page h1 {
+  font-size: clamp(28px, 4vw, 42px);
+  margin: 18px 0 14px;
+}
+.poppin-page h2 {
+  font-size: clamp(22px, 3vw, 28px);
+  margin: 0 0 18px;
+}
+.poppin-page h3 {
+  font-size: 20px;
+  line-height: 1.4;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+.poppin-page p {
+  margin: 10px 0;
+}
+.poppin-page a {
+  color: var(--color-ink);
+  text-underline-offset: 4px;
+}
+.poppin-page > a {
+  display: inline-block;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+.poppin-page :is(a, button, input, textarea, select):focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 4px;
+}
+.poppin-page input:not([type="checkbox"]):not([type="radio"]),
+.poppin-page textarea,
+.poppin-page select {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 11px 12px;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  border: 1px solid var(--poppin-line);
+  border-radius: 9px;
+}
+.poppin-page textarea {
+  resize: vertical;
+}
+.poppin-page input[type="checkbox"] {
+  accent-color: var(--color-ink);
+  width: 18px;
+  height: 18px;
+}
+.poppin-page label {
+  font-weight: 700;
+}
+.poppin-page form,
+.poppin-record-card {
+  border: 1px solid var(--poppin-line);
+  border-radius: 16px;
+  padding: 24px;
+  background: var(--color-paper);
+  box-shadow: 0 6px 22px color-mix(in srgb, var(--color-ink) 6%, transparent);
+}
+.poppin-page [style*="border:"][style*="border-radius:"] {
+  box-shadow: 0 4px 18px color-mix(in srgb, var(--color-ink) 5%, transparent);
+}
+.poppin-page img {
+  max-width: 100%;
+}
+.poppin-field {
+  margin: 0 0 18px;
+}
+.poppin-field label {
+  display: block;
+  margin-bottom: 6px;
+}
+.poppin-field-error {
+  font-size: 13px;
+  font-weight: 700;
+}
+.poppin-field [aria-invalid="true"] {
+  border: 2px solid var(--color-ink);
+  background: var(--poppin-pink-wash);
+}
+.poppin-management-section {
+  margin-top: 36px;
+}
+.poppin-management-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 24px;
+  align-items: start;
+}
+.poppin-record-list {
+  display: grid;
+  gap: 16px;
+}
+.poppin-field-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.poppin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+.poppin-count {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: var(--color-sage);
+  font: 700 12px var(--font-body);
+  vertical-align: middle;
+}
+.poppin-discover-filters {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 16px;
+  margin: 28px 0;
+}
+.poppin-discover-filters label {
+  display: block;
+  margin-bottom: 6px;
+}
+.poppin-discover-filters .poppin-actions {
+  grid-column: 1 / -1;
+  margin-top: 0;
+}
+.poppin-discover-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 32px 24px;
+  margin-top: 24px;
+}
+@media (max-width: 900px) {
+  .poppin-discover-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 640px) {
+  .poppin-discover-filters,
+  .poppin-discover-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .poppin-page {
+    width: calc(100% - 40px);
+    padding: 24px 0 48px !important;
+  }
+  .poppin-page h1 {
+    font-size: 28px !important;
+  }
+  .poppin-page form {
+    padding: 18px !important;
+  }
+  .poppin-management-grid,
+  .poppin-field-pair {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .poppin-page [style*="display: grid"] {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  .poppin-page [style*="display: flex"] {
+    flex-wrap: wrap;
+  }
+  .poppin-page [style*="display: grid"] > * {
+    min-width: 0;
+  }
+}
+/* Account, feed and event views reuse the approved public theme. */
+.poppin-auth,
+.poppin-form-page {
+  max-width: 720px;
+}
+.poppin-auth form {
+  margin-top: 24px;
+}
+.poppin-page-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: center;
+}
+.poppin-profile-header {
+  display: flex;
+  gap: 24px;
+  padding: 32px;
+  margin-bottom: 28px;
+  border-radius: 18px;
+  background: var(--color-sage);
+  border: 1px solid var(--poppin-line);
+  box-shadow: 0 6px 0 var(--poppin-pink-wash);
+}
+.poppin-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 116px;
+  height: 116px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid var(--poppin-line);
+  background: var(--color-paper);
+  overflow: hidden;
+  font-family: var(--font-display);
+  font-size: 32px;
+}
+.poppin-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.poppin-avatar-small {
+  width: 48px;
+  height: 48px;
+  font-size: 18px;
+}
+.poppin-person {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.poppin-person p {
+  margin: 2px 0;
+}
+.poppin-post-meta {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 16px 0;
+  font-size: 13px;
+}
+.poppin-status {
+  display: inline-flex;
+  padding: 4px 12px;
+  border: 1px solid var(--poppin-line);
+  border-radius: 30px;
+  background: var(--color-sage);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+.poppin-status-soft {
+  background: var(--poppin-pink-wash);
+}
+.poppin-social-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 28px;
+}
+.poppin-feed {
+  max-width: 760px;
+}
+.poppin-feed .poppin-record-list {
+  margin-top: 28px;
+}
+.poppin-feed .poppin-event-card-frame {
+  aspect-ratio: 4/3;
+}
+.poppin-post-image {
+  width: 100%;
+  max-height: 540px;
+  object-fit: contain;
+  border-radius: 12px;
+  margin-top: 16px;
+}
+.poppin-preserve-lines {
+  white-space: pre-line;
+}
+.poppin-event-header {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 40px;
+  align-items: center;
+  margin-top: 24px;
+}
+.poppin-detail-poster {
+  height: 520px;
+  border: 1px solid var(--poppin-line);
+  border-radius: 16px;
+  padding: 16px;
+  background: var(--color-sage);
+  overflow: hidden;
+}
+.poppin-owner-actions {
+  padding: 18px 24px;
+  background: var(--poppin-pink-wash);
+  border-radius: 12px;
+  margin-top: 28px;
+}
+.poppin-image-uploader {
+  margin: 20px 0;
+  padding: 18px;
+  border: 1px dashed var(--poppin-line);
+  border-radius: 12px;
+}
+.poppin-image-uploader img {
+  display: block;
+  max-width: 280px;
+  max-height: 280px;
+  object-fit: contain;
+}
+.poppin-public nav button.poppin-nav-link {
+  background: transparent;
+  color: var(--color-ink);
+  font: inherit;
+  cursor: pointer;
+}
+.poppin-record-card {
+  min-width: 0;
+}
+.poppin-page .poppin-actions select {
+  width: auto;
+}
+@media (max-width: 767px) {
+  .poppin-social-grid,
+  .poppin-event-header {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .poppin-profile-header {
+    padding: 22px;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .poppin-page-heading {
+    align-items: start;
+    flex-direction: column;
+  }
+  .poppin-detail-poster {
+    height: 400px;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .poppin-post,
+  .poppin-profile-header {
+    animation: poppin-appear 0.25s ease-out;
+  }
+  @keyframes poppin-appear {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+.poppin-page fieldset.poppin-field {
+  border: 0;
+  padding: 0;
+  min-width: 0;
+}
+.poppin-page fieldset.poppin-field legend {
+  font-weight: 700;
+  margin-bottom: 8px;
+}

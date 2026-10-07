@@ -34,6 +34,11 @@ const vendorCallSchema = new mongoose.Schema(
       type: Number,
       required: [true, "Total vendor slots are required"],
       min: [1, "Total slots must be at least 1"],
+      max: [1000, "Total slots cannot exceed 1000"],
+      validate: {
+        validator: Number.isInteger,
+        message: "Total slots must be a whole number",
+      },
     },
 
     boothFee: {
@@ -74,7 +79,8 @@ const vendorCallSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+    optimisticConcurrency: true,
+  },
 );
 
 module.exports = mongoose.model("VendorCall", vendorCallSchema);

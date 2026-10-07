@@ -1,0 +1,9 @@
+# Local configuration and dependencies in either application.
+**/node_modules/
+**/.env
+**/.env.*
+!**/.env.example
+**/dist/
+**/coverage/
+*.log
+.DS_Store

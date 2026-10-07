@@ -1,4 +1,4 @@
-import type { Category } from "./event";
+import type { Category, Organizer, Venue } from "./event";
 
 export interface VendorCallEvent {
   _id: string;
@@ -6,6 +6,8 @@ export interface VendorCallEvent {
   startDate: string;
   endDate: string;
   status: string;
+  organizer?: Organizer;
+  venue?: Venue;
 }
 
 export interface VendorCall {
@@ -34,20 +36,15 @@ export interface VendorCall {
 
 export interface VendorCallAvailability {
   statistics: {
-    totalApplications: number;
-    approvedApplications: number;
-    pendingApplications: number;
-    rejectedApplications: number;
+    totalApplications?: number;
+    acceptedApplications: number;
+    pendingApplications?: number;
+    rejectedApplications?: number;
     slotsRemaining: number;
   };
 
   availability: {
-    status:
-      | "draft"
-      | "upcoming"
-      | "open"
-      | "full"
-      | "closed";
+    status: "draft" | "upcoming" | "open" | "full" | "closed";
 
     canApply: boolean;
   };
