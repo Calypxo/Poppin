@@ -1,5 +1,12 @@
-﻿import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpRight,
+  CalendarDays,
+  Plus,
+  Store,
+} from "lucide-react";
 import api from "../../api/client";
 import useResource, { errorMessage } from "../../hooks/useResource";
 import type { FeedResponse } from "../../types/account";
@@ -9,36 +16,40 @@ import EventCard from "../../components/events/EventCard";
 import EventPostCard from "../../components/shared/EventPostCard";
 import OrganizerIdentity from "../../components/shared/OrganizerIdentity";
 import StatusBadge from "../../components/shared/StatusBadge";
+import VendorOpportunityCard from "../../components/vendors/VendorOpportunityCard";
 import { PageContainer, PageHeader } from "../../components/layout/Page";
 import Button, { ButtonLink } from "../../components/ui/Button";
-import Card from "../../components/ui/Card";
 import Alert from "../../components/ui/Alert";
 import { useUI } from "../../components/ui/context";
-import { WatercolorSticker } from "../../components/public/MarketDecorations";
+
 export default function FeedPage() {
   const [page, setPage] = useState(1);
   const [actionError, setActionError] = useState("");
   const { user } = useAuth();
   const { confirm, toast } = useUI();
-  const resource = useResource<FeedResponse>(`/feed?page=${page}`);
+  const resource = useResource<FeedResponse>("/feed?page=" + page);
   return (
-    <PageContainer width="feed" className="poppin-feed-wide">
+    <PageContainer className="poppin-news-page">
       <PageHeader
-        eyebrow="From your local circle"
-        title="What’s Popp’in"
+        eyebrow="THE LATEST FROM YOUR LOCAL SCENE"
+        title="What’s Popp’in."
         featured
-        motif="croissant"
-        description="Fresh plans, little updates and the people making our weekends."
+        description="Fresh events, news from the organizers and new places to bring your business."
         actions={
           user?.organizerId ? (
             <>
-              <ButtonLink to="/events/new">Create an event ↗</ButtonLink>
+              <ButtonLink
+                to="/events/new"
+                icon={<Plus size={17} aria-hidden="true" />}
+              >
+                Create an event
+              </ButtonLink>
               <ButtonLink variant="outline" to="/posts/new">
-                Share an update
+                Post an update
               </ButtonLink>
             </>
           ) : user ? (
-            <ButtonLink to="/organizer/profile/edit">
+            <ButtonLink variant="outline" to="/organizer/profile/edit">
               Become an organizer
             </ButtonLink>
           ) : undefined
@@ -49,18 +60,23 @@ export default function FeedPage() {
           {actionError}
         </Alert>
       )}
-      <div className="poppin-feed-layout">
+      <div className="poppin-news-layout">
         <div>
+          <div className="poppin-stream-heading">
+            <span className="poppin-live-dot" aria-hidden="true" />
+            <h2>The local noticeboard</h2>
+            <span>Latest first</span>
+          </div>
           <ResourceState
             {...resource}
             empty={
               !resource.data?.items.length
-                ? "The noticeboard is waiting for its first published event. Find your next plan in Discover."
+                ? "Fresh plans are on their way. Discover the events already around you."
                 : ""
             }
             action={<ButtonLink to="/discover">Discover events</ButtonLink>}
           />
-          <div className="poppin-record-list">
+          <div className="poppin-news-stream">
             {resource.data?.items.map((item) =>
               item.kind === "post" && item.post ? (
                 <EventPostCard
@@ -69,7 +85,7 @@ export default function FeedPage() {
                   onDelete={async (post) => {
                     if (
                       !(await confirm({
-                        title: `Delete “${post.title}”?`,
+                        title: "Delete “" + post.title + "”?",
                         description:
                           "This update will be removed from your event and the shared feed.",
                         confirmLabel: "Delete post",
@@ -78,7 +94,7 @@ export default function FeedPage() {
                     )
                       return;
                     try {
-                      await api.delete(`/posts/${post._id}`);
+                      await api.delete("/posts/" + post._id);
                       toast.success("Post deleted.");
                       resource.reload();
                     } catch (err) {
@@ -87,94 +103,97 @@ export default function FeedPage() {
                   }}
                 />
               ) : item.kind === "event" ? (
-                <Card variant="social" key={item._id}>
-                  <div className="poppin-post-meta poppin-social-identity">
+                <section className="poppin-feed-event" key={item._id}>
+                  <div className="poppin-feed-entry-heading">
                     <OrganizerIdentity organizer={item.event.organizer} />
                     <StatusBadge status="new event" />
                     <time dateTime={item.timestamp}>
                       {new Date(item.timestamp).toLocaleDateString("en-PH", {
                         timeZone: "Asia/Manila",
+                        month: "short",
+                        day: "numeric",
                       })}
                     </time>
                   </div>
                   <EventCard variant="social" event={item.event} />
-                </Card>
-              ) : (
-                <Card variant="ticket" key={item._id}>
-                  <div className="poppin-post-meta">
-                    <OrganizerIdentity organizer={item.event.organizer} />
-                    <StatusBadge status="vendor call" />
-                    <time dateTime={item.timestamp}>
-                      {new Date(item.timestamp).toLocaleDateString("en-PH", {
-                        timeZone: "Asia/Manila",
-                      })}
-                    </time>
-                  </div>
-                  <h2>{item.vendorCall?.title}</h2>
-                  <p>{item.vendorCall?.description}</p>
-                  <p>
-                    {item.event.title} · {item.event.venue?.city}
-                  </p>
-                  <div className="poppin-actions">
-                    <ButtonLink
-                      size="sm"
-                      variant="outline"
-                      to={`/events/${item.event._id}`}
-                    >
-                      View event ↗
-                    </ButtonLink>
-                    <ButtonLink size="sm" to="/opportunities">
-                      View opportunity
-                    </ButtonLink>
-                  </div>
-                </Card>
-              ),
+                </section>
+              ) : item.vendorCall ? (
+                <section className="poppin-feed-recruitment" key={item._id}>
+                  <VendorOpportunityCard
+                    call={{ ...item.vendorCall, event: item.event }}
+                    availability={item.vendorCall}
+                  />
+                </section>
+              ) : null,
             )}
           </div>
           {resource.data && (
-            <div className="poppin-actions">
+            <nav
+              className="poppin-feed-pagination"
+              aria-label="Noticeboard pages"
+            >
               <Button
                 variant="outline"
                 disabled={page === 1 || resource.loading}
-                onClick={() => setPage((p) => p - 1)}
+                onClick={() => setPage((value) => value - 1)}
               >
+                <ArrowLeft size={16} aria-hidden="true" />
                 Newer
               </Button>
               <span aria-live="polite">Page {page}</span>
               <Button
+                variant="outline"
                 disabled={!resource.data.hasMore || resource.loading}
-                onClick={() => setPage((p) => p + 1)}
+                onClick={() => setPage((value) => value + 1)}
               >
                 Older
+                <ArrowRight size={16} aria-hidden="true" />
               </Button>
-            </div>
+            </nav>
           )}
         </div>
-        <aside className="poppin-feed-aside">
-          <span className="poppin-eyebrow">YOUR WEEKEND FIELD NOTES</span>
-          <WatercolorSticker motif="croissant" className="poppin-heading-art" />
-          <h2>A little out of the ordinary.</h2>
-          <p>
-            Browse the markets, meet local businesses, and save a little room
-            for the weekend.
-          </p>
-          <div className="poppin-actions">
-            <ButtonLink fullWidth size="sm" to="/discover">
-              Find your next plan ↗
-            </ButtonLink>
+        <aside className="poppin-news-aside">
+          <div className="poppin-aside-plan">
+            <span className="poppin-section-icon">
+              <CalendarDays size={26} aria-hidden="true" />
+            </span>
+            <p className="poppin-eyebrow">LESS SCROLLING. MORE GOING.</p>
+            <h2>Make room for a good weekend.</h2>
+            <p>
+              Your next favorite market, coffee or local find is closer than you
+              think.
+            </p>
             <ButtonLink
               fullWidth
-              size="sm"
-              variant="outline"
-              to="/opportunities"
+              to="/discover"
+              icon={<ArrowUpRight size={17} aria-hidden="true" />}
             >
-              Vendor opportunities
+              Find your next plan
+            </ButtonLink>
+          </div>
+          <div className="poppin-aside-business">
+            <Store size={25} aria-hidden="true" />
+            <h3>Bring your business along.</h3>
+            <p>
+              Find an event, send your application and make your next local
+              connection.
+            </p>
+            <ButtonLink
+              size="sm"
+              variant="ghost"
+              to="/opportunities"
+              icon={<ArrowUpRight size={16} aria-hidden="true" />}
+            >
+              Explore opportunities
             </ButtonLink>
           </div>
           {!user && (
-            <p className="mt-5">
-              <Link to="/register">Join your local circle ↗</Link>
-            </p>
+            <div className="poppin-aside-signup">
+              <p>One account. A whole local scene.</p>
+              <ButtonLink size="sm" variant="outline" fullWidth to="/register">
+                Join POPP’IN
+              </ButtonLink>
+            </div>
           )}
         </aside>
       </div>

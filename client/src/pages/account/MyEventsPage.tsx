@@ -10,6 +10,7 @@ import Alert from "../../components/ui/Alert";
 import DropdownMenu from "../../components/ui/DropdownMenu";
 import Tabs from "../../components/ui/Tabs";
 import { useUI } from "../../components/ui/context";
+import { ArrowUpRight, CalendarDays, FileText, Users } from "lucide-react";
 export default function MyEventsPage() {
   const resource = useResource<Event[]>("/events/mine");
   const [error, setError] = useState("");
@@ -65,11 +66,11 @@ export default function MyEventsPage() {
       (event) => filter === "all" || event.status === filter,
     ) || [];
   return (
-    <PageContainer>
+    <PageContainer className="poppin-management-page">
       <PageHeader
-        eyebrow="Your local plans"
+        eyebrow="ORGANIZER WORKSPACE"
         title="My events"
-        description="From the first little idea to a full weekend market. Publish when you’re ready."
+        description="From your first idea to opening day. Everything you’re bringing to life, in one place."
         motif="craft-booth"
         actions={
           <>
@@ -80,9 +81,42 @@ export default function MyEventsPage() {
           </>
         }
       />
-      <div className="poppin-actions">
+      {resource.data && (
+        <div className="poppin-account-metrics">
+          <div>
+            <CalendarDays size={22} aria-hidden="true" />
+            <span>Published events</span>
+            <strong>
+              {
+                resource.data.filter((event) => event.status === "published")
+                  .length
+              }
+            </strong>
+          </div>
+          <div>
+            <FileText size={22} aria-hidden="true" />
+            <span>Drafts in progress</span>
+            <strong>
+              {resource.data.filter((event) => event.status === "draft").length}
+            </strong>
+          </div>
+          <div>
+            <Users size={22} aria-hidden="true" />
+            <span>Pending applications</span>
+            <strong>
+              {resource.data.reduce(
+                (count, event) =>
+                  count + (event.managementStats?.pendingApplications || 0),
+                0,
+              )}
+            </strong>
+          </div>
+        </div>
+      )}
+      <div className="poppin-management-toolbar">
         <ButtonLink size="sm" variant="ghost" to="/applications?view=incoming">
           Vendor applications
+          <ArrowUpRight size={15} aria-hidden="true" />
         </ButtonLink>
         <ButtonLink size="sm" variant="ghost" to="/catalog">
           Venues & categories
@@ -113,13 +147,13 @@ export default function MyEventsPage() {
           }
           action={<ButtonLink to="/events/new">Create an event</ButtonLink>}
         />
-        <div className="poppin-discover-grid">
+        <div className="poppin-managed-events-grid">
           {events.map((event) => (
-            <article key={event._id}>
+            <article className="poppin-managed-event" key={event._id}>
               <EventCard event={event} />
               {event.managementStats && (
                 <dl
-                  className="poppin-opportunity-meta"
+                  className="poppin-management-counts"
                   aria-label={`${event.title} applications and capacity`}
                 >
                   <div>
@@ -143,7 +177,7 @@ export default function MyEventsPage() {
                   </div>
                 </dl>
               )}
-              <div className="poppin-actions">
+              <div className="poppin-actions poppin-managed-event-actions">
                 {event.status !== "cancelled" && (
                   <ButtonLink
                     size="sm"

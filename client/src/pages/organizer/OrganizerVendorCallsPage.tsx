@@ -23,10 +23,10 @@ import {
 } from "../../components/ui/FormControls";
 import Button, { ButtonLink } from "../../components/ui/Button";
 import Alert from "../../components/ui/Alert";
-import Card from "../../components/ui/Card";
+import VendorRecruitmentCard from "../../components/vendors/VendorRecruitmentCard";
 import ResourceState from "../../components/shared/ResourceState";
-import StatusBadge from "../../components/shared/StatusBadge";
 import { useUI } from "../../components/ui/context";
+import { Store, DoorOpen, FileText } from "lucide-react";
 export default function OrganizerVendorCallsPage() {
   const { eventId } = useParams();
   const { user } = useAuth();
@@ -165,12 +165,12 @@ export default function OrganizerVendorCallsPage() {
     }
   }
   return (
-    <PageContainer>
+    <PageContainer className="poppin-recruitment-page">
       <Link to={eventId ? `/events/${eventId}` : "/my-events"}>
         ← Back to your {eventId ? "event" : "events"}
       </Link>
       <PageHeader
-        eyebrow="Good businesses. A great little market."
+        eyebrow="BUILD YOUR EVENT LINEUP"
         title="Vendor recruitment"
         description="Invite the makers, bakers and local favorites that make your event special."
         motif="flower-market-booth"
@@ -178,6 +178,29 @@ export default function OrganizerVendorCallsPage() {
       <ResourceState {...events} />
       <ResourceState {...categories} />
       {error && <Alert variant="error">{error}</Alert>}
+      {calls.data && (
+        <div className="poppin-account-metrics">
+          <div>
+            <Store size={22} aria-hidden="true" />
+            <span>Recruitment calls</span>
+            <strong>{ownCalls.length}</strong>
+          </div>
+          <div>
+            <DoorOpen size={22} aria-hidden="true" />
+            <span>Set to open</span>
+            <strong>
+              {ownCalls.filter((call) => call.status === "open").length}
+            </strong>
+          </div>
+          <div>
+            <FileText size={22} aria-hidden="true" />
+            <span>Drafts</span>
+            <strong>
+              {ownCalls.filter((call) => call.status === "draft").length}
+            </strong>
+          </div>
+        </div>
+      )}
       {!events.loading && !events.error && !ownEvents.length ? (
         <ResourceState
           loading={false}
@@ -190,92 +213,100 @@ export default function OrganizerVendorCallsPage() {
         !categories.loading &&
         !events.error &&
         !categories.error && (
-          <div className="poppin-management-grid">
+          <div className="poppin-management-grid poppin-composer-grid">
             <form
               ref={formRef}
+              className="poppin-editor-form"
               noValidate
               onSubmit={handleSubmit((data) => save(data, "draft"))}
             >
+              <p className="poppin-eyebrow">01 / INVITE THE RIGHT BUSINESSES</p>
               <h2>
-                {editingId
-                  ? "Edit your vendor call"
-                  : "A place for local businesses"}
+                {editingId ? "Edit your vendor call" : "Create a vendor call"}
               </h2>
               <p className="mb-6 text-sm">
                 Set the dates, spaces and details vendors need to know.
               </p>
-              <Field label="Event" error={errors.event?.message}>
-                <Select {...register("event")}>
-                  <option value="">Select event</option>
-                  {ownEvents.map((event) => (
-                    <option key={event._id} value={event._id}>
-                      {event.title} ({event.status})
-                    </option>
-                  ))}
-                </Select>
-              </Field>
-              <Field label="Vendor Call Title" error={errors.title?.message}>
-                <Input {...register("title")} />
-              </Field>
-              <Field label="Description" error={errors.description?.message}>
-                <Textarea rows={5} {...register("description")} />
-              </Field>
-              <div className="poppin-field-pair">
-                <Field
-                  label="Application Opening Date"
-                  error={errors.applicationStartDate?.message}
-                >
-                  <Input type="date" {...register("applicationStartDate")} />
+              <section className="poppin-form-section">
+                <Field label="Event" error={errors.event?.message}>
+                  <Select {...register("event")}>
+                    <option value="">Select event</option>
+                    {ownEvents.map((event) => (
+                      <option key={event._id} value={event._id}>
+                        {event.title} ({event.status})
+                      </option>
+                    ))}
+                  </Select>
                 </Field>
-                <Field
-                  label="Application Deadline"
-                  error={errors.applicationDeadline?.message}
-                >
-                  <Input type="date" {...register("applicationDeadline")} />
+                <Field label="Vendor Call Title" error={errors.title?.message}>
+                  <Input {...register("title")} />
                 </Field>
-                <Field
-                  label="Total Vendor Slots"
-                  error={errors.totalSlots?.message}
-                >
-                  <Input type="number" min="1" {...register("totalSlots")} />
+                <Field label="Description" error={errors.description?.message}>
+                  <Textarea rows={5} {...register("description")} />
                 </Field>
-                <Field label="Booth Fee" error={errors.boothFee?.message}>
-                  <Input type="number" min="0" {...register("boothFee")} />
-                </Field>
-              </div>
-              <Field label="Booth Size">
-                <Input
-                  placeholder="Example: 2m x 2m"
-                  {...register("boothSize")}
-                />
-              </Field>
-              <Field label="Requirements">
-                <Textarea
-                  rows={4}
-                  placeholder="Separate each requirement with a comma"
-                  {...register("requirements")}
-                />
-                <small>
-                  Example: Business name, product list, social media page
-                </small>
-              </Field>
-              <Field
-                label="Accepted Categories"
-                error={errors.acceptedCategories?.message}
-              >
-                <div className="poppin-checkbox-grid">
-                  {categories.data?.map((category) => (
-                    <label key={category._id}>
-                      <Checkbox
-                        value={category._id}
-                        {...register("acceptedCategories")}
-                      />
-                      {category.name}
-                    </label>
-                  ))}
+              </section>
+              <section className="poppin-form-section">
+                <h3>Dates & booth details</h3>
+                <div className="poppin-field-pair">
+                  <Field
+                    label="Application Opening Date"
+                    error={errors.applicationStartDate?.message}
+                  >
+                    <Input type="date" {...register("applicationStartDate")} />
+                  </Field>
+                  <Field
+                    label="Application Deadline"
+                    error={errors.applicationDeadline?.message}
+                  >
+                    <Input type="date" {...register("applicationDeadline")} />
+                  </Field>
+                  <Field
+                    label="Total Vendor Slots"
+                    error={errors.totalSlots?.message}
+                  >
+                    <Input type="number" min="1" {...register("totalSlots")} />
+                  </Field>
+                  <Field label="Booth Fee" error={errors.boothFee?.message}>
+                    <Input type="number" min="0" {...register("boothFee")} />
+                  </Field>
                 </div>
-              </Field>
-              <div className="poppin-actions">
+                <Field label="Booth Size">
+                  <Input
+                    placeholder="Example: 2m x 2m"
+                    {...register("boothSize")}
+                  />
+                </Field>
+              </section>
+              <section className="poppin-form-section">
+                <h3>Who you’re looking for</h3>
+                <Field label="Requirements">
+                  <Textarea
+                    rows={4}
+                    placeholder="Separate each requirement with a comma"
+                    {...register("requirements")}
+                  />
+                  <small>
+                    Example: Business name, product list, social media page
+                  </small>
+                </Field>
+                <Field
+                  label="Accepted Categories"
+                  error={errors.acceptedCategories?.message}
+                >
+                  <div className="poppin-checkbox-grid">
+                    {categories.data?.map((category) => (
+                      <label key={category._id}>
+                        <Checkbox
+                          value={category._id}
+                          {...register("acceptedCategories")}
+                        />
+                        {category.name}
+                      </label>
+                    ))}
+                  </div>
+                </Field>
+              </section>
+              <div className="poppin-actions poppin-form-footer">
                 <Button type="submit" variant="outline" loading={isSubmitting}>
                   {editingId ? "Save Changes" : "Save Draft"}
                 </Button>
@@ -292,8 +323,14 @@ export default function OrganizerVendorCallsPage() {
                 )}
               </div>
             </form>
-            <section>
-              <h2>Your vendor calls</h2>
+            <section className="poppin-management-history">
+              <div className="poppin-section-heading">
+                <h2>
+                  <span className="poppin-section-index">02</span>Your vendor
+                  calls
+                </h2>
+                <span className="poppin-count">{ownCalls.length}</span>
+              </div>
               <ResourceState
                 {...calls}
                 empty={
@@ -304,66 +341,13 @@ export default function OrganizerVendorCallsPage() {
               />
               <div className="poppin-record-list">
                 {ownCalls.map((call) => (
-                  <Card variant="ticket" key={call._id}>
-                    <StatusBadge status={call.status} />
-                    <h3 className="mt-4">{call.title}</h3>
-                    <p>{call.event.title}</p>
-                    <p>{call.description}</p>
-                    <dl className="poppin-opportunity-meta">
-                      <div>
-                        <dt>Opens</dt>
-                        <dd>
-                          {new Date(
-                            call.applicationStartDate,
-                          ).toLocaleDateString("en-PH", {
-                            timeZone: "Asia/Manila",
-                          })}
-                        </dd>
-                      </div>
-                      <div>
-                        <dt>Apply by</dt>
-                        <dd>
-                          {new Date(
-                            call.applicationDeadline,
-                          ).toLocaleDateString("en-PH", {
-                            timeZone: "Asia/Manila",
-                          })}
-                        </dd>
-                      </div>
-                      <div>
-                        <dt>Spaces</dt>
-                        <dd>{call.totalSlots}</dd>
-                      </div>
-                      <div>
-                        <dt>Booth fee</dt>
-                        <dd>₱{call.boothFee.toLocaleString()}</dd>
-                      </div>
-                    </dl>
-                    <div className="poppin-actions">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => startEditing(call)}
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="danger"
-                        loading={deleting === call._id}
-                        onClick={() => void remove(call)}
-                      >
-                        Delete
-                      </Button>
-                      <ButtonLink
-                        size="sm"
-                        variant="ghost"
-                        to={`/events/${call.event._id}/applications`}
-                      >
-                        Applications ↗
-                      </ButtonLink>
-                    </div>
-                  </Card>
+                  <VendorRecruitmentCard
+                    key={call._id}
+                    call={call}
+                    deleting={deleting === call._id}
+                    onEdit={() => startEditing(call)}
+                    onDelete={() => void remove(call)}
+                  />
                 ))}
               </div>
             </section>

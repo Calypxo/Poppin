@@ -1,8 +1,6 @@
-import { useEffect, useRef } from "react";
-import type { ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { ArrowUpRight } from "lucide-react";
-import { WatercolorSticker } from "./MarketDecorations";
+import { ArrowUpRight, Asterisk, Pause, Play } from "lucide-react";
 import { ButtonLink } from "../ui/Button";
 
 export function ActionLink({
@@ -25,15 +23,13 @@ export function ActionLink({
     <ButtonLink
       to={to}
       size="lg"
-      variant={light ? "outline" : "primary"}
-      className={`poppin-button ${light ? "poppin-button-light" : ""}`}
-      icon={<ArrowUpRight size={17} aria-hidden="true" />}
+      variant={light ? "secondary" : "primary"}
+      icon={<ArrowUpRight size={18} aria-hidden="true" />}
     >
       {children}
     </ButtonLink>
   );
 }
-
 export function Reveal({
   children,
   className = "",
@@ -50,7 +46,6 @@ export function Reveal({
       window.matchMedia("(prefers-reduced-motion: reduce)").matches
     )
       return;
-    // Content is visible by default, including without animation support.
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -58,7 +53,7 @@ export function Reveal({
           observer.disconnect();
         }
       },
-      { threshold: 0.08 },
+      { threshold: 0.04 },
     );
     element.classList.add("poppin-reveal-ready");
     observer.observe(element);
@@ -70,11 +65,6 @@ export function Reveal({
     </div>
   );
 }
-
-export function FlowerSticker({ className = "" }: { className?: string }) {
-  return <WatercolorSticker motif="flower-bouquet" className={className} />;
-}
-
 export function SectionHeading({
   eyebrow,
   children,
@@ -85,30 +75,45 @@ export function SectionHeading({
   copy?: string;
 }) {
   return (
-    <Reveal>
-      <p className="poppin-eyebrow mb-4">{eyebrow}</p>
+    <div className="section-heading">
+      <p className="poppin-eyebrow">{eyebrow}</p>
       <h2 className="poppin-heading">{children}</h2>
-      {copy && (
-        <p className="mt-4 max-w-lg text-sm leading-7 text-ink/75 sm:text-base">
-          {copy}
-        </p>
-      )}
-    </Reveal>
+      {copy && <p className="section-description">{copy}</p>}
+    </div>
   );
 }
-
 export function DecorativeMarquee() {
-  const content =
-    "WHAT’S POPP’IN?  ✳  WHAT’S NEAR YOU?  ✳  PAMPANGA  ✳  LOCAL FINDS  ✳  ";
+  const [paused, setPaused] = useState(false);
+  const words = ["GOOD FINDS", "GREAT PEOPLE", "LOCAL ENERGY", "GO POPP'IN"];
   return (
-    <div
-      className="overflow-hidden border-y border-pink bg-pink/60 py-4 text-ink"
-      aria-hidden="true"
-    >
-      <div className="poppin-marquee flex w-max font-body text-xl italic sm:text-2xl">
-        <span className="whitespace-pre">{content.repeat(2)}</span>
-        <span className="whitespace-pre">{content.repeat(2)}</span>
+    <div className={`modern-marquee ${paused ? "is-paused" : ""}`}>
+      <div className="modern-marquee-viewport" aria-hidden="true">
+        <div className="modern-marquee-track">
+          {["one", "two"].map((copy) => (
+            <div key={copy}>
+              {words.map((word) => (
+                <span key={word}>
+                  {word}
+                  <Asterisk size={24} />
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
+      <button
+        type="button"
+        className="marquee-control"
+        onClick={() => setPaused(!paused)}
+        aria-label={paused ? "Play moving banner" : "Pause moving banner"}
+        aria-pressed={paused}
+      >
+        {paused ? (
+          <Play size={14} aria-hidden="true" />
+        ) : (
+          <Pause size={14} aria-hidden="true" />
+        )}
+      </button>
     </div>
   );
 }

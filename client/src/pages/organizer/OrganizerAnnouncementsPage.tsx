@@ -21,6 +21,7 @@ import { PageHeader } from "../../components/layout/Page";
 import { useUI } from "../../components/ui/context";
 import { EmptyState } from "../../components/ui/States";
 import { ButtonLink } from "../../components/ui/Button";
+import { Megaphone, FileText, Radio } from "lucide-react";
 export default function OrganizerAnnouncementsPage() {
   const { confirm, toast } = useUI();
   const { eventId } = useParams();
@@ -101,23 +102,47 @@ export default function OrganizerAnnouncementsPage() {
     }
   }
   return (
-    <main className="poppin-page">
+    <main className="poppin-page poppin-updates-page">
       <Link to={eventId ? `/events/${eventId}` : "/my-events"}>
         ← Your event
       </Link>
       <PageHeader
-        eyebrow="From you, to your local circle"
-        title="Share a little update"
-        description="A new announcement, a helpful reminder, or a little news from the market."
+        eyebrow="KEEP EVERYONE IN THE LOOP"
+        title="Event updates"
+        description="Opening-day details, a lineup reveal or a change of plan. Share what your community needs to know."
         motif="book-stack"
       />
       <ResourceState {...events} />
       <ResourceState {...resource} />
       {error && <Alert variant="error">{error}</Alert>}
       {message && <Alert variant="success">{message}</Alert>}
+      {resource.data && (
+        <div className="poppin-account-metrics">
+          <div>
+            <Megaphone size={22} aria-hidden="true" />
+            <span>Total updates</span>
+            <strong>{posts.length}</strong>
+          </div>
+          <div>
+            <Radio size={22} aria-hidden="true" />
+            <span>Published</span>
+            <strong>{posts.filter((post) => post.isPublished).length}</strong>
+          </div>
+          <div>
+            <FileText size={22} aria-hidden="true" />
+            <span>Drafts</span>
+            <strong>{posts.filter((post) => !post.isPublished).length}</strong>
+          </div>
+        </div>
+      )}
       {selectedEvents.length > 0 && (
-        <div className="poppin-management-grid">
-          <form noValidate onSubmit={handleSubmit((data) => save(data, true))}>
+        <div className="poppin-management-grid poppin-composer-grid">
+          <form
+            className="poppin-editor-form"
+            noValidate
+            onSubmit={handleSubmit((data) => save(data, true))}
+          >
+            <p className="poppin-eyebrow">01 / THE LATEST FROM YOUR EVENT</p>
             <h2>{editingId ? "Edit update" : "New update"}</h2>
             <FormField
               id="post-event"
@@ -174,7 +199,7 @@ export default function OrganizerAnnouncementsPage() {
               onChange={(value) => setValue("imageUrl", value)}
               onBusy={setBusy}
             />
-            <div className="poppin-actions">
+            <div className="poppin-actions poppin-form-footer">
               <Button type="submit" disabled={busy || isSubmitting}>
                 Publish update
               </Button>
@@ -205,8 +230,13 @@ export default function OrganizerAnnouncementsPage() {
               )}
             </div>
           </form>
-          <section>
-            <h2>Your updates</h2>
+          <section className="poppin-management-history">
+            <div className="poppin-section-heading">
+              <h2>
+                <span className="poppin-section-index">02</span>Your updates
+              </h2>
+              <span className="poppin-count">{posts.length}</span>
+            </div>
             <ResourceState
               loading={false}
               error=""
@@ -244,7 +274,10 @@ export default function OrganizerAnnouncementsPage() {
         </div>
       )}
       {!events.loading && !selectedEvents.length && (
-        <EmptyState description="Create your own event before sharing updates with your local circle." action={<ButtonLink to="/events/new">Create an event</ButtonLink>} />
+        <EmptyState
+          description="Create your own event before sharing updates with your local circle."
+          action={<ButtonLink to="/events/new">Create an event</ButtonLink>}
+        />
       )}
     </main>
   );

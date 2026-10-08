@@ -1,39 +1,53 @@
 import { Link } from "react-router-dom";
+import { ArrowUpRight, BadgeCheck } from "lucide-react";
 import type { VendorLineupItem } from "../../types/vendorApplication";
 import Card from "../ui/Card";
 import { ButtonLink } from "../ui/Button";
+
 export default function VendorCard({ vendor }: { vendor: VendorLineupItem }) {
   return (
-    <Card className="poppin-vendor-card">
-      <div className="poppin-person">
-        <span className="poppin-avatar poppin-avatar-small">
+    <Card className="poppin-lineup-card">
+      <div className="poppin-lineup-card-top">
+        <span className="poppin-business-avatar" aria-hidden="true">
           {vendor.logoUrl ? (
-            <img src={vendor.logoUrl} alt={`${vendor.businessName} logo`} />
+            <img src={vendor.logoUrl} alt="" loading="lazy" />
           ) : (
-            vendor.businessName.slice(0, 2)
+            vendor.businessName.slice(0, 2).toUpperCase()
           )}
         </span>
-        <div>
-          {vendor.vendorId ? (
-            <Link to={`/vendors/${vendor.vendorId}`}>
-              <h3>{vendor.businessName}</h3>
-            </Link>
-          ) : (
-            <h3>{vendor.businessName}</h3>
-          )}
-          <p>{vendor.category?.name}</p>
-        </div>
+        <span className="poppin-confirmed-label">
+          <BadgeCheck size={15} aria-hidden="true" />
+          Confirmed
+        </span>
       </div>
-      <p>{vendor.description}</p>
-      <p>{vendor.products}</p>
-      {vendor.socialMedia && <p>Social page: {vendor.socialMedia}</p>}
+      <p className="poppin-eyebrow">
+        {vendor.category?.name || "LOCAL BUSINESS"}
+      </p>
+      <h3>
+        {vendor.vendorId ? (
+          <Link to={"/vendors/" + vendor.vendorId}>{vendor.businessName}</Link>
+        ) : (
+          vendor.businessName
+        )}
+      </h3>
+      {vendor.description && <p>{vendor.description}</p>}
+      {vendor.products && (
+        <div className="poppin-vendor-products">
+          <span>What you’ll find</span>
+          <p>{vendor.products}</p>
+        </div>
+      )}
+      {vendor.socialMedia && (
+        <p className="poppin-vendor-social">Find them: {vendor.socialMedia}</p>
+      )}
       {vendor.vendorId && (
         <ButtonLink
           variant="ghost"
           size="sm"
-          to={`/vendors/${vendor.vendorId}`}
+          to={"/vendors/" + vendor.vendorId}
+          icon={<ArrowUpRight size={16} aria-hidden="true" />}
         >
-          Meet the business ↗
+          Meet the business
         </ButtonLink>
       )}
     </Card>

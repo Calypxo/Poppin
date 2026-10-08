@@ -1,10 +1,14 @@
 import Card from "../ui/Card";
 import { ButtonLink } from "../ui/Button";
+import { CalendarPlus, ArrowUpRight } from "lucide-react";
 
 export default function ProfileSetupPrompt({ returnTo }: { returnTo: string }) {
   return (
-    <Card variant="paper">
-      <p className="poppin-eyebrow">Your next local chapter</p>
+    <Card className="poppin-setup-prompt">
+      <div className="poppin-feature-icon">
+        <CalendarPlus size={28} aria-hidden="true" />
+      </div>
+      <p className="poppin-eyebrow">MAKE SOMETHING HAPPEN</p>
       <h2>Become an organizer</h2>
       <p>
         Add your organizer name and public contact details, then create your
@@ -14,7 +18,7 @@ export default function ProfileSetupPrompt({ returnTo }: { returnTo: string }) {
       <ButtonLink
         to={`/profile/edit?section=organizer&returnTo=${encodeURIComponent(returnTo)}`}
       >
-        Create organizer profile
+        Create organizer profile <ArrowUpRight size={17} aria-hidden="true" />
       </ButtonLink>
     </Card>
   );

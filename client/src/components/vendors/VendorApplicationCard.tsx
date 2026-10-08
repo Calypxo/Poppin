@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { ArrowUpRight, BadgeCheck, CalendarDays, Check, X } from "lucide-react";
 import api from "../../api/client";
 import { errorMessage } from "../../hooks/useResource";
 import type { VendorApplicationListItem } from "../../types/vendorApplication";
@@ -73,13 +74,18 @@ export default function VendorApplicationCard({
     }
   }
   return (
-    <Card variant="ticket">
+    <Card className="poppin-application-card">
       <div className="poppin-application-heading">
         <div>
           <p className="poppin-eyebrow">
             {application.category?.name || "Local business"}
           </p>
           <h2>{application.businessName}</h2>
+          {review && (
+            <p className="poppin-application-applicant">
+              Applied by {application.representativeName}
+            </p>
+          )}
         </div>
         <StatusBadge status={application.status} />
       </div>
@@ -93,7 +99,10 @@ export default function VendorApplicationCard({
         {application.businessDescription || application.products}
       </p>
       {application.status === "accepted" && (
-        <p className="poppin-eyebrow">Confirmed vendor</p>
+        <p className="poppin-confirmed-label">
+          <BadgeCheck size={16} aria-hidden="true" />
+          Confirmed vendor
+        </p>
       )}
       {application.organizerRemarks && (
         <div className="poppin-application-note">
@@ -103,6 +112,7 @@ export default function VendorApplicationCard({
       )}
       <div className="poppin-application-summary">
         <small>
+          <CalendarDays size={14} aria-hidden="true" />
           Sent{" "}
           {new Date(application.createdAt).toLocaleDateString("en-PH", {
             timeZone: "Asia/Manila",
@@ -139,11 +149,16 @@ export default function VendorApplicationCard({
               />
             </FormField>
             <div className="poppin-actions">
-              <Button loading={busy} onClick={() => void act("accepted")}>
+              <Button
+                loading={busy}
+                icon={<Check size={16} aria-hidden="true" />}
+                onClick={() => void act("accepted")}
+              >
                 Accept vendor
               </Button>
               <Button
                 variant="danger"
+                icon={<X size={16} aria-hidden="true" />}
                 disabled={busy || !remarks.trim()}
                 onClick={() => void act("rejected")}
               >
@@ -170,7 +185,11 @@ export default function VendorApplicationCard({
         description={application.vendorCall.event.title}
         size="lg"
         footer={
-          <Button variant="outline" onClick={() => setDetails(false)}>
+          <Button
+            variant="outline"
+            icon={<ArrowUpRight size={16} aria-hidden="true" />}
+            onClick={() => setDetails(false)}
+          >
             Back to applications
           </Button>
         }

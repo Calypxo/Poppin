@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
-import {
-  WatercolorSticker,
-  type WatercolorMotif,
-} from "../public/MarketDecorations";
+import type { WatercolorMotif } from "../public/MarketDecorations";
+import { Asterisk } from "lucide-react";
+import TextReveal from "../ui/TextReveal";
+
 export function PageContainer({
   children,
   className = "",
@@ -25,7 +25,6 @@ export function PageHeader({
   title,
   description,
   actions,
-  motif,
   featured = false,
 }: {
   eyebrow: string;
@@ -37,19 +36,25 @@ export function PageHeader({
 }) {
   return (
     <header
-      className={`poppin-page-heading poppin-editorial-heading ${motif ? "poppin-heading-with-art" : ""} ${featured ? "poppin-heading-featured" : ""}`}
+      className={`poppin-page-heading ${featured ? "poppin-heading-featured" : ""}`}
     >
       <div className="poppin-heading-copy">
-        <span className="poppin-eyebrow">{eyebrow}</span>
+        <span className="poppin-eyebrow">
+          <span className="eyebrow-dot" />
+          {eyebrow}
+        </span>
         <h1>
-          <span>{title}</span>
+          <TextReveal key={title} text={title.endsWith(".") ? title.slice(0, -1) : title} />
+          {!/[!?]$/.test(title) && <span className="heading-period">.</span>}
         </h1>
         {description && <p>{description}</p>}
         {actions && <div className="poppin-actions">{actions}</div>}
       </div>
-      {motif && (
-        <WatercolorSticker motif={motif} className="poppin-heading-art" />
-      )}
+      <div className="page-heading-emblem" aria-hidden="true">
+        <span>GOOD THINGS</span>
+        <Asterisk className="page-heading-flower" size={70} strokeWidth={1.2} />
+        <span>HAPPEN HERE</span>
+      </div>
     </header>
   );
 }

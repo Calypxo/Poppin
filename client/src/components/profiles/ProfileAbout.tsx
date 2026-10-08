@@ -1,5 +1,6 @@
 import type { VendorProfile } from "../../types/account";
 import type { Organizer } from "../../types/event";
+import { Mail, Phone, ArrowUpRight } from "lucide-react";
 export default function ProfileAbout({
   profile,
   name,
@@ -9,7 +10,7 @@ export default function ProfileAbout({
 }) {
   return (
     <aside className="poppin-profile-about">
-      <p className="poppin-eyebrow">THE LOCAL STORY</p>
+      <p className="poppin-eyebrow">GET TO KNOW US</p>
       <h2>About {name}</h2>
       <p className="poppin-preserve-lines">
         {profile.description || "This local story is just getting started."}
@@ -21,16 +22,23 @@ export default function ProfileAbout({
         </>
       )}
       {(profile.email || profile.contactNumber || profile.socialMedia) && (
-        <h3>Say hello</h3>
+        <h3 className="poppin-profile-contact-heading">Get in touch</h3>
       )}
       {profile.email && (
-        <p>
+        <p className="poppin-contact-row">
+          <Mail size={16} aria-hidden="true" />
           <a href={`mailto:${profile.email}`}>{profile.email}</a>
         </p>
       )}
-      {profile.contactNumber && <p>{profile.contactNumber}</p>}
+      {profile.contactNumber && (
+        <p className="poppin-contact-row">
+          <Phone size={16} aria-hidden="true" />
+          {profile.contactNumber}
+        </p>
+      )}
       {profile.socialMedia && (
-        <p>
+        <p className="poppin-contact-row">
+          <ArrowUpRight size={16} aria-hidden="true" />
           {/^https?:\/\//.test(profile.socialMedia) ? (
             <a href={profile.socialMedia} target="_blank" rel="noreferrer">
               Social page ↗

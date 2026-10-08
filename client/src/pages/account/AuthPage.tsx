@@ -11,7 +11,7 @@ import { useAuth, type SessionResponse } from "../../auth/context";
 import FormField from "../../components/forms/FormField";
 import { errorMessage } from "../../hooks/useResource";
 import { PageHeader } from "../../components/layout/Page";
-import { WatercolorSticker } from "../../components/public/MarketDecorations";
+import { ArrowUpRight, CalendarDays, Compass, Store } from "lucide-react";
 import { useUI } from "../../components/ui/context";
 
 export default function AuthPage({
@@ -48,30 +48,54 @@ export default function AuthPage({
     <main className="poppin-page poppin-auth-layout">
       <aside
         className="poppin-auth-story"
-        aria-label="Welcome to the local circle"
+        aria-label="Discover local events with POPP'IN"
       >
-        <p className="poppin-eyebrow">GOOD FINDS. GREAT WEEKENDS.</p>
-        <h2>
-          A little more local.
-          <br />A little more you.
-        </h2>
-        <p>
-          Meet the makers, find your next favorite, and make room for a weekend
-          around Pampanga.
-        </p>
-        <div className="poppin-auth-still-life" aria-hidden="true">
-          <WatercolorSticker motif="flower-market-booth" />
-          <WatercolorSticker motif="croissant" />
+        <Link className="poppin-auth-brand" to="/">
+          POPP’IN <ArrowUpRight size={24} />
+        </Link>
+        <div className="poppin-auth-message">
+          <p className="poppin-eyebrow">YOUR NEXT GOOD PLAN STARTS HERE</p>
+          <h2>
+            Go out. <br />
+            Find your <br />
+            <span>people.</span>
+          </h2>
+          <p>
+            Markets, makers and moments worth showing up for. Get closer to
+            what’s happening around Pampanga.
+          </p>
         </div>
+        <div className="poppin-auth-benefits">
+          <div>
+            <span className="poppin-auth-benefit-index">01</span>
+            <Compass size={20} />
+            <span>Discover something local</span>
+          </div>
+          <div>
+            <span className="poppin-auth-benefit-index">02</span>
+            <CalendarDays size={20} />
+            <span>Bring your own event to life</span>
+          </div>
+          <div>
+            <span className="poppin-auth-benefit-index">03</span>
+            <Store size={20} />
+            <span>Find a space for your business</span>
+          </div>
+        </div>
+        <p className="poppin-auth-edition">
+          PAMPANGA, PH <span>GOOD PLANS. REAL CONNECTIONS.</span>
+        </p>
       </aside>
       <div className="poppin-auth-form">
         <PageHeader
-          eyebrow="Your local circle"
+          eyebrow={
+            registering ? "LET’S GET YOU STARTED" : "GOOD TO SEE YOU AGAIN"
+          }
           title={registering ? "Join POPP’IN" : "Welcome back"}
           description={
             registering
-              ? "One account to discover local plans, host events and join markets with your business."
-              : "Your events and local finds are waiting."
+              ? "One account. Every way to take part."
+              : "Log in to pick up where you left off."
           }
         />
         <form
@@ -158,7 +182,7 @@ export default function AuthPage({
                 : "Log in"}
           </Button>
         </form>
-        <p>
+        <p className="poppin-auth-switch">
           {registering ? "Already part of the circle?" : "New around here?"}{" "}
           <Link to={registering ? "/login" : "/register"} state={{ from }}>
             {registering ? "Log in" : "Create an account"}

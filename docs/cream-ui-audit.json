@@ -1,0 +1,2173 @@
+{
+  "checkedAt": "2026-10-08T12:58:46.458Z",
+  "mode": "isolated-browser-response-fixtures",
+  "liveApiVerified": false,
+  "persistedWrites": false,
+  "source": "Existing poster manifest plus synthetic account/application presentation fixtures outside the repository",
+  "bodyBackground": "rgb(247, 244, 213)",
+  "findings": [
+    {
+      "name": "home at 1440px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "discover at 1440px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "event at 1440px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "feed at 1440px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "opportunities at 1440px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "login at 1440px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "register at 1440px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "organizer-profile at 1440px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "legacy-profile at 1440px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "not-found at 1440px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "profile at 1440px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "profile-editor at 1440px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "organizer-editor at 1440px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "my-events at 1440px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "create-event at 1440px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "event-editor at 1440px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "updates at 1440px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "recruitment at 1440px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "incoming at 1440px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "catalog at 1440px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "applications at 1440px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "confirmed-events at 1440px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "application at 1440px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "home at 768px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "discover at 768px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "event at 768px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "feed at 768px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "opportunities at 768px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "login at 768px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "register at 768px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "organizer-profile at 768px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "legacy-profile at 768px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "not-found at 768px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "profile at 768px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "profile-editor at 768px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "organizer-editor at 768px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "my-events at 768px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "create-event at 768px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "event-editor at 768px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "updates at 768px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "recruitment at 768px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "incoming at 768px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "catalog at 768px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "applications at 768px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "confirmed-events at 768px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "application at 768px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "home at 375px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "discover at 375px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "event at 375px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "feed at 375px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "opportunities at 375px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "login at 375px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "register at 375px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "organizer-profile at 375px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "legacy-profile at 375px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "not-found at 375px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "profile at 375px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "profile-editor at 375px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "organizer-editor at 375px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "my-events at 375px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "create-event at 375px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "event-editor at 375px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "updates at 375px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "recruitment at 375px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "incoming at 375px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "catalog at 375px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "applications at 375px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "confirmed-events at 375px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "application at 375px: cream, content and layout",
+      "passed": true
+    },
+    {
+      "name": "Hero Next changes the visible event title and destination",
+      "passed": true
+    },
+    {
+      "name": "Three Hero Next actions wrap through three different events",
+      "passed": true
+    },
+    {
+      "name": "Hero Previous wraps to the previous event",
+      "passed": true
+    },
+    {
+      "name": "Focused hero arrow activates with Enter",
+      "passed": true
+    },
+    {
+      "name": "Hero navigation keeps descriptive labels and live announcement",
+      "passed": true
+    },
+    {
+      "name": "Discover search updates URL and narrows visible events",
+      "passed": true
+    },
+    {
+      "name": "Discover combines city and timing with text search",
+      "passed": true
+    },
+    {
+      "name": "Discover zero matches shows a visible empty state",
+      "passed": true
+    },
+    {
+      "name": "Clear filters restores the event list",
+      "passed": true
+    },
+    {
+      "name": "Discover request failure has retry feedback",
+      "passed": true
+    },
+    {
+      "name": "Discover retry recovers from the intercepted response failure",
+      "passed": true
+    },
+    {
+      "name": "Empty registration announces per-field errors without a request",
+      "passed": true
+    },
+    {
+      "name": "Confirm Password mismatch is reported before registration",
+      "passed": true
+    },
+    {
+      "name": "Registration has no permanent role selection",
+      "passed": true
+    },
+    {
+      "name": "Normal account shows organizer setup and own applications together",
+      "passed": true
+    },
+    {
+      "name": "Normal user sees organizer setup guidance for an organizer-only page",
+      "passed": true
+    },
+    {
+      "name": "Organizer capability retains the shared profile and management actions",
+      "passed": true
+    },
+    {
+      "name": "Incomplete event form keeps errors visible before a write request",
+      "passed": true
+    },
+    {
+      "name": "Image removal opens the shared accessible confirmation",
+      "passed": true
+    },
+    {
+      "name": "Escape cancels image removal and restores triggering focus",
+      "passed": true
+    },
+    {
+      "name": "Delete action opens a confirmation before any delete request",
+      "passed": true
+    },
+    {
+      "name": "Confirmation dialog keeps Tab focus inside the dialog",
+      "passed": true
+    },
+    {
+      "name": "Canceling delete restores the management trigger without deleting",
+      "passed": true
+    },
+    {
+      "name": "Mobile navigation exposes the existing shared destinations",
+      "passed": true
+    },
+    {
+      "name": "Mobile menu Escape closes and returns focus",
+      "passed": true
+    },
+    {
+      "name": "Application details modal fits at 375px with named business content",
+      "passed": true
+    },
+    {
+      "name": "Application details Escape restores its trigger",
+      "passed": true
+    },
+    {
+      "name": "Reduced-motion preference stops decorative motion and smooth scrolling",
+      "passed": true
+    },
+    {
+      "name": "All audited routes used known API presentation fixtures",
+      "passed": true,
+      "missing": []
+    },
+    {
+      "name": "No unhandled JavaScript runtime errors during the pass",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "name": "Zero spotlight posters render helpful empty content without controls",
+      "passed": true
+    },
+    {
+      "name": "One spotlight poster has its real link and disabled Previous/Next controls",
+      "passed": true
+    },
+    {
+      "name": "Restoring normal fixture responses restores all three spotlight items",
+      "passed": true
+    },
+    {
+      "name": "Start something local remains readable on hover",
+      "passed": true,
+      "color": "rgb(247, 244, 213)",
+      "background": "rgb(16, 86, 102)",
+      "text": "Start something local",
+      "contrastRatio": 7.41
+    },
+    {
+      "name": "Logged-out account route redirects to the shared login",
+      "passed": true
+    },
+    {
+      "name": "Spotlight boundary and hover checks have no runtime or fixture failures",
+      "passed": true,
+      "errors": [],
+      "missing": []
+    },
+    {
+      "name": "Final Discover layout and collapsed advanced filters at 1440px",
+      "passed": true,
+      "state": {
+        "name": "discover",
+        "route": "/discover",
+        "viewport": 1440,
+        "height": 900,
+        "path": "/discover",
+        "width": 1440,
+        "documentWidth": 1425,
+        "overflow": false,
+        "title": "Your next great find.",
+        "main": true,
+        "brokenImages": [],
+        "overflowing": [],
+        "bodyBackground": "rgb(247, 244, 213)",
+        "h1": true,
+        "errors": [],
+        "currentPath": "/discover",
+        "advancedOpen": false,
+        "passed": true
+      }
+    },
+    {
+      "name": "Final Discover layout and collapsed advanced filters at 768px",
+      "passed": true,
+      "state": {
+        "name": "discover",
+        "route": "/discover",
+        "viewport": 768,
+        "height": 1000,
+        "path": "/discover",
+        "width": 768,
+        "documentWidth": 753,
+        "overflow": false,
+        "title": "Your next great find.",
+        "main": true,
+        "brokenImages": [],
+        "overflowing": [],
+        "bodyBackground": "rgb(247, 244, 213)",
+        "h1": true,
+        "errors": [],
+        "currentPath": "/discover",
+        "advancedOpen": false,
+        "passed": true
+      }
+    },
+    {
+      "name": "Final Discover layout and collapsed advanced filters at 375px",
+      "passed": true,
+      "state": {
+        "name": "discover",
+        "route": "/discover",
+        "viewport": 375,
+        "height": 900,
+        "path": "/discover",
+        "width": 375,
+        "documentWidth": 360,
+        "overflow": false,
+        "title": "Your next great find.",
+        "main": true,
+        "brokenImages": [],
+        "overflowing": [],
+        "bodyBackground": "rgb(247, 244, 213)",
+        "h1": true,
+        "errors": [],
+        "currentPath": "/discover",
+        "advancedOpen": false,
+        "passed": true
+      }
+    },
+    {
+      "name": "Expanded mobile dates occupy full readable rows without clipping",
+      "passed": true,
+      "dates": [
+        {
+          "name": "from",
+          "width": 286,
+          "left": 37,
+          "right": 323,
+          "clientWidth": 284,
+          "scrollWidth": 284,
+          "visible": true
+        },
+        {
+          "name": "to",
+          "width": 286,
+          "left": 37,
+          "right": 323,
+          "clientWidth": 284,
+          "scrollWidth": 284,
+          "visible": true
+        }
+      ]
+    },
+    {
+      "name": "Expanded filters submit dates with search, city and timing and remain visible",
+      "passed": true,
+      "result": {
+        "query": "?search=Kulitan&city=Angeles&from=2026-10-09&to=2026-10-12&state=upcoming",
+        "open": true,
+        "cards": 1,
+        "applied": "4 applied",
+        "from": "2026-10-09",
+        "to": "2026-10-12"
+      }
+    },
+    {
+      "name": "Clearing advanced filters restores all events and compact search",
+      "passed": true
+    },
+    {
+      "name": "Discover refinement has no unexpected runtime or fixture errors",
+      "passed": true,
+      "errors": [],
+      "missing": []
+    }
+  ],
+  "views": [
+    {
+      "name": "home",
+      "route": "/",
+      "viewport": 1440,
+      "height": 900,
+      "path": "/",
+      "width": 1440,
+      "documentWidth": 1425,
+      "overflow": false,
+      "title": "Good plans.Great finds.Right here.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [
+        {
+          "tag": "DIV",
+          "className": "modern-marquee-track",
+          "text": "GOOD FINDSGREAT PEOPLELOCAL ENERGYGO POPP'INGOOD FINDSGREAT "
+        },
+        {
+          "tag": "DIV",
+          "className": "",
+          "text": "GOOD FINDSGREAT PEOPLELOCAL ENERGYGO POPP'IN"
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "LOCAL ENERGY"
+        },
+        {
+          "tag": "svg",
+          "className": "svg",
+          "text": ""
+        },
+        {
+          "tag": "path",
+          "className": "svg",
+          "text": ""
+        },
+        {
+          "tag": "path",
+          "className": "svg",
+          "text": ""
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "GO POPP'IN"
+        },
+        {
+          "tag": "svg",
+          "className": "svg",
+          "text": ""
+        },
+        {
+          "tag": "path",
+          "className": "svg",
+          "text": ""
+        },
+        {
+          "tag": "path",
+          "className": "svg",
+          "text": ""
+        }
+      ],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/",
+      "passed": true
+    },
+    {
+      "name": "discover",
+      "route": "/discover",
+      "viewport": 1440,
+      "height": 900,
+      "path": "/discover",
+      "width": 1440,
+      "documentWidth": 1425,
+      "overflow": false,
+      "title": "Your next great find.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/discover",
+      "advancedOpen": false,
+      "passed": true
+    },
+    {
+      "name": "event",
+      "route": "/events/1a6c446e677f9e1779da6203",
+      "viewport": 1440,
+      "height": 900,
+      "path": "/events/1a6c446e677f9e1779da6203",
+      "width": 1440,
+      "documentWidth": 1425,
+      "overflow": false,
+      "title": "Kulitan Flea Market: Angeles City Youthfest",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/events/1a6c446e677f9e1779da6203",
+      "passed": true
+    },
+    {
+      "name": "feed",
+      "route": "/feed",
+      "viewport": 1440,
+      "height": 900,
+      "path": "/feed",
+      "width": 1440,
+      "documentWidth": 1425,
+      "overflow": false,
+      "title": "Whatâ€™s Poppâ€™in.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/feed",
+      "passed": true
+    },
+    {
+      "name": "opportunities",
+      "route": "/opportunities",
+      "viewport": 1440,
+      "height": 900,
+      "path": "/opportunities",
+      "width": 1440,
+      "documentWidth": 1425,
+      "overflow": false,
+      "title": "Find your next market.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/opportunities",
+      "passed": true
+    },
+    {
+      "name": "login",
+      "route": "/login",
+      "viewport": 1440,
+      "height": 900,
+      "path": "/login",
+      "width": 1440,
+      "documentWidth": 1425,
+      "overflow": false,
+      "title": "Welcome back.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/login",
+      "passed": true
+    },
+    {
+      "name": "register",
+      "route": "/register",
+      "viewport": 1440,
+      "height": 900,
+      "path": "/register",
+      "width": 1440,
+      "documentWidth": 1425,
+      "overflow": false,
+      "title": "Join POPPâ€™IN.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/register",
+      "passed": true
+    },
+    {
+      "name": "organizer-profile",
+      "route": "/organizers/cd81692f91cb34dec11aeba5",
+      "viewport": 1440,
+      "height": 900,
+      "path": "/organizers/cd81692f91cb34dec11aeba5",
+      "width": 1440,
+      "documentWidth": 1425,
+      "overflow": false,
+      "title": "Kulitan Flea Market",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/organizers/cd81692f91cb34dec11aeba5",
+      "passed": true
+    },
+    {
+      "name": "legacy-profile",
+      "route": "/vendors/8cec4f14250cca7e13feacc1",
+      "viewport": 1440,
+      "height": 900,
+      "path": "/vendors/8cec4f14250cca7e13feacc1",
+      "width": 1440,
+      "documentWidth": 1425,
+      "overflow": false,
+      "title": "Pampanga Handmade",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/vendors/8cec4f14250cca7e13feacc1",
+      "passed": true
+    },
+    {
+      "name": "not-found",
+      "route": "/not-a-page",
+      "viewport": 1440,
+      "height": 900,
+      "path": "/not-a-page",
+      "width": 1440,
+      "documentWidth": 1425,
+      "overflow": false,
+      "title": "This spot isnâ€™t on the map.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/not-a-page",
+      "passed": true
+    },
+    {
+      "name": "profile",
+      "route": "/profile",
+      "viewport": 1440,
+      "height": 900,
+      "path": "/profile",
+      "width": 1440,
+      "documentWidth": 1425,
+      "overflow": false,
+      "title": "Sam Mercado",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/profile",
+      "passed": true
+    },
+    {
+      "name": "profile-editor",
+      "route": "/profile/edit",
+      "viewport": 1440,
+      "height": 900,
+      "path": "/profile/edit",
+      "width": 1440,
+      "documentWidth": 1425,
+      "overflow": false,
+      "title": "Edit your profile.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/profile/edit",
+      "passed": true
+    },
+    {
+      "name": "organizer-editor",
+      "route": "/profile/edit?section=organizer",
+      "viewport": 1440,
+      "height": 900,
+      "path": "/profile/edit?section=organizer",
+      "width": 1440,
+      "documentWidth": 1425,
+      "overflow": false,
+      "title": "Your organizer details.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/profile/edit?section=organizer",
+      "passed": true
+    },
+    {
+      "name": "my-events",
+      "route": "/my-events",
+      "viewport": 1440,
+      "height": 900,
+      "path": "/my-events",
+      "width": 1440,
+      "documentWidth": 1425,
+      "overflow": false,
+      "title": "My events.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/my-events",
+      "passed": true
+    },
+    {
+      "name": "create-event",
+      "route": "/events/new",
+      "viewport": 1440,
+      "height": 900,
+      "path": "/events/new",
+      "width": 1440,
+      "documentWidth": 1425,
+      "overflow": false,
+      "title": "Create an event.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/events/new",
+      "passed": true
+    },
+    {
+      "name": "event-editor",
+      "route": "/events/1a6c446e677f9e1779da6203/edit",
+      "viewport": 1440,
+      "height": 900,
+      "path": "/events/1a6c446e677f9e1779da6203/edit",
+      "width": 1440,
+      "documentWidth": 1425,
+      "overflow": false,
+      "title": "Edit your event.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/events/1a6c446e677f9e1779da6203/edit",
+      "passed": true
+    },
+    {
+      "name": "updates",
+      "route": "/events/1a6c446e677f9e1779da6203/posts",
+      "viewport": 1440,
+      "height": 900,
+      "path": "/events/1a6c446e677f9e1779da6203/posts",
+      "width": 1440,
+      "documentWidth": 1425,
+      "overflow": false,
+      "title": "Event updates.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/events/1a6c446e677f9e1779da6203/posts",
+      "passed": true
+    },
+    {
+      "name": "recruitment",
+      "route": "/events/1a6c446e677f9e1779da6203/vendor-call",
+      "viewport": 1440,
+      "height": 900,
+      "path": "/events/1a6c446e677f9e1779da6203/vendor-call",
+      "width": 1440,
+      "documentWidth": 1425,
+      "overflow": false,
+      "title": "Vendor recruitment.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/events/1a6c446e677f9e1779da6203/vendor-call",
+      "passed": true
+    },
+    {
+      "name": "incoming",
+      "route": "/events/1a6c446e677f9e1779da6203/applications",
+      "viewport": 1440,
+      "height": 900,
+      "path": "/events/1a6c446e677f9e1779da6203/applications",
+      "width": 1440,
+      "documentWidth": 1425,
+      "overflow": false,
+      "title": "Vendor applications.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/events/1a6c446e677f9e1779da6203/applications",
+      "passed": true
+    },
+    {
+      "name": "catalog",
+      "route": "/catalog",
+      "viewport": 1440,
+      "height": 900,
+      "path": "/catalog",
+      "width": 1440,
+      "documentWidth": 1425,
+      "overflow": false,
+      "title": "Venues & categories.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/catalog",
+      "passed": true
+    },
+    {
+      "name": "applications",
+      "route": "/my-applications",
+      "viewport": 1440,
+      "height": 900,
+      "path": "/my-applications",
+      "width": 1440,
+      "documentWidth": 1425,
+      "overflow": false,
+      "title": "My applications.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/my-applications",
+      "passed": true
+    },
+    {
+      "name": "confirmed-events",
+      "route": "/confirmed-events",
+      "viewport": 1440,
+      "height": 900,
+      "path": "/confirmed-events",
+      "width": 1440,
+      "documentWidth": 1425,
+      "overflow": false,
+      "title": "My confirmed events.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/confirmed-events",
+      "passed": true
+    },
+    {
+      "name": "application",
+      "route": "/vendor-application/136904b1477c287894c070e8",
+      "viewport": 1440,
+      "height": 900,
+      "path": "/vendor-application/136904b1477c287894c070e8",
+      "width": 1440,
+      "documentWidth": 1425,
+      "overflow": false,
+      "title": "Apply as a vendor.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/vendor-application/136904b1477c287894c070e8",
+      "passed": true
+    },
+    {
+      "name": "home",
+      "route": "/",
+      "viewport": 768,
+      "height": 1000,
+      "path": "/",
+      "width": 768,
+      "documentWidth": 753,
+      "overflow": false,
+      "title": "Good plans.Great finds.Right here.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [
+        {
+          "tag": "DIV",
+          "className": "modern-marquee-track",
+          "text": "GOOD FINDSGREAT PEOPLELOCAL ENERGYGO POPP'INGOOD FINDSGREAT "
+        },
+        {
+          "tag": "DIV",
+          "className": "",
+          "text": "GOOD FINDSGREAT PEOPLELOCAL ENERGYGO POPP'IN"
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "GO POPP'IN"
+        },
+        {
+          "tag": "svg",
+          "className": "svg",
+          "text": ""
+        },
+        {
+          "tag": "path",
+          "className": "svg",
+          "text": ""
+        },
+        {
+          "tag": "path",
+          "className": "svg",
+          "text": ""
+        },
+        {
+          "tag": "DIV",
+          "className": "",
+          "text": "GOOD FINDSGREAT PEOPLELOCAL ENERGYGO POPP'IN"
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "GOOD FINDS"
+        },
+        {
+          "tag": "svg",
+          "className": "svg",
+          "text": ""
+        },
+        {
+          "tag": "path",
+          "className": "svg",
+          "text": ""
+        },
+        {
+          "tag": "path",
+          "className": "svg",
+          "text": ""
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "GREAT PEOPLE"
+        }
+      ],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/",
+      "passed": true
+    },
+    {
+      "name": "discover",
+      "route": "/discover",
+      "viewport": 768,
+      "height": 1000,
+      "path": "/discover",
+      "width": 768,
+      "documentWidth": 753,
+      "overflow": false,
+      "title": "Your next great find.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/discover",
+      "advancedOpen": false,
+      "passed": true
+    },
+    {
+      "name": "event",
+      "route": "/events/1a6c446e677f9e1779da6203",
+      "viewport": 768,
+      "height": 1000,
+      "path": "/events/1a6c446e677f9e1779da6203",
+      "width": 768,
+      "documentWidth": 753,
+      "overflow": false,
+      "title": "Kulitan Flea Market: Angeles City Youthfest",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/events/1a6c446e677f9e1779da6203",
+      "passed": true
+    },
+    {
+      "name": "feed",
+      "route": "/feed",
+      "viewport": 768,
+      "height": 1000,
+      "path": "/feed",
+      "width": 768,
+      "documentWidth": 753,
+      "overflow": false,
+      "title": "Whatâ€™s Poppâ€™in.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/feed",
+      "passed": true
+    },
+    {
+      "name": "opportunities",
+      "route": "/opportunities",
+      "viewport": 768,
+      "height": 1000,
+      "path": "/opportunities",
+      "width": 768,
+      "documentWidth": 753,
+      "overflow": false,
+      "title": "Find your next market.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/opportunities",
+      "passed": true
+    },
+    {
+      "name": "login",
+      "route": "/login",
+      "viewport": 768,
+      "height": 1000,
+      "path": "/login",
+      "width": 768,
+      "documentWidth": 753,
+      "overflow": false,
+      "title": "Welcome back.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/login",
+      "passed": true
+    },
+    {
+      "name": "register",
+      "route": "/register",
+      "viewport": 768,
+      "height": 1000,
+      "path": "/register",
+      "width": 768,
+      "documentWidth": 753,
+      "overflow": false,
+      "title": "Join POPPâ€™IN.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/register",
+      "passed": true
+    },
+    {
+      "name": "organizer-profile",
+      "route": "/organizers/cd81692f91cb34dec11aeba5",
+      "viewport": 768,
+      "height": 1000,
+      "path": "/organizers/cd81692f91cb34dec11aeba5",
+      "width": 768,
+      "documentWidth": 753,
+      "overflow": false,
+      "title": "Kulitan Flea Market",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/organizers/cd81692f91cb34dec11aeba5",
+      "passed": true
+    },
+    {
+      "name": "legacy-profile",
+      "route": "/vendors/8cec4f14250cca7e13feacc1",
+      "viewport": 768,
+      "height": 1000,
+      "path": "/vendors/8cec4f14250cca7e13feacc1",
+      "width": 768,
+      "documentWidth": 753,
+      "overflow": false,
+      "title": "Pampanga Handmade",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/vendors/8cec4f14250cca7e13feacc1",
+      "passed": true
+    },
+    {
+      "name": "not-found",
+      "route": "/not-a-page",
+      "viewport": 768,
+      "height": 1000,
+      "path": "/not-a-page",
+      "width": 768,
+      "documentWidth": 753,
+      "overflow": false,
+      "title": "This spot isnâ€™t on the map.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/not-a-page",
+      "passed": true
+    },
+    {
+      "name": "profile",
+      "route": "/profile",
+      "viewport": 768,
+      "height": 1000,
+      "path": "/profile",
+      "width": 768,
+      "documentWidth": 753,
+      "overflow": false,
+      "title": "Sam Mercado",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/profile",
+      "passed": true
+    },
+    {
+      "name": "profile-editor",
+      "route": "/profile/edit",
+      "viewport": 768,
+      "height": 1000,
+      "path": "/profile/edit",
+      "width": 768,
+      "documentWidth": 753,
+      "overflow": false,
+      "title": "Edit your profile.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/profile/edit",
+      "passed": true
+    },
+    {
+      "name": "organizer-editor",
+      "route": "/profile/edit?section=organizer",
+      "viewport": 768,
+      "height": 1000,
+      "path": "/profile/edit?section=organizer",
+      "width": 768,
+      "documentWidth": 753,
+      "overflow": false,
+      "title": "Your organizer details.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/profile/edit?section=organizer",
+      "passed": true
+    },
+    {
+      "name": "my-events",
+      "route": "/my-events",
+      "viewport": 768,
+      "height": 1000,
+      "path": "/my-events",
+      "width": 768,
+      "documentWidth": 753,
+      "overflow": false,
+      "title": "My events.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/my-events",
+      "passed": true
+    },
+    {
+      "name": "create-event",
+      "route": "/events/new",
+      "viewport": 768,
+      "height": 1000,
+      "path": "/events/new",
+      "width": 768,
+      "documentWidth": 753,
+      "overflow": false,
+      "title": "Create an event.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/events/new",
+      "passed": true
+    },
+    {
+      "name": "event-editor",
+      "route": "/events/1a6c446e677f9e1779da6203/edit",
+      "viewport": 768,
+      "height": 1000,
+      "path": "/events/1a6c446e677f9e1779da6203/edit",
+      "width": 768,
+      "documentWidth": 753,
+      "overflow": false,
+      "title": "Edit your event.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/events/1a6c446e677f9e1779da6203/edit",
+      "passed": true
+    },
+    {
+      "name": "updates",
+      "route": "/events/1a6c446e677f9e1779da6203/posts",
+      "viewport": 768,
+      "height": 1000,
+      "path": "/events/1a6c446e677f9e1779da6203/posts",
+      "width": 768,
+      "documentWidth": 753,
+      "overflow": false,
+      "title": "Event updates.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/events/1a6c446e677f9e1779da6203/posts",
+      "passed": true
+    },
+    {
+      "name": "recruitment",
+      "route": "/events/1a6c446e677f9e1779da6203/vendor-call",
+      "viewport": 768,
+      "height": 1000,
+      "path": "/events/1a6c446e677f9e1779da6203/vendor-call",
+      "width": 768,
+      "documentWidth": 753,
+      "overflow": false,
+      "title": "Vendor recruitment.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/events/1a6c446e677f9e1779da6203/vendor-call",
+      "passed": true
+    },
+    {
+      "name": "incoming",
+      "route": "/events/1a6c446e677f9e1779da6203/applications",
+      "viewport": 768,
+      "height": 1000,
+      "path": "/events/1a6c446e677f9e1779da6203/applications",
+      "width": 768,
+      "documentWidth": 753,
+      "overflow": false,
+      "title": "Vendor applications.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/events/1a6c446e677f9e1779da6203/applications",
+      "passed": true
+    },
+    {
+      "name": "catalog",
+      "route": "/catalog",
+      "viewport": 768,
+      "height": 1000,
+      "path": "/catalog",
+      "width": 768,
+      "documentWidth": 753,
+      "overflow": false,
+      "title": "Venues & categories.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/catalog",
+      "passed": true
+    },
+    {
+      "name": "applications",
+      "route": "/my-applications",
+      "viewport": 768,
+      "height": 1000,
+      "path": "/my-applications",
+      "width": 768,
+      "documentWidth": 753,
+      "overflow": false,
+      "title": "My applications.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/my-applications",
+      "passed": true
+    },
+    {
+      "name": "confirmed-events",
+      "route": "/confirmed-events",
+      "viewport": 768,
+      "height": 1000,
+      "path": "/confirmed-events",
+      "width": 768,
+      "documentWidth": 753,
+      "overflow": false,
+      "title": "My confirmed events.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/confirmed-events",
+      "passed": true
+    },
+    {
+      "name": "application",
+      "route": "/vendor-application/136904b1477c287894c070e8",
+      "viewport": 768,
+      "height": 1000,
+      "path": "/vendor-application/136904b1477c287894c070e8",
+      "width": 768,
+      "documentWidth": 753,
+      "overflow": false,
+      "title": "Apply as a vendor.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/vendor-application/136904b1477c287894c070e8",
+      "passed": true
+    },
+    {
+      "name": "home",
+      "route": "/",
+      "viewport": 375,
+      "height": 900,
+      "path": "/",
+      "width": 375,
+      "documentWidth": 360,
+      "overflow": false,
+      "title": "Good plans.Great finds.Right here.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [
+        {
+          "tag": "DIV",
+          "className": "modern-marquee-track",
+          "text": "GOOD FINDSGREAT PEOPLELOCAL ENERGYGO POPP'INGOOD FINDSGREAT "
+        },
+        {
+          "tag": "DIV",
+          "className": "",
+          "text": "GOOD FINDSGREAT PEOPLELOCAL ENERGYGO POPP'IN"
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "LOCAL ENERGY"
+        },
+        {
+          "tag": "svg",
+          "className": "svg",
+          "text": ""
+        },
+        {
+          "tag": "path",
+          "className": "svg",
+          "text": ""
+        },
+        {
+          "tag": "path",
+          "className": "svg",
+          "text": ""
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "GO POPP'IN"
+        },
+        {
+          "tag": "svg",
+          "className": "svg",
+          "text": ""
+        },
+        {
+          "tag": "path",
+          "className": "svg",
+          "text": ""
+        },
+        {
+          "tag": "path",
+          "className": "svg",
+          "text": ""
+        },
+        {
+          "tag": "DIV",
+          "className": "",
+          "text": "GOOD FINDSGREAT PEOPLELOCAL ENERGYGO POPP'IN"
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "GOOD FINDS"
+        }
+      ],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/",
+      "passed": true
+    },
+    {
+      "name": "discover",
+      "route": "/discover",
+      "viewport": 375,
+      "height": 900,
+      "path": "/discover",
+      "width": 375,
+      "documentWidth": 360,
+      "overflow": false,
+      "title": "Your next great find.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/discover",
+      "advancedOpen": false,
+      "passed": true
+    },
+    {
+      "name": "event",
+      "route": "/events/1a6c446e677f9e1779da6203",
+      "viewport": 375,
+      "height": 900,
+      "path": "/events/1a6c446e677f9e1779da6203",
+      "width": 375,
+      "documentWidth": 360,
+      "overflow": false,
+      "title": "Kulitan Flea Market: Angeles City Youthfest",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "Join the market"
+        }
+      ],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/events/1a6c446e677f9e1779da6203",
+      "passed": true
+    },
+    {
+      "name": "feed",
+      "route": "/feed",
+      "viewport": 375,
+      "height": 900,
+      "path": "/feed",
+      "width": 375,
+      "documentWidth": 360,
+      "overflow": false,
+      "title": "Whatâ€™s Poppâ€™in.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/feed",
+      "passed": true
+    },
+    {
+      "name": "opportunities",
+      "route": "/opportunities",
+      "viewport": 375,
+      "height": 900,
+      "path": "/opportunities",
+      "width": 375,
+      "documentWidth": 360,
+      "overflow": false,
+      "title": "Find your next market.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/opportunities",
+      "passed": true
+    },
+    {
+      "name": "login",
+      "route": "/login",
+      "viewport": 375,
+      "height": 900,
+      "path": "/login",
+      "width": 375,
+      "documentWidth": 360,
+      "overflow": false,
+      "title": "Welcome back.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/login",
+      "passed": true
+    },
+    {
+      "name": "register",
+      "route": "/register",
+      "viewport": 375,
+      "height": 900,
+      "path": "/register",
+      "width": 375,
+      "documentWidth": 360,
+      "overflow": false,
+      "title": "Join POPPâ€™IN.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/register",
+      "passed": true
+    },
+    {
+      "name": "organizer-profile",
+      "route": "/organizers/cd81692f91cb34dec11aeba5",
+      "viewport": 375,
+      "height": 900,
+      "path": "/organizers/cd81692f91cb34dec11aeba5",
+      "width": 375,
+      "documentWidth": 360,
+      "overflow": false,
+      "title": "Kulitan Flea Market",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "Recent updates"
+        }
+      ],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/organizers/cd81692f91cb34dec11aeba5",
+      "passed": true
+    },
+    {
+      "name": "legacy-profile",
+      "route": "/vendors/8cec4f14250cca7e13feacc1",
+      "viewport": 375,
+      "height": 900,
+      "path": "/vendors/8cec4f14250cca7e13feacc1",
+      "width": 375,
+      "documentWidth": 360,
+      "overflow": false,
+      "title": "Pampanga Handmade",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/vendors/8cec4f14250cca7e13feacc1",
+      "passed": true
+    },
+    {
+      "name": "not-found",
+      "route": "/not-a-page",
+      "viewport": 375,
+      "height": 900,
+      "path": "/not-a-page",
+      "width": 375,
+      "documentWidth": 360,
+      "overflow": false,
+      "title": "This spot isnâ€™t on the map.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/not-a-page",
+      "passed": true
+    },
+    {
+      "name": "profile",
+      "route": "/profile",
+      "viewport": 375,
+      "height": 900,
+      "path": "/profile",
+      "width": 375,
+      "documentWidth": 360,
+      "overflow": false,
+      "title": "Sam Mercado",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/profile",
+      "passed": true
+    },
+    {
+      "name": "profile-editor",
+      "route": "/profile/edit",
+      "viewport": 375,
+      "height": 900,
+      "path": "/profile/edit",
+      "width": 375,
+      "documentWidth": 360,
+      "overflow": false,
+      "title": "Edit your profile.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/profile/edit",
+      "passed": true
+    },
+    {
+      "name": "organizer-editor",
+      "route": "/profile/edit?section=organizer",
+      "viewport": 375,
+      "height": 900,
+      "path": "/profile/edit?section=organizer",
+      "width": 375,
+      "documentWidth": 360,
+      "overflow": false,
+      "title": "Your organizer details.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/profile/edit?section=organizer",
+      "passed": true
+    },
+    {
+      "name": "my-events",
+      "route": "/my-events",
+      "viewport": 375,
+      "height": 900,
+      "path": "/my-events",
+      "width": 375,
+      "documentWidth": 360,
+      "overflow": false,
+      "title": "My events.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/my-events",
+      "passed": true
+    },
+    {
+      "name": "create-event",
+      "route": "/events/new",
+      "viewport": 375,
+      "height": 900,
+      "path": "/events/new",
+      "width": 375,
+      "documentWidth": 360,
+      "overflow": false,
+      "title": "Create an event.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/events/new",
+      "passed": true
+    },
+    {
+      "name": "event-editor",
+      "route": "/events/1a6c446e677f9e1779da6203/edit",
+      "viewport": 375,
+      "height": 900,
+      "path": "/events/1a6c446e677f9e1779da6203/edit",
+      "width": 375,
+      "documentWidth": 360,
+      "overflow": false,
+      "title": "Edit your event.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/events/1a6c446e677f9e1779da6203/edit",
+      "passed": true
+    },
+    {
+      "name": "updates",
+      "route": "/events/1a6c446e677f9e1779da6203/posts",
+      "viewport": 375,
+      "height": 900,
+      "path": "/events/1a6c446e677f9e1779da6203/posts",
+      "width": 375,
+      "documentWidth": 360,
+      "overflow": false,
+      "title": "Event updates.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/events/1a6c446e677f9e1779da6203/posts",
+      "passed": true
+    },
+    {
+      "name": "recruitment",
+      "route": "/events/1a6c446e677f9e1779da6203/vendor-call",
+      "viewport": 375,
+      "height": 900,
+      "path": "/events/1a6c446e677f9e1779da6203/vendor-call",
+      "width": 375,
+      "documentWidth": 360,
+      "overflow": false,
+      "title": "Vendor recruitment.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/events/1a6c446e677f9e1779da6203/vendor-call",
+      "passed": true
+    },
+    {
+      "name": "incoming",
+      "route": "/events/1a6c446e677f9e1779da6203/applications",
+      "viewport": 375,
+      "height": 900,
+      "path": "/events/1a6c446e677f9e1779da6203/applications",
+      "width": 375,
+      "documentWidth": 360,
+      "overflow": false,
+      "title": "Vendor applications.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "Withdrawn"
+        }
+      ],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/events/1a6c446e677f9e1779da6203/applications",
+      "passed": true
+    },
+    {
+      "name": "catalog",
+      "route": "/catalog",
+      "viewport": 375,
+      "height": 900,
+      "path": "/catalog",
+      "width": 375,
+      "documentWidth": 360,
+      "overflow": false,
+      "title": "Venues & categories.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/catalog",
+      "passed": true
+    },
+    {
+      "name": "applications",
+      "route": "/my-applications",
+      "viewport": 375,
+      "height": 900,
+      "path": "/my-applications",
+      "width": 375,
+      "documentWidth": 360,
+      "overflow": false,
+      "title": "My applications.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "Withdrawn"
+        }
+      ],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/my-applications",
+      "passed": true
+    },
+    {
+      "name": "confirmed-events",
+      "route": "/confirmed-events",
+      "viewport": 375,
+      "height": 900,
+      "path": "/confirmed-events",
+      "width": 375,
+      "documentWidth": 360,
+      "overflow": false,
+      "title": "My confirmed events.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/confirmed-events",
+      "passed": true
+    },
+    {
+      "name": "application",
+      "route": "/vendor-application/136904b1477c287894c070e8",
+      "viewport": 375,
+      "height": 900,
+      "path": "/vendor-application/136904b1477c287894c070e8",
+      "width": 375,
+      "documentWidth": 360,
+      "overflow": false,
+      "title": "Apply as a vendor.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/vendor-application/136904b1477c287894c070e8",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "missing": [],
+  "screenshots": [
+    "docs/screenshots/cream-home-1440.png",
+    "docs/screenshots/cream-home-full.png",
+    "docs/screenshots/cream-discover-1440.png",
+    "docs/screenshots/cream-event-1440.png",
+    "docs/screenshots/cream-login-1440.png",
+    "docs/screenshots/cream-register-1440.png",
+    "docs/screenshots/cream-organizer-profile-1440.png",
+    "docs/screenshots/cream-profile-1440.png",
+    "docs/screenshots/cream-profile-editor-1440.png",
+    "docs/screenshots/cream-my-events-1440.png",
+    "docs/screenshots/cream-create-event-1440.png",
+    "docs/screenshots/cream-event-editor-1440.png",
+    "docs/screenshots/cream-recruitment-1440.png",
+    "docs/screenshots/cream-catalog-1440.png",
+    "docs/screenshots/cream-applications-1440.png",
+    "docs/screenshots/cream-application-1440.png",
+    "docs/screenshots/cream-home-375.png",
+    "docs/screenshots/cream-discover-375.png",
+    "docs/screenshots/cream-event-375.png",
+    "docs/screenshots/cream-login-375.png",
+    "docs/screenshots/cream-register-375.png",
+    "docs/screenshots/cream-organizer-profile-375.png",
+    "docs/screenshots/cream-profile-375.png",
+    "docs/screenshots/cream-profile-editor-375.png",
+    "docs/screenshots/cream-my-events-375.png",
+    "docs/screenshots/cream-create-event-375.png",
+    "docs/screenshots/cream-event-editor-375.png",
+    "docs/screenshots/cream-recruitment-375.png",
+    "docs/screenshots/cream-catalog-375.png",
+    "docs/screenshots/cream-applications-375.png",
+    "docs/screenshots/cream-application-375.png",
+    "docs/screenshots/cream-image-confirm-1440.png",
+    "docs/screenshots/cream-delete-confirm-1440.png",
+    "docs/screenshots/cream-application-details-375.png",
+    "docs/screenshots/cream-application-details-1440.png",
+    "docs/screenshots/cream-discover-filters-375.png"
+  ],
+  "passed": 112,
+  "failed": 0,
+  "discoverRefinementReruns": [
+    {
+      "name": "discover",
+      "route": "/discover",
+      "viewport": 1440,
+      "height": 900,
+      "path": "/discover",
+      "width": 1440,
+      "documentWidth": 1425,
+      "overflow": false,
+      "title": "Your next great find.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/discover",
+      "advancedOpen": false,
+      "passed": true
+    },
+    {
+      "name": "discover",
+      "route": "/discover",
+      "viewport": 768,
+      "height": 1000,
+      "path": "/discover",
+      "width": 768,
+      "documentWidth": 753,
+      "overflow": false,
+      "title": "Your next great find.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/discover",
+      "advancedOpen": false,
+      "passed": true
+    },
+    {
+      "name": "discover",
+      "route": "/discover",
+      "viewport": 375,
+      "height": 900,
+      "path": "/discover",
+      "width": 375,
+      "documentWidth": 360,
+      "overflow": false,
+      "title": "Your next great find.",
+      "main": true,
+      "brokenImages": [],
+      "overflowing": [],
+      "bodyBackground": "rgb(247, 244, 213)",
+      "h1": true,
+      "errors": [],
+      "currentPath": "/discover",
+      "advancedOpen": false,
+      "passed": true
+    }
+  ]
+}

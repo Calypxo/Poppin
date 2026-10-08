@@ -1,6 +1,14 @@
-import { categoryIllustration } from "../../components/home/categoryIllustration";
 import { useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  ArrowUpRight,
+  Asterisk,
+  Compass,
+  MapPin,
+  Search,
+  Store,
+  Ticket,
+} from "lucide-react";
 import useHomeEvents from "../../hooks/useHomeEvents";
 import {
   ActionLink,
@@ -12,442 +20,306 @@ import {
   EditorialEventCard,
   EventLoading,
   EventMessage,
-  EventPoster,
   HeroPosterCollage,
 } from "../../components/home/EventPresentation";
-import WeeklyEventCalendar from "../../components/home/WeeklyEventCalendar";
-import VendorCTA from "../../components/home/VendorCTA";
-import {
-  BotanicalDivider,
-  LocalFindsIllustrations,
-  LocalFindsShelf,
-  WatercolorSticker,
-} from "../../components/public/MarketDecorations";
+import WeekendEdit from "../../components/home/WeekendEdit";
+import { useAuth } from "../../auth/context";
+import Button from "../../components/ui/Button";
+import TextReveal from "../../components/ui/TextReveal";
+import useSurfaceMotion from "../../hooks/useSurfaceMotion";
 
 export default function HomePage() {
   const { events, featured, categories, retry } = useHomeEvents();
+  const { user } = useAuth();
   const [category, setCategory] = useState("");
+  const [search, setSearch] = useState("");
+  const navigate = useNavigate();
   const { hash, key } = useLocation();
-  const alignedLocationKey = useRef("");
-
+  const aligned = useRef("");
+  const exploreMotion = useSurfaceMotion<HTMLAnchorElement>();
+  const vendorMotion = useSurfaceMotion<HTMLAnchorElement>();
   useEffect(() => {
-    if (!hash) {
-      alignedLocationKey.current = "";
-      return;
-    }
     if (
+      !hash ||
       events.loading ||
-      featured.loading ||
       categories.loading ||
-      alignedLocationKey.current === key
+      aligned.current === key
     )
       return;
-    // Live event sections can change height after the initial route hash jump.
-    // Align once their content and the display font have settled.
     let active = true;
-    let frame = 0;
     void document.fonts.ready.then(() => {
-      if (!active) return;
-      frame = requestAnimationFrame(() => {
-        const target = document.getElementById(hash.slice(1));
-        if (target) {
-          target.scrollIntoView({ behavior: "instant" });
-          alignedLocationKey.current = key;
-        }
-      });
+      if (active) {
+        document
+          .getElementById(hash.slice(1))
+          ?.scrollIntoView({ behavior: "instant" });
+        aligned.current = key;
+      }
     });
     return () => {
       active = false;
-      cancelAnimationFrame(frame);
     };
-  }, [hash, key, events.loading, featured.loading, categories.loading]);
-
+  }, [hash, key, events.loading, categories.loading]);
   const upcoming = events.data.filter(
     (event) =>
       event.eventState === "upcoming" || event.eventState === "ongoing",
   );
-  const featuredFirst = [
-    ...featured.data,
-    ...upcoming.filter(
-      (event) => !featured.data.some((item) => item._id === event._id),
-    ),
-  ].sort((a, b) => Number(Boolean(b.posterUrl)) - Number(Boolean(a.posterUrl)));
-  const collageEvents = [
+  const posterEvents = [
     ...upcoming,
     ...events.data.filter(
       (event) => !upcoming.some((item) => item._id === event._id),
     ),
   ];
-  const selectedCategory = categories.data.find(
-    (item) => item._id === category,
-  );
-  const displayedEvents = (
+  const ordered = [
+    ...featured.data,
+    ...events.data.filter(
+      (event) => !featured.data.some((item) => item._id === event._id),
+    ),
+  ];
+  const displayed = (
     category
       ? events.data.filter((event) =>
           event.categories?.some((item) => item._id === category),
         )
-      : featuredFirst
-  ).slice(0, 5);
-  const bannerEvent = collageEvents.find((event) => event.posterUrl);
-  const selectionLoading = category
-    ? events.loading
-    : featured.loading || events.loading;
-  const selectionError = category
-    ? events.error
-    : featured.error && events.error;
-
+      : ordered
+  ).slice(0, 6);
+  const cities = new Set(
+    events.data.map((event) => event.venue?.city).filter(Boolean),
+  );
   return (
-    <main className="poppin-home poppin-reference-home">
-      <section
-        aria-labelledby="hero-title"
-        className="poppin-hero-scene relative overflow-hidden"
-      >
-        <div className="poppin-hero-stage grid">
-          <div className="poppin-folder relative z-10">
-            <div className="poppin-folder-tabs" aria-hidden="true">
-              <span>POP-UPS</span>
-              <span>BAZAARS</span>
-              <span>LOCAL FINDS</span>
+    <main className="modern-home">
+      <section className="home-hero" aria-labelledby="hero-title">
+        <div className="poppin-container hero-layout">
+          <div className="hero-copy">
+            <span className="hero-kicker">
+              <span />
+              YOUR FIELD GUIDE TO PAMPANGA
+            </span>
+            <h1 id="hero-title">
+              <TextReveal text="Good plans." />
+              <br />
+              <span className="hero-highlight"><TextReveal text="Great finds." delay={110} /></span>
+              <br />
+              <TextReveal text="Right here" delay={220} /><span className="hero-period">.</span>
+            </h1>
+            <p>
+              A market to wander. A maker to meet. A little something worth
+              going out for. Find your next local favorite.
+            </p>
+            <div className="hero-actions">
+              <ActionLink to="/discover">Find your next plan</ActionLink>
+              <a href="#this-week" className="hero-calendar-link">
+                <Ticket size={18} aria-hidden="true" /> The weekend edit
+              </a>
             </div>
-            <div className="poppin-hero-paper">
-              <p className="poppin-hero-eyebrow poppin-eyebrow mb-5 flex items-center gap-3 text-ink">
-                <span className="h-px w-7 bg-olive" />
-                YOUR PAMPANGA FIELD NOTES
-              </p>
-              <h1
-                id="hero-title"
-                className="poppin-hero-title"
-                aria-label="What’s Popp’in around Pampanga?"
-              >
-                <span aria-hidden="true" className="poppin-title-line">
-                  What’s
-                </span>
-                <span aria-hidden="true" className="poppin-title-line">
-                  Popp’in
-                </span>
-                <span
-                  aria-hidden="true"
-                  className="poppin-title-line poppin-title-accent"
-                >
-                  around Pampanga?
-                </span>
-              </h1>
-              <p className="poppin-hero-description poppin-entrance mt-6 max-w-sm text-sm leading-7 text-ink/75 sm:text-base">
-                Find markets, pop-ups, bazaars and local finds happening near
-                you.
-              </p>
-              <div className="poppin-hero-actions poppin-entrance mt-7 flex flex-wrap items-center gap-x-6 gap-y-4">
-                <ActionLink to="/discover">
-                  <span className="lg:hidden">Find events</span>
-                  <span className="hidden lg:inline">Discover events</span>
-                </ActionLink>
-              </div>
+            <form
+              className="hero-search"
+              onSubmit={(event) => {
+                event.preventDefault();
+                navigate(
+                  `/discover${search.trim() ? `?search=${encodeURIComponent(search.trim())}` : ""}`,
+                );
+              }}
+              role="search"
+            >
+              <Search size={20} aria-hidden="true" />
+              <label htmlFor="home-search" className="sr-only">
+                Search local events
+              </label>
+              <input
+                id="home-search"
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+                placeholder="Search markets, makers & more"
+              />
+              <Button type="submit" variant="ghost" aria-label="Search events">
+                <ArrowUpRight size={21} aria-hidden="true" />
+              </Button>
+            </form>
+            <div className="hero-shortcuts">
+              <span>Good things, close to home.</span>
+              <Link to="/opportunities">
+                Here to sell? <ArrowUpRight size={14} aria-hidden="true" />
+              </Link>
             </div>
           </div>
-          <div className="poppin-hero-collage poppin-entrance">
-            <HeroPosterCollage
-              events={collageEvents}
-              loading={events.loading}
-              error={events.error}
-              retry={retry}
-            />
-          </div>
+          <HeroPosterCollage
+            events={posterEvents}
+            loading={events.loading}
+            error={events.error}
+            retry={retry}
+          />
         </div>
-        <div className="poppin-hero-caption poppin-container flex justify-between gap-4 py-5 text-[10px] uppercase tracking-[0.16em] text-ink">
-          <span>Your little guide to going local</span>
-          <span>Pampanga, Philippines</span>
+        <div className="hero-facts poppin-container">
+          <span>
+            <MapPin size={15} aria-hidden="true" /> Rooted in Pampanga
+          </span>
+          <span>
+            <Ticket size={15} aria-hidden="true" />{" "}
+            {events.loading || events.error
+              ? "Events with local character"
+              : `${events.data.length} events to explore`}
+          </span>
+          <span>
+            <Compass size={15} aria-hidden="true" />{" "}
+            {events.loading || events.error
+              ? "Discover your local scene"
+              : `${cities.size} ${cities.size === 1 ? "city" : "cities"}. Endless possibilities.`}
+          </span>
+          <span className="hero-facts-end">
+            Find your people. Make a plan.{" "}
+            <Asterisk size={18} aria-hidden="true" />
+          </span>
         </div>
-        <BotanicalDivider />
       </section>
       <DecorativeMarquee />
-
       <section
-        aria-labelledby="weekly-title"
-        className="poppin-calendar-section bg-olive py-9 sm:py-12"
+        className="home-events poppin-container"
+        id="events"
+        aria-labelledby="home-events-title"
       >
-        <div className="poppin-container">
-          <div className="poppin-week-panel bg-paper px-4 py-6 sm:px-7 sm:py-7">
-            <Reveal>
-              <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
-                <div>
-                  <p className="poppin-eyebrow mb-2 text-ink">
-                    A LITTLE SPACE FOR YOUR NEXT GOOD WEEKEND
-                  </p>
-                  <h2
-                    id="weekly-title"
-                    className="font-display text-[clamp(1.5rem,2.1vw,2rem)] leading-[1.15] text-ink"
-                  >
-                    Your local <em>calendar.</em>
-                  </h2>
-                </div>
-                <p className="font-body text-base italic text-ink">
-                  Make a little room for going local.
-                </p>
-              </div>
-            </Reveal>
-            {events.loading ? (
-              <EventLoading compact />
-            ) : events.error ? (
-              <EventMessage error retry={retry} />
-            ) : (
-              <WeeklyEventCalendar events={events.data} />
-            )}
-            <div className="mt-4 flex items-center justify-between gap-4 border-t border-olive/25 pt-4">
-              <span className="hidden text-xs italic text-ink sm:block">
-                Good weekends start with a little plan.
-              </span>
-              <ActionLink to="/discover" text>
-                Discover All Events
-              </ActionLink>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="poppin-container grid items-center gap-8 py-16 sm:py-24 lg:grid-cols-2 lg:gap-16">
-        <div>
-          <SectionHeading
-            eyebrow="LESS SCROLLING. MORE STROLLING."
-            copy="The coffee you’ll come back for. The one-of-a-kind find. The maker you’ll meet along the way. Discover the little things happening around Pampanga."
-          >
-            Your next local
-            <br />
-            favorite is probably
-            <br />
-            <em className="text-ink">popping up nearby.</em>
-          </SectionHeading>
-          <div className="mt-7">
-            <ActionLink to="/discover" text>
-              Find Events Near You
-            </ActionLink>
-          </div>
-        </div>
-        <div className="poppin-striped-wall relative">
-          <LocalFindsIllustrations />
-        </div>
-        <LocalFindsShelf />
-      </section>
-
-      <section
-        aria-labelledby="categories-title"
-        className="border-y border-olive/20 bg-sage/60 py-12 sm:py-16"
-      >
-        <div className="poppin-container">
-          <Reveal>
-            <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-              <div>
-                <p className="poppin-eyebrow mb-3 text-ink">
-                  FOLLOW YOUR KIND OF GOOD TIME
-                </p>
-                <h2 id="categories-title" className="poppin-heading">
-                  What are you <em className="text-ink">into?</em>
-                </h2>
-              </div>
-              <p className="max-w-xs text-sm leading-6 text-ink/75">
-                Pick a little interest. Find a little adventure.
-              </p>
-            </div>
-          </Reveal>
-          {categories.loading ? (
-            <div role="status" className="mt-8 text-sm text-ink">
-              Getting the labels ready…
-              <div aria-hidden="true" className="mt-4 flex gap-3">
-                {["first-category", "second-category", "third-category"].map(
-                  (placeholder) => (
-                    <div
-                      key={placeholder}
-                      className="poppin-skeleton h-20 w-32 bg-olive/10"
-                    />
-                  ),
-                )}
-              </div>
-            </div>
-          ) : categories.error ? (
-            <EventMessage
-              error
-              title="The category labels are taking a moment."
-              retry={retry}
-            />
-          ) : categories.data.length ? (
-            <div className="mt-8 grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-4">
-              {categories.data.map((item, index) => (
-                <button
-                  key={item._id}
-                  type="button"
-                  aria-pressed={category === item._id}
-                  className={`poppin-category-ticket poppin-ticket-${index % 3} ${category === item._id ? "is-selected" : ""}`}
-                  onClick={() => {
-                    setCategory(category === item._id ? "" : item._id);
-                    document.getElementById("event-finds")?.scrollIntoView({
-                      behavior: window.matchMedia(
-                        "(prefers-reduced-motion: reduce)",
-                      ).matches
-                        ? "instant"
-                        : "smooth",
-                    });
-                  }}
-                >
-                  <span className="text-[9px] uppercase tracking-[0.2em]">
-                    ADMIT ONE CURIOUS LOCAL
-                  </span>
-                  <WatercolorSticker
-                    motif={categoryIllustration(item.name)}
-                    className="my-2 h-20 w-24"
-                  />
-                  <span className="mt-2 font-body text-2xl">{item.name}</span>
-                  <span aria-hidden="true" className="mt-2 text-xs">
-                    ✳ POP IN & LOOK AROUND ✳
-                  </span>
-                </button>
-              ))}
-            </div>
-          ) : (
-            <p className="mt-8 text-sm">
-              Fresh interests are coming to the noticeboard soon.
-            </p>
-          )}
-        </div>
-      </section>
-
-      <section
-        id="event-finds"
-        aria-labelledby="featured-title"
-        className="poppin-container scroll-mt-8 py-16 sm:py-24"
-      >
-        <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
-          <Reveal>
-            <p className="poppin-eyebrow mb-4 text-ink">
-              A FEW THINGS TO PUT ON YOUR RADAR
-            </p>
-            <h2 id="featured-title" className="poppin-heading">
-              {selectedCategory ? (
-                <>
-                  {selectedCategory.name}
-                  <br />
-                  <em className="text-ink">on the noticeboard.</em>
-                </>
-              ) : (
-                <>
-                  Worth <em className="text-ink">popping into.</em>
-                </>
-              )}
-            </h2>
-          </Reveal>
-          {category ? (
-            <button
-              type="button"
-              className="poppin-text-link text-sm"
-              onClick={() => setCategory("")}
-            >
-              Show all local finds ×
-            </button>
-          ) : (
+        <Reveal>
+          <div className="home-section-top">
+            <SectionHeading eyebrow="01 / THE LOCAL LINEUP">
+              <span id="home-events-title">Worth stepping out for.</span>
+            </SectionHeading>
             <ActionLink to="/discover" text>
               Explore all events
             </ActionLink>
+          </div>
+          <div
+            className="home-category-list"
+            aria-label="Filter events by category"
+          >
+            <button
+              type="button"
+              aria-pressed={!category}
+              onClick={() => setCategory("")}
+            >
+              All happenings <Asterisk size={14} aria-hidden="true" />
+            </button>
+            {categories.data.map((item) => (
+              <button
+                key={item._id}
+                type="button"
+                aria-pressed={category === item._id}
+                onClick={() => setCategory(item._id)}
+              >
+                {item.name}
+              </button>
+            ))}
+          </div>
+          {categories.error && (
+            <p className="category-load-error">
+              Categories couldn't load.{" "}
+              <button onClick={retry}>Try again</button>
+            </p>
           )}
-        </div>
-        {!category && featured.error && !events.error && (
-          <p role="status" className="mt-5 text-sm text-ink">
-            Featured picks couldn’t load; here’s what’s coming up instead.{" "}
-            <button
-              type="button"
-              onClick={retry}
-              className="underline underline-offset-4"
-            >
-              Retry featured picks
-            </button>
-          </p>
-        )}
-        {!category && events.error && !featured.error && (
-          <p role="status" className="mt-5 text-sm text-ink">
-            Upcoming events couldn’t load; you can still explore the featured
-            picks.{" "}
-            <button
-              type="button"
-              onClick={retry}
-              className="underline underline-offset-4"
-            >
-              Retry upcoming events
-            </button>
-          </p>
-        )}
-        {selectionLoading ? (
+        </Reveal>
+        {events.loading || featured.loading ? (
           <EventLoading />
-        ) : selectionError ? (
+        ) : (category ? events.error : events.error && featured.error) ? (
           <EventMessage error retry={retry} />
-        ) : displayedEvents.length ? (
-          <div className="poppin-feature-grid mt-9">
-            {displayedEvents.map((event, index) => (
-              <EditorialEventCard
-                key={event._id}
-                event={event}
-                large={index === 0}
-              />
+        ) : displayed.length ? (
+          <div className="poppin-discover-grid home-event-grid">
+            {displayed.map((event) => (
+              <Reveal key={event._id}>
+                <EditorialEventCard event={event} />
+              </Reveal>
             ))}
           </div>
         ) : (
           <EventMessage
-            title={
-              category ? "No events under this label just yet." : undefined
-            }
+            title="Nothing in this category just yet."
+            copy="Try another category, or see what else is happening around Pampanga."
           />
         )}
       </section>
-
-      <section
-        aria-labelledby="image-break-title"
-        className="poppin-image-break relative overflow-hidden bg-olive text-ink"
-      >
-        {bannerEvent && (
-          <div className="poppin-banner-image absolute inset-y-0 right-0 w-full opacity-25 sm:w-1/2 sm:opacity-60">
-            <EventPoster event={bannerEvent} contain />
-          </div>
-        )}
-        <div className="poppin-container relative flex min-h-72 flex-col items-start gap-8 py-12 sm:min-h-80 md:flex-row md:items-center">
-          <div className="max-w-xl">
-            <p className="poppin-eyebrow mb-4 text-ink">
-              KEEP A LITTLE CURIOSITY IN YOUR WEEKEND
-            </p>
-            <h2
-              id="image-break-title"
-              className="font-display text-[clamp(2.5rem,5vw,4.5rem)] leading-[1.05]"
-            >
-              Something new is
+      <WeekendEdit events={events.data} loading={events.loading} error={events.error} retry={retry} />
+      <section className="home-community poppin-container">
+        <Reveal>
+          <div className="community-intro">
+            <span className="poppin-eyebrow">03 / FIND YOUR PLACE</span>
+            <h2>
+              Come for the finds.
               <br />
-              always <em>popping up.</em>
+              Stay for the <span>feeling.</span>
             </h2>
-            <div className="mt-7">
-              <ActionLink to="/discover" light>
-                See What’s Happening
+            <p>
+              Your favorite coffee. A one-of-a-kind piece. A familiar face in a
+              new place. Good things happen when we show up for local.
+            </p>
+          </div>
+          <div className="community-grid">
+            <Link to="/discover" className="community-card community-explore interactive-surface" {...exploreMotion}>
+              <Compass size={33} aria-hidden="true" />
+              <span className="community-number">01 / EXPLORE</span>
+              <h3>
+                Find your
+                <br />
+                next favorite.
+              </h3>
+              <p>
+                Around the corner or across the city. Follow your curiosity.
+              </p>
+              <span className="community-card-action">
+                Discover events <ArrowUpRight size={25} aria-hidden="true" />
+              </span>
+            </Link>
+            <Link to="/opportunities" className="community-card community-sell interactive-surface" {...vendorMotion}>
+              <Store size={33} aria-hidden="true" />
+              <span className="community-number">02 / SET UP SHOP</span>
+              <h3>
+                Small business.
+                <br />
+                Big energy.
+              </h3>
+              <p>
+                Bring what you make, find your crowd, and make it a market day.
+              </p>
+              <span className="community-card-action">
+                Find a vendor spot <ArrowUpRight size={25} aria-hidden="true" />
+              </span>
+            </Link>
+          </div>
+        </Reveal>
+      </section>
+      <section className="home-organize">
+        <div className="poppin-container">
+          <Reveal className="organize-layout">
+            <div>
+              <span className="poppin-eyebrow">
+                FOR THE PEOPLE WHO MAKE IT HAPPEN
+              </span>
+              <h2>
+                Got an idea?
+                <br />
+                Make it <span>popp.</span>
+              </h2>
+              <p>
+                Bring your community together. Create an event, share your
+                updates, and find the vendors who make it yours.
+              </p>
+              <ActionLink to={user ? "/organizer/profile/edit" : "/register"}>
+                Start something local
               </ActionLink>
             </div>
-          </div>
-          {!bannerEvent && (
-            <WatercolorSticker
-              motif="dessert-cups"
-              className="mx-auto h-52 w-52 -rotate-6 md:ml-auto md:mr-0 md:h-64 md:w-64 md:shrink-0"
-            />
-          )}
+            <div className="organize-art" aria-hidden="true">
+              <div className="organize-circle">
+                <Asterisk size={140} strokeWidth={1.4} />
+              </div>
+              <div className="organize-ticket">
+                <span>THE NEXT BIG THING</span>
+                <strong>
+                  could be
+                  <br />
+                  your thing.
+                </strong>
+                <div className="ticket-barcode" />
+                <span>POPP'IN · PAMPANGA</span>
+              </div>
+            </div>
+          </Reveal>
         </div>
-      </section>
-      <VendorCTA
-        events={events.data}
-        eventsLoading={events.loading}
-        eventsError={events.error}
-        retryEvents={retry}
-      />
-      <section className="poppin-container flex flex-col items-center gap-4 py-12 text-center sm:py-16">
-        <WatercolorSticker
-          motif="flower-market-booth"
-          className="h-56 w-full max-w-sm sm:h-72 sm:max-w-md"
-        />
-        <p className="font-body text-2xl italic text-ink sm:text-3xl">
-          Made for weekends around Pampanga.
-        </p>
-        <p className="poppin-eyebrow text-ink/65">
-          See you around. See you at the market.
-        </p>
       </section>
     </main>
   );

@@ -17,12 +17,12 @@ export default function ConfirmedEventsPage() {
         : event.eventState !== "completed",
     ) || [];
   return (
-    <PageContainer>
+    <PageContainer className="poppin-confirmed-page">
       <Link to="/profile">← My profile</Link>
       <PageHeader
-        eyebrow="A little place with your name on it"
+        eyebrow="YOU’RE ON THE LINEUP"
         title="My confirmed events"
-        description="Your business, out in the local circle. These are the markets where the organizer has confirmed your spot."
+        description="Your next market days, all together. These organizers have confirmed a place for your business."
         motif="flower-bouquet"
       />
       <Tabs

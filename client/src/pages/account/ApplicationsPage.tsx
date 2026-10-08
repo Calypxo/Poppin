@@ -14,6 +14,7 @@ import { ButtonLink } from "../../components/ui/Button";
 import Alert from "../../components/ui/Alert";
 import Tabs from "../../components/ui/Tabs";
 import { useAuth } from "../../auth/context";
+import { CheckCheck, Clock3, Send } from "lucide-react";
 export default function ApplicationsPage() {
   const { eventId } = useParams();
   const { user } = useAuth();
@@ -31,8 +32,11 @@ export default function ApplicationsPage() {
         (!eventId || application.vendorCall.event._id === eventId) &&
         (status === "all" || application.status === status),
     ) || [];
+  const scopedApplications = resource.data?.filter(
+    (application) => !eventId || application.vendorCall.event._id === eventId,
+  );
   return (
-    <PageContainer>
+    <PageContainer className="poppin-applications-page">
       <Link to={eventId ? `/events/${eventId}` : "/profile"}>
         ← {eventId ? "Your event" : "Your profile"}
       </Link>
@@ -60,6 +64,37 @@ export default function ApplicationsPage() {
       />
       {typeof location.state?.message === "string" && (
         <Alert variant="success">{location.state.message}</Alert>
+      )}
+      {scopedApplications && (
+        <div className="poppin-account-metrics">
+          <div>
+            <Send size={22} aria-hidden="true" />
+            <span>Total applications</span>
+            <strong>{scopedApplications.length}</strong>
+          </div>
+          <div>
+            <Clock3 size={22} aria-hidden="true" />
+            <span>Awaiting review</span>
+            <strong>
+              {
+                scopedApplications.filter(
+                  (application) => application.status === "pending",
+                ).length
+              }
+            </strong>
+          </div>
+          <div>
+            <CheckCheck size={22} aria-hidden="true" />
+            <span>Confirmed vendors</span>
+            <strong>
+              {
+                scopedApplications.filter(
+                  (application) => application.status === "accepted",
+                ).length
+              }
+            </strong>
+          </div>
+        </div>
       )}
       {!eventId && user?.organizerId && (
         <Tabs
@@ -106,7 +141,7 @@ export default function ApplicationsPage() {
             ) : undefined
           }
         />
-        <div className="poppin-record-list">
+        <div className="poppin-record-list poppin-application-list">
           {applications.map((application) => (
             <VendorApplicationCard
               key={application._id}

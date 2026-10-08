@@ -21,6 +21,7 @@ import FormField from "../../components/forms/FormField";
 import ImageUploader from "../../components/forms/ImageUploader";
 import { PageHeader } from "../../components/layout/Page";
 import { useUI } from "../../components/ui/context";
+import { ArrowLeft, UserRound, CalendarPlus, Globe2 } from "lucide-react";
 export default function EditProfilePage() {
   const { user, refresh } = useAuth();
   const [params, setParams] = useSearchParams();
@@ -86,10 +87,10 @@ export default function EditProfilePage() {
     });
   }, [resource.data, reset, section]);
   return (
-    <main className="poppin-page poppin-form-page">
+    <main className="poppin-page poppin-editor-page">
       <Link to="/profile">← Your profile</Link>
       <PageHeader
-        eyebrow="Your local story"
+        eyebrow="PROFILE SETTINGS"
         title={
           section === "personal"
             ? "Edit your profile"
@@ -97,232 +98,299 @@ export default function EditProfilePage() {
               ? "Your organizer details"
               : "Your business details"
         }
-        description="Tell your story, add a photo, and help your local circle get to know you."
+        description="Make it yours. Keep your details up to date and let people get to know you."
       />
       <ResourceState {...resource} />
-      <Tabs
-        label="Profile details"
-        value={section}
-        onChange={(value) => {
-          setError("");
-          setMessage("");
-          setParams((current) => {
-            current.set("section", value);
-            return current;
-          });
-        }}
-        items={[
-          { value: "personal", label: "About you" },
-          { value: "organizer", label: "Organize events" },
-          ...(user?.vendorId
-            ? [{ value: "vendor", label: "Business details" }]
-            : []),
-        ]}
-      >
-        {resource.data && (
-          <form
-            noValidate
-            onSubmit={handleSubmit(async (data) => {
-              if (!resource.data) return;
+      <div className="poppin-editor-layout">
+        <aside className="poppin-editor-aside">
+          <span className="poppin-feature-icon">
+            {section === "personal" ? (
+              <UserRound size={26} />
+            ) : (
+              <CalendarPlus size={26} />
+            )}
+          </span>
+          <h2>
+            {section === "personal"
+              ? "The person behind the plans."
+              : "Give your events a home."}
+          </h2>
+          <p>
+            {section === "personal"
+              ? "A name, a photo, a few things about you. Your account stays the same wherever you take part."
+              : "Your organizer page brings your story, events and updates together for everyone to discover."}
+          </p>
+          <div className="poppin-editor-note">
+            <Globe2 size={18} aria-hidden="true" />
+            <p>
+              {section === "personal"
+                ? "Your account email stays connected to your login."
+                : "Organizer details and contact information appear on your public page."}
+            </p>
+          </div>
+          <Link className="poppin-inline-link" to="/profile">
+            <ArrowLeft size={16} /> Back to profile
+          </Link>
+        </aside>
+        <div className="poppin-editor-main">
+          <Tabs
+            label="Profile details"
+            value={section}
+            onChange={(value) => {
               setError("");
               setMessage("");
-              try {
-                const business =
-                  section === "organizer"
-                    ? resource.data.organizer
-                    : resource.data.vendor;
-                const payload =
-                  section === "personal"
-                    ? {
-                        name: data.name,
-                        bio: data.bio,
-                        avatarUrl: data.avatarUrl,
-                        city: data.city,
-                        contactNumber: data.contactNumber,
-                      }
-                    : data;
-                if (section === "personal" || business)
-                  await api.patch(
-                    section === "personal"
-                      ? "/profiles/me"
-                      : `/profiles/${section}`,
-                    payload,
-                  );
-                else await api.post(`/profiles/${section}`, payload);
-                setMessage("Your profile has been updated.");
-                toast.success("Your profile is updated. Looking good!");
-                await refresh();
-                resource.reload();
-                if (returnTo && section !== "personal") navigate(returnTo);
-                else if (section === "organizer" && !business)
-                  navigate("/profile");
-              } catch (err) {
-                setError(errorMessage(err));
-              }
-            })}
+              setParams((current) => {
+                current.set("section", value);
+                return current;
+              });
+            }}
+            items={[
+              { value: "personal", label: "About you" },
+              { value: "organizer", label: "Organize events" },
+              ...(user?.vendorId
+                ? [{ value: "vendor", label: "Business details" }]
+                : []),
+            ]}
           >
-            {section === "personal" && (
-              <FormField
-                id="profile-name"
-                label="Your name"
-                error={errors.name?.message}
-              >
-                <Input
-                  {...register("name", {
-                    required: "Enter your name",
-                    minLength: {
-                      value: 2,
-                      message: "Use at least 2 characters",
-                    },
-                  })}
-                  maxLength={100}
-                />
-              </FormField>
-            )}
-            {section === "personal" ? (
-              <>
-                <FormField id="profile-bio" label="About you">
-                  <Textarea rows={4} maxLength={2000} {...register("bio")} />
-                </FormField>
-                <ImageUploader
-                  label="Profile photo"
-                  value={avatar || ""}
-                  onChange={(value) => setValue("avatarUrl", value)}
-                  onBusy={setBusy}
-                />
-              </>
-            ) : (
-              <>
-                <FormField
-                  id="profile-business"
-                  label={
-                    section === "organizer" ? "Organizer name" : "Business name"
+            {resource.data && (
+              <form
+                className="poppin-editor-form"
+                noValidate
+                onSubmit={handleSubmit(async (data) => {
+                  if (!resource.data) return;
+                  setError("");
+                  setMessage("");
+                  try {
+                    const business =
+                      section === "organizer"
+                        ? resource.data.organizer
+                        : resource.data.vendor;
+                    const payload =
+                      section === "personal"
+                        ? {
+                            name: data.name,
+                            bio: data.bio,
+                            avatarUrl: data.avatarUrl,
+                            city: data.city,
+                            contactNumber: data.contactNumber,
+                          }
+                        : data;
+                    if (section === "personal" || business)
+                      await api.patch(
+                        section === "personal"
+                          ? "/profiles/me"
+                          : `/profiles/${section}`,
+                        payload,
+                      );
+                    else await api.post(`/profiles/${section}`, payload);
+                    setMessage("Your profile has been updated.");
+                    toast.success("Your profile is updated. Looking good!");
+                    await refresh();
+                    resource.reload();
+                    if (returnTo && section !== "personal") navigate(returnTo);
+                    else if (section === "organizer" && !business)
+                      navigate("/profile");
+                  } catch (err) {
+                    setError(errorMessage(err));
                   }
-                  error={errors.businessName?.message}
-                >
-                  <Input
-                    {...register("businessName", {
-                      required: "Enter a business name",
-                    })}
-                    maxLength={150}
-                  />
-                </FormField>
-                <FormField
-                  id="profile-description"
-                  label="Your story"
-                  error={errors.description?.message}
-                >
-                  <Textarea
-                    rows={5}
-                    maxLength={5000}
-                    {...register("description", {
-                      required: "Tell us about your business",
-                    })}
-                  />
-                </FormField>
-                <ImageUploader
-                  label="Business logo"
-                  value={logo || ""}
-                  onChange={(value) => setValue("logoUrl", value)}
-                  onBusy={setBusy}
-                />
-                {section === "vendor" && (
+                })}
+              >
+                <div className="poppin-form-section-heading">
+                  <span>01</span>
+                  <div>
+                    <h2>
+                      {section === "personal"
+                        ? "Your details"
+                        : section === "organizer"
+                          ? "Organizer identity"
+                          : "Business identity"}
+                    </h2>
+                    <p>
+                      {section === "personal"
+                        ? "The name and story that make this profile yours."
+                        : "A clear introduction to the people behind your events."}
+                    </p>
+                  </div>
+                </div>
+                {section === "personal" && (
+                  <FormField
+                    id="profile-name"
+                    label="Your name"
+                    error={errors.name?.message}
+                  >
+                    <Input
+                      {...register("name", {
+                        required: "Enter your name",
+                        minLength: {
+                          value: 2,
+                          message: "Use at least 2 characters",
+                        },
+                      })}
+                      maxLength={100}
+                    />
+                  </FormField>
+                )}
+                {section === "personal" ? (
+                  <>
+                    <FormField id="profile-bio" label="About you">
+                      <Textarea
+                        rows={4}
+                        maxLength={2000}
+                        {...register("bio")}
+                      />
+                    </FormField>
+                    <ImageUploader
+                      label="Profile photo"
+                      value={avatar || ""}
+                      onChange={(value) => setValue("avatarUrl", value)}
+                      onBusy={setBusy}
+                    />
+                  </>
+                ) : (
                   <>
                     <FormField
-                      id="profile-category"
-                      label="Business category"
-                      error={errors.category?.message}
+                      id="profile-business"
+                      label={
+                        section === "organizer"
+                          ? "Organizer name"
+                          : "Business name"
+                      }
+                      error={errors.businessName?.message}
                     >
-                      <Select
-                        {...register("category", {
-                          required: "Choose a category",
+                      <Input
+                        {...register("businessName", {
+                          required: "Enter a business name",
                         })}
-                      >
-                        <option value="">Choose category</option>
-                        {categories.data?.map((category) => (
-                          <option key={category._id} value={category._id}>
-                            {category.name}
-                          </option>
-                        ))}
-                      </Select>
+                        maxLength={150}
+                      />
                     </FormField>
-                    <ResourceState
-                      loading={categories.loading}
-                      error={categories.error}
-                      reload={categories.reload}
-                    />
                     <FormField
-                      id="profile-products"
-                      label="Products or services"
-                      error={errors.products?.message}
+                      id="profile-description"
+                      label="Your story"
+                      error={errors.description?.message}
                     >
                       <Textarea
-                        maxLength={2000}
-                        {...register("products", {
-                          required: "Describe your products or services",
+                        rows={5}
+                        maxLength={5000}
+                        {...register("description", {
+                          required: "Tell us about your business",
                         })}
                       />
                     </FormField>
+                    <ImageUploader
+                      label="Business logo"
+                      value={logo || ""}
+                      onChange={(value) => setValue("logoUrl", value)}
+                      onBusy={setBusy}
+                    />
+                    {section === "vendor" && (
+                      <>
+                        <FormField
+                          id="profile-category"
+                          label="Business category"
+                          error={errors.category?.message}
+                        >
+                          <Select
+                            {...register("category", {
+                              required: "Choose a category",
+                            })}
+                          >
+                            <option value="">Choose category</option>
+                            {categories.data?.map((category) => (
+                              <option key={category._id} value={category._id}>
+                                {category.name}
+                              </option>
+                            ))}
+                          </Select>
+                        </FormField>
+                        <ResourceState
+                          loading={categories.loading}
+                          error={categories.error}
+                          reload={categories.reload}
+                        />
+                        <FormField
+                          id="profile-products"
+                          label="Products or services"
+                          error={errors.products?.message}
+                        >
+                          <Textarea
+                            maxLength={2000}
+                            {...register("products", {
+                              required: "Describe your products or services",
+                            })}
+                          />
+                        </FormField>
+                      </>
+                    )}
+                    <FormField
+                      id="profile-email"
+                      label="Public contact email"
+                      error={errors.email?.message}
+                    >
+                      <Input
+                        type="email"
+                        {...register("email", {
+                          required: "Enter a contact email",
+                          pattern: {
+                            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                            message: "Enter a valid email",
+                          },
+                        })}
+                      />
+                    </FormField>
+                    <FormField id="profile-social" label="Social page">
+                      <Input {...register("socialMedia")} />
+                    </FormField>
                   </>
                 )}
-                <FormField
-                  id="profile-email"
-                  label="Public contact email"
-                  error={errors.email?.message}
-                >
-                  <Input
-                    type="email"
-                    {...register("email", {
-                      required: "Enter a contact email",
-                      pattern: {
-                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                        message: "Enter a valid email",
-                      },
-                    })}
-                  />
-                </FormField>
-                <FormField id="profile-social" label="Social page">
-                  <Input {...register("socialMedia")} />
-                </FormField>
-              </>
+                <div className="poppin-form-section-heading poppin-form-section-heading-separated">
+                  <span>02</span>
+                  <div>
+                    <h2>Where to find you</h2>
+                    <p>Keep your location and contact details current.</p>
+                  </div>
+                </div>
+                <div className="poppin-field-pair">
+                  <FormField
+                    id="profile-city"
+                    label="City"
+                    error={errors.city?.message}
+                  >
+                    <Input
+                      {...register("city", {
+                        required:
+                          section !== "personal" ? "Enter your city" : false,
+                      })}
+                    />
+                  </FormField>
+                  <FormField
+                    id="profile-contact"
+                    label="Contact number"
+                    error={errors.contactNumber?.message}
+                  >
+                    <Input
+                      type="tel"
+                      {...register("contactNumber", {
+                        required:
+                          section !== "personal"
+                            ? "Enter a contact number"
+                            : false,
+                      })}
+                    />
+                  </FormField>
+                </div>
+                {error && <Alert variant="error">{error}</Alert>}
+                {message && <Alert variant="success">{message}</Alert>}
+                <Button disabled={busy || isSubmitting} type="submit">
+                  {section === "organizer" && !resource.data.organizer
+                    ? "Create organizer profile"
+                    : "Save profile"}
+                </Button>
+              </form>
             )}
-            <div className="poppin-field-pair">
-              <FormField
-                id="profile-city"
-                label="City"
-                error={errors.city?.message}
-              >
-                <Input
-                  {...register("city", {
-                    required:
-                      section !== "personal" ? "Enter your city" : false,
-                  })}
-                />
-              </FormField>
-              <FormField
-                id="profile-contact"
-                label="Contact number"
-                error={errors.contactNumber?.message}
-              >
-                <Input
-                  type="tel"
-                  {...register("contactNumber", {
-                    required:
-                      section !== "personal" ? "Enter a contact number" : false,
-                  })}
-                />
-              </FormField>
-            </div>
-            {error && <Alert variant="error">{error}</Alert>}
-            {message && <Alert variant="success">{message}</Alert>}
-            <Button disabled={busy || isSubmitting} type="submit">
-              {section === "organizer" && !resource.data.organizer
-                ? "Create organizer profile"
-                : "Save profile"}
-            </Button>
-          </form>
-        )}
-      </Tabs>
+          </Tabs>
+        </div>
+      </div>
     </main>
   );
 }

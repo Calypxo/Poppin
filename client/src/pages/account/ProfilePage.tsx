@@ -12,6 +12,13 @@ import { PageContainer } from "../../components/layout/Page";
 import { ButtonLink } from "../../components/ui/Button";
 import Card from "../../components/ui/Card";
 import Tabs from "../../components/ui/Tabs";
+import {
+  ArrowUpRight,
+  CalendarPlus,
+  Mail,
+  Store,
+  UserRound,
+} from "lucide-react";
 export default function ProfilePage({
   kind,
 }: {
@@ -28,11 +35,11 @@ export default function ProfilePage({
   const mine = useResource<MyProfiles>(!kind && user ? "/profiles/me" : null);
   if (!kind && user)
     return (
-      <PageContainer>
+      <PageContainer className="poppin-account-page">
         <ProfileHeader
           name={user.name}
           image={user.avatarUrl}
-          kind="Your local circle"
+          kind="My profile"
           city={user.city}
         >
           <ButtonLink variant="outline" size="sm" to="/profile/edit">
@@ -42,61 +49,91 @@ export default function ProfilePage({
             Discover events ↗
           </ButtonLink>
         </ProfileHeader>
-        <Card>
-          <h2>My local story</h2>
-          <p>
-            {user.bio ||
-              "A little space for your local story. Tell us what makes a good weekend for you."}
-          </p>
-          <p>Account email: {user.email}</p>
-        </Card>
-        <ResourceState {...mine} />
-        <div className="poppin-social-grid mt-8">
-          <Card variant="paper">
-            <p className="poppin-eyebrow">Make a little gathering</p>
-            <h2>{mine.data?.organizer?.name || "Host your own event"}</h2>
-            <p>
-              {mine.data?.organizer?.description ||
-                "Bring your local circle together. Add organizer details when you’re ready to share an event."}
-            </p>
-            <div className="poppin-actions">
-              {user.organizerId ? (
-                <>
-                  <ButtonLink to="/events/new">Create event</ButtonLink>
-                  <ButtonLink variant="outline" to="/my-events">
-                    My events
-                  </ButtonLink>
-                  <ButtonLink
-                    variant="ghost"
-                    to={`/organizers/${user.organizerId}`}
-                  >
-                    Manage organizer page
-                  </ButtonLink>
-                </>
-              ) : (
-                <ButtonLink to="/organizer/profile/edit">
-                  Become an organizer
-                </ButtonLink>
-              )}
+        <div className="poppin-account-home">
+          <Card className="poppin-account-bio">
+            <div className="poppin-account-section-mark">
+              <span>01 / ABOUT YOU</span>
+              <span className="poppin-feature-icon">
+                <UserRound size={22} aria-hidden="true" />
+              </span>
             </div>
-          </Card>
-          <Card variant="paper">
-            <p className="poppin-eyebrow">Bring your good finds</p>
-            <h2>My vendor applications</h2>
+            <h2>Your profile</h2>
             <p>
-              Apply to a local event with your business details, follow its
-              status and see your confirmed markets.
+              {user.bio ||
+                "Add a few words about yourself and what you love discovering."}
             </p>
-            <div className="poppin-actions">
-              <ButtonLink to="/my-applications">My applications</ButtonLink>
-              <ButtonLink variant="outline" to="/opportunities">
-                Find a market
-              </ButtonLink>
-              <ButtonLink variant="ghost" to="/confirmed-events">
-                Confirmed events
-              </ButtonLink>
-            </div>
+            <p className="poppin-contact-row">
+              <Mail size={16} aria-hidden="true" />
+              {user.email}
+            </p>
+            <ButtonLink variant="ghost" size="sm" to="/profile/edit">
+              Edit your details <ArrowUpRight size={15} aria-hidden="true" />
+            </ButtonLink>
           </Card>
+          <div className="poppin-account-activities">
+            <ResourceState {...mine} />
+            <Card className="poppin-activity-card poppin-activity-host">
+              <div className="poppin-account-section-mark">
+                <span>02 / ORGANIZE</span>
+                <span className="poppin-feature-icon">
+                  <CalendarPlus size={25} aria-hidden="true" />
+                </span>
+              </div>
+              <div className="poppin-activity-copy">
+                <p className="poppin-eyebrow">MAKE SOMETHING HAPPEN</p>
+                <h2>{mine.data?.organizer?.name || "Host your own event"}</h2>
+                <p>
+                  {mine.data?.organizer?.description ||
+                    "Have an idea worth gathering for? Create an organizer profile and turn it into your next event."}
+                </p>
+                <div className="poppin-actions">
+                  {user.organizerId ? (
+                    <>
+                      <ButtonLink to="/events/new">Create event</ButtonLink>
+                      <ButtonLink variant="outline" to="/my-events">
+                        My events
+                      </ButtonLink>
+                      <ButtonLink
+                        variant="ghost"
+                        to={`/organizers/${user.organizerId}`}
+                      >
+                        Manage organizer page
+                      </ButtonLink>
+                    </>
+                  ) : (
+                    <ButtonLink to="/organizer/profile/edit">
+                      Become an organizer
+                    </ButtonLink>
+                  )}
+                </div>
+              </div>
+            </Card>
+            <Card className="poppin-activity-card poppin-activity-vendor">
+              <div className="poppin-account-section-mark">
+                <span>03 / TAKE PART</span>
+                <span className="poppin-feature-icon">
+                  <Store size={25} aria-hidden="true" />
+                </span>
+              </div>
+              <div className="poppin-activity-copy">
+                <p className="poppin-eyebrow">YOUR BUSINESS, OUT THERE</p>
+                <h2>My vendor applications</h2>
+                <p>
+                  Apply to a local event with your business details, follow its
+                  status and see your confirmed markets.
+                </p>
+                <div className="poppin-actions">
+                  <ButtonLink to="/my-applications">My applications</ButtonLink>
+                  <ButtonLink variant="outline" to="/opportunities">
+                    Find a market
+                  </ButtonLink>
+                  <ButtonLink variant="ghost" to="/confirmed-events">
+                    Confirmed events
+                  </ButtonLink>
+                </div>
+              </div>
+            </Card>
+          </div>
         </div>
       </PageContainer>
     );
@@ -114,7 +151,7 @@ export default function ProfilePage({
       : event.eventState !== "completed",
   );
   return (
-    <PageContainer>
+    <PageContainer className="poppin-account-page">
       <ResourceState {...resource} />
       {profile && (
         <>

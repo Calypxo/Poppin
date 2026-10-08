@@ -1,113 +1,112 @@
 import { useRef, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
-import { Asterisk, Menu, X } from "lucide-react";
-
+import { Link, NavLink, useLocation } from "react-router-dom";
+import { ArrowUpRight, Asterisk, LogOut, Menu, X } from "lucide-react";
 import { useAuth } from "../../auth/context";
 import { navigation } from "../shared/navigation";
 import IconButton from "../ui/IconButton";
+import PillNavigation from "./PillNavigation";
+
 export default function PublicHeader() {
   const { user, logout } = useAuth();
-  const links = navigation(user);
-  const [open, setOpen] = useState(false);
+  const { pathname } = useLocation();
+  const [menuPath, setMenuPath] = useState<string | null>(null);
+  const open = menuPath === pathname;
   const toggle = useRef<HTMLButtonElement>(null);
-
+  const links = navigation(user);
   return (
-    <header className="relative z-20 border-b border-ink/15 bg-paper">
+    <header className="site-header">
       <a href="#public-content" className="poppin-skip">
         Skip to content
       </a>
-      <div className="poppin-top-strip bg-olive px-4 py-2.5 text-center text-[10px] font-semibold tracking-[0.1em] text-paper sm:text-[11px] sm:tracking-[0.2em]">
-        <span>POP-UPS · BAZAARS · LOCAL FINDS · PAMPANGA</span>
-      </div>
-      <div className="poppin-container grid min-h-24 grid-cols-[1fr_auto] items-center gap-4 lg:grid-cols-[1fr_auto_1fr]">
-        <Link
-          to="/discover"
-          className="hidden w-fit font-body text-xl italic text-ink lg:block"
-        >
-          What’s near you?
-        </Link>
+      <div className="site-nav poppin-container">
         <Link
           to="/"
-          aria-label="POPP’IN home"
-          className="poppin-wordmark w-fit text-[38px] text-olive sm:text-[44px]"
-          onClick={() => setOpen(false)}
+          aria-label="POPP'IN home"
+          className="brand"
+          onClick={() => setMenuPath(null)}
         >
-          POPP’IN
-          <Asterisk
-            size={15}
-            aria-hidden="true"
-            className="ml-1 mt-2 inline-block align-top"
-          />
+          popp
+          <span className="brand-mark">
+            <Asterisk aria-hidden="true" />
+          </span>
+          in<span className="brand-dot">.</span>
         </Link>
-        <nav
-          aria-label="Main navigation"
-          className="hidden justify-end flex-wrap gap-3 lg:flex"
-        >
-          {links.map(({ to, label }) => (
-            <NavLink
-              key={to}
-              to={to}
-              className={({ isActive }) =>
-                `poppin-nav-link ${isActive && !to.includes("#") ? "is-active" : ""}`
-              }
-            >
-              {label}
-            </NavLink>
-          ))}
-          {user && (
-            <button type="button" className="poppin-nav-link" onClick={logout}>
-              Log out
-            </button>
+        <PillNavigation links={links.filter(
+          ({ to }) => !["/login", "/register", "/profile"].includes(to),
+        )} />
+        <div className="site-account">
+          {user ? (
+            <>
+              <Link
+                to="/profile"
+                className="site-profile"
+                aria-label="My profile"
+              >
+                <span>{user.name.slice(0, 1).toUpperCase()}</span>
+                <span>My profile</span>
+              </Link>
+              <IconButton variant="ghost" aria-label="Log out" onClick={logout}>
+                <LogOut size={18} />
+              </IconButton>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="site-login">
+                Log in
+              </Link>
+              <Link to="/register" className="site-join">
+                Join the crowd <ArrowUpRight size={16} aria-hidden="true" />
+              </Link>
+            </>
           )}
-        </nav>
+        </div>
         <IconButton
           ref={toggle}
-          type="button"
-          className="poppin-menu-toggle justify-self-end rounded-xl border border-olive/40 bg-sage/40 p-3 text-ink lg:hidden"
+          className="site-menu-toggle"
+          variant="ghost"
           aria-label={open ? "Close navigation" : "Open navigation"}
           aria-expanded={open}
           aria-controls="public-menu"
-          onClick={() => setOpen(!open)}
+          onClick={() => setMenuPath(open ? null : pathname)}
         >
-          {open ? (
-            <X size={22} aria-hidden="true" />
-          ) : (
-            <Menu size={22} aria-hidden="true" />
-          )}
+          {open ? <X size={23} /> : <Menu size={23} />}
         </IconButton>
       </div>
       {open && (
         <nav
           id="public-menu"
-          aria-label="Mobile public navigation"
-          className="poppin-container flex flex-col gap-1 border-t border-ink/10 py-4 lg:hidden"
+          className="mobile-nav"
+          aria-label="Mobile navigation"
           onKeyDown={(event) => {
             if (event.key === "Escape") {
-              setOpen(false);
+              setMenuPath(null);
               toggle.current?.focus();
             }
           }}
         >
           {links.map(({ to, label }) => (
-            <Link
+            <NavLink
               key={to}
               to={to}
-              className="poppin-nav-link py-3"
-              onClick={() => setOpen(false)}
+              end={to === "/"}
+              onClick={() => setMenuPath(null)}
+              className={({ isActive }) =>
+                `site-nav-link ${isActive ? "is-active" : ""}`
+              }
             >
               {label}
-            </Link>
+              <ArrowUpRight size={18} aria-hidden="true" />
+            </NavLink>
           ))}
           {user && (
             <button
-              type="button"
-              className="poppin-nav-link py-3 text-left"
+              className="site-nav-link"
               onClick={() => {
                 logout();
-                setOpen(false);
+                setMenuPath(null);
               }}
             >
-              Log out
+              Log out <LogOut size={18} aria-hidden="true" />
             </button>
           )}
         </nav>

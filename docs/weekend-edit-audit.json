@@ -1,0 +1,221 @@
+{
+  "mode": "browser-only fixtures from existing poster manifest",
+  "clock": "2026-10-08T04:00:00Z",
+  "liveApiVerified": false,
+  "checks": [
+    {
+      "name": "This weekend has two manifest events at 1440",
+      "passed": true
+    },
+    {
+      "name": "No horizontal overflow at 1440",
+      "passed": true
+    },
+    {
+      "name": "Cream base and expected fonts at 1440",
+      "passed": true
+    },
+    {
+      "name": "Correct period URL at 1440",
+      "passed": true
+    },
+    {
+      "name": "Ticket links use corresponding event IDs at 1440",
+      "passed": true
+    },
+    {
+      "name": "Posters load at 1440",
+      "passed": true
+    },
+    {
+      "name": "Next weekend results at 1440",
+      "passed": true
+    },
+    {
+      "name": "Coming up preview and full count at 1440",
+      "passed": true
+    },
+    {
+      "name": "Reduced motion removes ticket animation at 1440",
+      "passed": true
+    },
+    {
+      "name": "This weekend has two manifest events at 768",
+      "passed": true
+    },
+    {
+      "name": "No horizontal overflow at 768",
+      "passed": true
+    },
+    {
+      "name": "Cream base and expected fonts at 768",
+      "passed": true
+    },
+    {
+      "name": "Correct period URL at 768",
+      "passed": true
+    },
+    {
+      "name": "Ticket links use corresponding event IDs at 768",
+      "passed": true
+    },
+    {
+      "name": "Posters load at 768",
+      "passed": true
+    },
+    {
+      "name": "Next weekend results at 768",
+      "passed": true
+    },
+    {
+      "name": "Coming up preview and full count at 768",
+      "passed": true
+    },
+    {
+      "name": "Reduced motion removes ticket animation at 768",
+      "passed": true
+    },
+    {
+      "name": "This weekend has two manifest events at 375",
+      "passed": true
+    },
+    {
+      "name": "No horizontal overflow at 375",
+      "passed": true
+    },
+    {
+      "name": "Cream base and expected fonts at 375",
+      "passed": true
+    },
+    {
+      "name": "Correct period URL at 375",
+      "passed": true
+    },
+    {
+      "name": "Ticket links use corresponding event IDs at 375",
+      "passed": true
+    },
+    {
+      "name": "Posters load at 375",
+      "passed": true
+    },
+    {
+      "name": "Next weekend results at 375",
+      "passed": true
+    },
+    {
+      "name": "Coming up preview and full count at 375",
+      "passed": true
+    },
+    {
+      "name": "Reduced motion removes ticket animation at 375",
+      "passed": true
+    },
+    {
+      "name": "This weekend has two manifest events at 320",
+      "passed": true
+    },
+    {
+      "name": "No horizontal overflow at 320",
+      "passed": true
+    },
+    {
+      "name": "Cream base and expected fonts at 320",
+      "passed": true
+    },
+    {
+      "name": "Correct period URL at 320",
+      "passed": true
+    },
+    {
+      "name": "Ticket links use corresponding event IDs at 320",
+      "passed": true
+    },
+    {
+      "name": "Posters load at 320",
+      "passed": true
+    },
+    {
+      "name": "Next weekend results at 320",
+      "passed": true
+    },
+    {
+      "name": "Coming up preview and full count at 320",
+      "passed": true
+    },
+    {
+      "name": "Reduced motion removes ticket animation at 320",
+      "passed": true
+    },
+    {
+      "name": "Keyboard activates period and retains focus",
+      "passed": true
+    },
+    {
+      "name": "Discover navigation stays in SPA and transfers dates",
+      "passed": true
+    },
+    {
+      "name": "Empty weekend is explicit",
+      "passed": true
+    },
+    {
+      "name": "Empty weekend action opens coming-up events",
+      "passed": true
+    },
+    {
+      "name": "No events state remains useful",
+      "passed": true
+    },
+    {
+      "name": "API error state has retry",
+      "passed": true
+    },
+    {
+      "name": "Retry recovers tickets",
+      "passed": true
+    },
+    {
+      "name": "Loading feedback is present",
+      "passed": true
+    },
+    {
+      "name": "Unavailable posters fall back cleanly",
+      "passed": true
+    },
+    {
+      "name": "Old calendar markup removed",
+      "passed": true
+    },
+    {
+      "name": "Sunday timestamp event appears in weekend preview",
+      "passed": true
+    },
+    {
+      "name": "Hover lift works after entry animation ends",
+      "passed": true
+    },
+    {
+      "name": "Discover request uses full Manila day bounds",
+      "passed": true
+    },
+    {
+      "name": "Discover retains Sunday timestamp event",
+      "passed": true
+    },
+    {
+      "name": "Date inputs and URL retain calendar-date values",
+      "passed": true
+    },
+    {
+      "name": "Corrected date navigation stays in SPA",
+      "passed": true
+    }
+  ],
+  "screenshots": [
+    "screenshots/weekend-edit-1440.png",
+    "screenshots/weekend-edit-768.png",
+    "screenshots/weekend-edit-375.png"
+  ],
+  "finalBoundaryCheck": "Browser-only synthetic Sunday timestamp event added to manifest fixtures; backend-style timestamp comparisons used."
+}

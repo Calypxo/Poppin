@@ -1,10 +1,13 @@
 import { Link } from "react-router-dom";
+import { ArrowUpRight, Clock3 } from "lucide-react";
 import { useAuth } from "../../auth/context";
 import type { Announcement } from "../../types/announcement";
 import StatusBadge from "./StatusBadge";
+import OrganizerIdentity from "./OrganizerIdentity";
 import Card from "../ui/Card";
 import { ButtonLink } from "../ui/Button";
 import DropdownMenu from "../ui/DropdownMenu";
+
 export default function EventPostCard({
   post,
   onDelete,
@@ -15,33 +18,26 @@ export default function EventPostCard({
   const { user } = useAuth();
   const organizer = post.event.organizer;
   const owner = !!user && organizer?.user === user._id;
+  const date = post.publishedAt || post.createdAt;
   return (
-    <Card variant="social" className="poppin-post">
-      <div className="poppin-post-top">
-        <div className="poppin-person">
-          <span className="poppin-avatar poppin-avatar-small">
-            {organizer?.logoUrl ? (
-              <img src={organizer.logoUrl} alt={`${organizer.name} logo`} />
-            ) : (
-              organizer?.name?.slice(0, 2) || "P’"
-            )}
-          </span>
-          <div>
-            {organizer && (
-              <Link to={`/organizers/${organizer._id}`}>{organizer.name}</Link>
-            )}
-            <p>
-              <Link to={`/events/${post.event._id}`}>{post.event.title}</Link>
-            </p>
-          </div>
+    <Card className="poppin-update-card">
+      <div className="poppin-update-top">
+        <div>
+          {organizer && <OrganizerIdentity organizer={organizer} />}
+          <Link
+            className="poppin-update-event"
+            to={"/events/" + post.event._id}
+          >
+            {post.event.title}
+          </Link>
         </div>
         {owner && (
           <DropdownMenu
-            label={`Actions for ${post.title}`}
+            label={"Actions for " + post.title}
             items={[
               {
                 label: "Edit post",
-                to: `/events/${post.event._id}/posts?edit=${post._id}`,
+                to: "/events/" + post.event._id + "/posts?edit=" + post._id,
               },
               ...(onDelete
                 ? [
@@ -56,29 +52,36 @@ export default function EventPostCard({
           />
         )}
       </div>
-      <div className="poppin-post-meta">
+      <div className="poppin-update-meta">
         <StatusBadge status={post.isPublished ? post.type : "draft"} />
-        <time dateTime={post.publishedAt || post.createdAt}>
-          {new Date(post.publishedAt || post.createdAt).toLocaleString("en-PH")}
+        <time dateTime={date}>
+          <Clock3 size={13} aria-hidden="true" />
+          {new Date(date).toLocaleDateString("en-PH", {
+            timeZone: "Asia/Manila",
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          })}
         </time>
       </div>
       <h3>{post.title}</h3>
       <p className="poppin-preserve-lines">{post.content}</p>
       {post.imageUrl && (
         <img
-          className="poppin-post-image"
+          className="poppin-update-image"
           src={post.imageUrl}
           alt={post.title}
           loading="lazy"
         />
       )}
-      <div className="poppin-actions">
+      <div className="poppin-update-footer">
         <ButtonLink
           size="sm"
-          variant="outline"
-          to={`/events/${post.event._id}`}
+          variant="ghost"
+          to={"/events/" + post.event._id}
+          icon={<ArrowUpRight size={16} aria-hidden="true" />}
         >
-          View event ↗
+          View event
         </ButtonLink>
       </div>
     </Card>

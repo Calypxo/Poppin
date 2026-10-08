@@ -1,59 +1,57 @@
 import { Link } from "react-router-dom";
-import { WatercolorSticker } from "./MarketDecorations";
-
+import { ArrowUpRight, Asterisk, MapPin } from "lucide-react";
 import { useAuth } from "../../auth/context";
-import { navigation } from "../shared/navigation";
-import { ActionLink } from "./PublicPrimitives";
+
 export default function PublicFooter() {
   const { user } = useAuth();
   return (
-    <footer className="poppin-footer poppin-scrapbook-footer relative border-t border-pink bg-pink/40 py-12 sm:py-16">
+    <footer className="site-footer">
       <div className="poppin-container">
-        <div className="flex flex-col justify-between gap-8 sm:flex-row sm:items-start">
-          <div className="poppin-footer-invitation">
-            <p className="poppin-eyebrow mb-3">
-              LOCAL FINDS. LOCAL PEOPLE. LOCAL PLACES.
-            </p>
+        <div className="footer-top">
+          <div>
+            <span className="poppin-eyebrow">
+              YOUR NEXT GOOD THING IS LOCAL
+            </span>
             <h2>
-              Good finds.
+              Less scrolling.
               <br />
-              Great weekends.
+              More <span>showing up.</span>
             </h2>
-            <p>A little out of the ordinary. A little closer to home.</p>
-            <ActionLink to="/discover" text>
-              Find your next local plan
-            </ActionLink>
+            <Link className="footer-cta" to="/discover">
+              Find your next plan <ArrowUpRight size={24} aria-hidden="true" />
+            </Link>
           </div>
-          <div className="flex gap-8 sm:pt-2">
-            <nav
-              aria-label="Footer navigation"
-              className="flex flex-col items-start gap-4 text-sm"
-            >
-              {navigation(user).map((link) => (
-                <Link key={link.to} className="poppin-nav-link" to={link.to}>
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-            <div className="relative hidden w-24 md:block">
-              <WatercolorSticker
-                motif="flower-bouquet"
-                className="h-28 w-24 -rotate-12"
-              />
+          <div className="footer-links">
+            <div>
+              <h3>Explore</h3>
+              <Link to="/discover">Discover events</Link>
+              <Link to="/feed">Events & updates</Link>
+              <Link to="/opportunities">Vendor opportunities</Link>
+            </div>
+            <div>
+              <h3>Make it happen</h3>
+              <Link to={user ? "/profile" : "/register"}>
+                {user ? "My profile" : "Join POPP'IN"}
+              </Link>
+              <Link to={user ? "/organizer/profile/edit" : "/register"}>
+                Organize an event
+              </Link>
+              <Link to="/my-applications">My applications</Link>
             </div>
           </div>
         </div>
-        <Link
-          to="/"
-          className="poppin-wordmark poppin-footer-signature"
-          aria-label="POPP’IN home"
-        >
-          POPP’IN
-        </Link>
-        <div className="mt-10 flex flex-col justify-between gap-3 border-t border-olive/30 pt-6 text-xs sm:flex-row sm:items-center">
-          <p className="font-body text-xl italic text-ink">What’s near you?</p>
-          <p>Pampanga, Philippines</p>
-          <p>© {new Date().getFullYear()} POPP’IN</p>
+        <div className="footer-wordmark" aria-hidden="true">
+          popp
+          <Asterisk />
+          in<span>.</span>
+        </div>
+        <div className="footer-bottom">
+          <span>© {new Date().getFullYear()} POPP'IN</span>
+          <span>
+            <MapPin size={13} aria-hidden="true" /> Made for going out in
+            Pampanga.
+          </span>
+          <a href="#public-content">Back to top ↑</a>
         </div>
       </div>
     </footer>

@@ -1,7 +1,8 @@
+import { Store } from "lucide-react";
 import type { VendorLineupItem } from "../../types/vendorApplication";
 import VendorCard from "../shared/VendorCard";
 import ResourceState from "../shared/ResourceState";
-import { WatercolorSticker } from "../public/MarketDecorations";
+
 export default function VendorLineup({
   vendors,
   loading,
@@ -15,29 +16,34 @@ export default function VendorLineup({
 }) {
   return (
     <section
-      className="poppin-management-section"
+      className="poppin-vendor-lineup"
       id="vendor-lineup"
       aria-labelledby="vendor-lineup-title"
     >
-      <div className="poppin-lineup-heading">
-        <WatercolorSticker motif="flower-bouquet" />
+      <div className="poppin-section-heading">
         <div>
-          <p className="poppin-eyebrow">Meet the market</p>
-          <h2 id="vendor-lineup-title">The vendor lineup</h2>
+          <p className="poppin-eyebrow">MEET THE VENDORS</p>
+          <h2 id="vendor-lineup-title">The people behind the good finds.</h2>
+          <p>Discover the businesses confirmed for this event.</p>
         </div>
+        {!loading && !error && (
+          <span className="poppin-results-count">
+            <Store size={16} aria-hidden="true" />
+            {vendors.length} {vendors.length === 1 ? "business" : "businesses"}
+          </span>
+        )}
       </div>
-      <p>Local businesses joining this event, confirmed by the organizer.</p>
       <ResourceState
         loading={loading}
         error={error}
         reload={reload}
         empty={
           !vendors.length
-            ? "The lineup is still taking shape. Meet the businesses here as they’re confirmed."
+            ? "The lineup is taking shape. Confirmed businesses will appear here as the organizer accepts applications."
             : ""
         }
       />
-      <div className="poppin-discover-grid">
+      <div className="poppin-lineup-grid">
         {vendors.map((vendor) => (
           <VendorCard key={vendor._id} vendor={vendor} />
         ))}

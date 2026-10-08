@@ -22,6 +22,7 @@ import useResource, { errorMessage } from "../../hooks/useResource";
 import StatusBadge from "../../components/shared/StatusBadge";
 import type { Category, Event, Venue } from "../../types/event";
 import { eventSchema, type EventFormData } from "../../schemas/eventSchema";
+import { CalendarPlus, Check, ArrowUpRight } from "lucide-react";
 function timeForInput(value: string) {
   const match = value.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
   if (!match) return /^\d{2}:\d{2}$/.test(value) ? value : "";
@@ -114,10 +115,10 @@ export default function OrganizerEventFormPage() {
       ? "You can only edit your own events."
       : "");
   return (
-    <PageContainer width="form">
+    <PageContainer className="poppin-editor-page">
       <Link to="/my-events">← Back to my events</Link>
       <PageHeader
-        eyebrow="Make room for something local"
+        eyebrow="MAKE SOMETHING HAPPEN"
         title={eventId ? "Edit your event" : "Create an event"}
         description="Set the scene, save your draft, and share it with your local circle when you’re ready."
       />
@@ -139,102 +140,152 @@ export default function OrganizerEventFormPage() {
               Current status: <StatusBadge status={current.data.status} />
             </p>
           )}
-          <form noValidate onSubmit={handleSubmit((data) => save(data, false))}>
-            <section className="poppin-form-section">
-              <h2>The little details</h2>
-              <p>Give your event a name and a story worth showing up for.</p>
-              <FieldGroup label="Event Title" error={errors.title?.message}>
-                <Input {...register("title")} />
-              </FieldGroup>
-              <FieldGroup
-                label="Description"
-                error={errors.description?.message}
-              >
-                <Textarea rows={6} {...register("description")} />
-              </FieldGroup>
-              <FieldGroup label="Venue" error={errors.venue?.message}>
-                <Select {...register("venue")}>
-                  <option value="">Select venue</option>
-                  {venues.data?.map((venue) => (
-                    <option key={venue._id} value={venue._id}>
-                      {venue.name} - {venue.city}
-                    </option>
-                  ))}
-                </Select>
-              </FieldGroup>
-              <FieldGroup label="Categories" error={errors.categories?.message}>
-                <div className="poppin-checkbox-grid">
-                  {categories.data?.map((category) => (
-                    <label key={category._id}>
-                      <Checkbox
-                        value={category._id}
-                        {...register("categories")}
-                      />
-                      {category.name}
-                    </label>
-                  ))}
-                </div>
-              </FieldGroup>
-            </section>
-            <section className="poppin-form-section">
-              <h2>Save the date</h2>
-              <p>Your event dates and hours, in local Pampanga time.</p>
-              <div className="poppin-field-pair">
-                <FieldGroup
-                  label="Start Date"
-                  error={errors.startDate?.message}
-                >
-                  <Input type="date" {...register("startDate")} />
-                </FieldGroup>
-                <FieldGroup label="End Date" error={errors.endDate?.message}>
-                  <Input type="date" {...register("endDate")} />
-                </FieldGroup>
-                <FieldGroup
-                  label="Start Time"
-                  error={errors.startTime?.message}
-                >
-                  <Input type="time" {...register("startTime")} />
-                </FieldGroup>
-                <FieldGroup label="End Time" error={errors.endTime?.message}>
-                  <Input type="time" {...register("endTime")} />
-                </FieldGroup>
+          <div className="poppin-editor-layout">
+            <aside className="poppin-editor-aside">
+              <span className="poppin-feature-icon">
+                <CalendarPlus size={28} aria-hidden="true" />
+              </span>
+              <h2>
+                Your idea.
+                <br />
+                Their next good plan.
+              </h2>
+              <p>
+                A great event starts with a clear invitation. Add the details
+                people need to show up.
+              </p>
+              <ol className="poppin-editor-steps">
+                <li>
+                  <span>01</span> Set the scene
+                </li>
+                <li>
+                  <span>02</span> Pick a time and place
+                </li>
+                <li>
+                  <span>03</span> Make it stand out
+                </li>
+              </ol>
+              <div className="poppin-editor-note">
+                <Check size={18} aria-hidden="true" />
+                <p>
+                  Save a draft at any time. Publish when the details are ready
+                  to share.
+                </p>
               </div>
-            </section>
-            <input type="hidden" {...register("posterUrl")} />
-            <ImageUploader
-              label="Event Poster"
-              value={poster || ""}
-              onChange={(value) =>
-                setValue("posterUrl", value, {
-                  shouldDirty: true,
-                  shouldValidate: true,
-                })
-              }
-              onBusy={setUploading}
-            />
-            {errors.posterUrl?.message && (
-              <Alert variant="error">{errors.posterUrl.message}</Alert>
-            )}
-            {error && <Alert variant="error">{error}</Alert>}
-            <div className="poppin-actions">
-              <Button
-                type="submit"
-                variant="outline"
-                loading={isSubmitting}
-                disabled={uploading}
-              >
-                {eventId ? "Save Changes" : "Save Draft"}
-              </Button>
-              {(!current.data || current.data.status === "draft") && (
-                <Button
-                  disabled={uploading || isSubmitting}
-                  onClick={handleSubmit((data) => save(data, true))}
+              <Link className="poppin-inline-link" to="/catalog">
+                Manage venues & categories <ArrowUpRight size={16} />
+              </Link>
+            </aside>
+            <form
+              className="poppin-editor-form"
+              noValidate
+              onSubmit={handleSubmit((data) => save(data, false))}
+            >
+              <section className="poppin-form-section">
+                <p className="poppin-eyebrow">01 / THE EVENT</p>
+                <h2>Set the scene</h2>
+                <p>What’s happening, and why should people be there?</p>
+                <FieldGroup label="Event Title" error={errors.title?.message}>
+                  <Input {...register("title")} />
+                </FieldGroup>
+                <FieldGroup
+                  label="Description"
+                  error={errors.description?.message}
                 >
-                  Publish Event
-                </Button>
+                  <Textarea rows={6} {...register("description")} />
+                </FieldGroup>
+                <FieldGroup label="Venue" error={errors.venue?.message}>
+                  <Select {...register("venue")}>
+                    <option value="">Select venue</option>
+                    {venues.data?.map((venue) => (
+                      <option key={venue._id} value={venue._id}>
+                        {venue.name} - {venue.city}
+                      </option>
+                    ))}
+                  </Select>
+                </FieldGroup>
+                <FieldGroup
+                  label="Categories"
+                  error={errors.categories?.message}
+                >
+                  <div className="poppin-checkbox-grid">
+                    {categories.data?.map((category) => (
+                      <label key={category._id}>
+                        <Checkbox
+                          value={category._id}
+                          {...register("categories")}
+                        />
+                        {category.name}
+                      </label>
+                    ))}
+                  </div>
+                </FieldGroup>
+              </section>
+              <section className="poppin-form-section">
+                <p className="poppin-eyebrow">02 / WHEN TO SHOW UP</p>
+                <h2>Save the date</h2>
+                <p>Your event dates and hours, in local Pampanga time.</p>
+                <div className="poppin-field-pair">
+                  <FieldGroup
+                    label="Start Date"
+                    error={errors.startDate?.message}
+                  >
+                    <Input type="date" {...register("startDate")} />
+                  </FieldGroup>
+                  <FieldGroup label="End Date" error={errors.endDate?.message}>
+                    <Input type="date" {...register("endDate")} />
+                  </FieldGroup>
+                  <FieldGroup
+                    label="Start Time"
+                    error={errors.startTime?.message}
+                  >
+                    <Input type="time" {...register("startTime")} />
+                  </FieldGroup>
+                  <FieldGroup label="End Time" error={errors.endTime?.message}>
+                    <Input type="time" {...register("endTime")} />
+                  </FieldGroup>
+                </div>
+              </section>
+              <section className="poppin-form-section">
+                <p className="poppin-eyebrow">03 / THE FIRST IMPRESSION</p>
+                <h2>Give it a cover</h2>
+                <input type="hidden" {...register("posterUrl")} />
+                <ImageUploader
+                  label="Event Poster"
+                  value={poster || ""}
+                  onChange={(value) =>
+                    setValue("posterUrl", value, {
+                      shouldDirty: true,
+                      shouldValidate: true,
+                    })
+                  }
+                  onBusy={setUploading}
+                />
+              </section>
+              {errors.posterUrl?.message && (
+                <Alert variant="error">{errors.posterUrl.message}</Alert>
               )}
-            </div>
-          </form>
+              {error && <Alert variant="error">{error}</Alert>}
+              <div className="poppin-actions poppin-form-footer">
+                <Button
+                  type="submit"
+                  variant="outline"
+                  loading={isSubmitting}
+                  disabled={uploading}
+                >
+                  {eventId ? "Save Changes" : "Save Draft"}
+                </Button>
+                {(!current.data || current.data.status === "draft") && (
+                  <Button
+                    disabled={uploading || isSubmitting}
+                    onClick={handleSubmit((data) => save(data, true))}
+                  >
+                    Publish Event
+                  </Button>
+                )}
+              </div>
+            </form>
+          </div>
         </>
       )}
     </PageContainer>

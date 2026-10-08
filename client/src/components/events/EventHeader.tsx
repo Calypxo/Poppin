@@ -1,59 +1,74 @@
-import { Link } from "react-router-dom";
-import { CalendarDays, Clock, MapPin } from "lucide-react";
+import { CalendarDays, Clock3, MapPin } from "lucide-react";
 import type { Event } from "../../types/event";
 import StatusBadge from "../shared/StatusBadge";
+import OrganizerIdentity from "../shared/OrganizerIdentity";
 import { EventPoster } from "../home/EventPresentation";
 import { eventDate } from "../home/eventFormatting";
+import { calendarHours } from "../home/weeklyCalendar";
+
 export default function EventHeader({ event }: { event: Event }) {
+  const firstDay = eventDate(event.startDate);
+  const lastDay = eventDate(event.endDate);
   return (
-    <header className="poppin-event-header">
-      <div className="poppin-detail-poster">
+    <header className="poppin-event-hero">
+      <div className="poppin-event-hero-poster">
         <EventPoster event={event} contain eager />
       </div>
-      <div className="poppin-event-summary">
-        <StatusBadge
-          status={
-            event.status === "published"
-              ? event.eventState || event.status
-              : event.status
-          }
-        />
+      <div className="poppin-event-hero-copy">
+        <div className="poppin-event-hero-kicker">
+          <span>
+            <MapPin size={14} aria-hidden="true" />
+            {event.venue?.city || "Pampanga"}
+          </span>
+          <StatusBadge
+            status={
+              event.status === "published"
+                ? event.eventState || event.status
+                : event.status
+            }
+          />
+        </div>
         <h1>{event.title}</h1>
-        <p>
-          Hosted by{" "}
-          <Link to={`/organizers/${event.organizer._id}`}>
-            {event.organizer.name}
-          </Link>
-        </p>
-        <div className="poppin-event-facts">
+        <div className="poppin-event-host">
+          <span>Hosted by</span>
+          <OrganizerIdentity organizer={event.organizer} />
+        </div>
+        <dl className="poppin-event-essential">
           <div>
             <CalendarDays size={20} aria-hidden="true" />
-            <p>
-              <strong>Save the date</strong>
-              {eventDate(event.startDate)} – {eventDate(event.endDate)}
-            </p>
+            <div>
+              <dt>Save the date</dt>
+              <dd>
+                {firstDay === lastDay ? firstDay : firstDay + " – " + lastDay}
+              </dd>
+            </div>
           </div>
           <div>
-            <Clock size={20} aria-hidden="true" />
-            <p>
-              <strong>Market hours</strong>
-              {event.startTime} – {event.endTime}
-            </p>
+            <Clock3 size={20} aria-hidden="true" />
+            <div>
+              <dt>Market hours</dt>
+              <dd>{calendarHours(event)}</dd>
+            </div>
           </div>
           <div>
             <MapPin size={20} aria-hidden="true" />
-            <p>
-              <strong>{event.venue?.name}</strong>
-              {event.venue?.address}, {event.venue?.city},{" "}
-              {event.venue?.province}
-            </p>
+            <div>
+              <dt>{event.venue?.name || "The location"}</dt>
+              <dd>
+                {[
+                  event.venue?.address,
+                  event.venue?.city,
+                  event.venue?.province,
+                ]
+                  .filter(Boolean)
+                  .join(", ")}
+              </dd>
+            </div>
           </div>
-        </div>
-        <div className="poppin-actions">
+        </dl>
+        <div className="poppin-event-categories" aria-label="Event categories">
           {event.categories.map((category) => (
-            <span className="poppin-status" key={category._id}>
-              {category.name}
-            </span>
+            <span key={category._id}>{category.name}</span>
           ))}
         </div>
       </div>

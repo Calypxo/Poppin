@@ -2,7 +2,10 @@
 @import "./styles/public.css";
 @import "./styles/app.css";
 @import "./styles/ui.css";
-@import "./styles/scrapbook.css";
+@import "./styles/home.css";
+@import "./styles/discovery.css";
+@import "./styles/weekend-edit.css";
+@import "./styles/experience.css";
 
 * {
   box-sizing: border-box;
