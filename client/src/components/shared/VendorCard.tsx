@@ -5,6 +5,7 @@ import Card from "../ui/Card";
 import { ButtonLink } from "../ui/Button";
 
 export default function VendorCard({ vendor }: { vendor: VendorLineupItem }) {
+  const initials = vendor.businessName.split(/\s+/).filter(Boolean).slice(0, 2).map((word) => word[0]).join("").toUpperCase();
   return (
     <Card className="poppin-lineup-card">
       <div className="poppin-lineup-card-top">
@@ -12,7 +13,7 @@ export default function VendorCard({ vendor }: { vendor: VendorLineupItem }) {
           {vendor.logoUrl ? (
             <img src={vendor.logoUrl} alt="" loading="lazy" />
           ) : (
-            vendor.businessName.slice(0, 2).toUpperCase()
+            initials
           )}
         </span>
         <span className="poppin-confirmed-label">
@@ -23,13 +24,13 @@ export default function VendorCard({ vendor }: { vendor: VendorLineupItem }) {
       <p className="poppin-eyebrow">
         {vendor.category?.name || "LOCAL BUSINESS"}
       </p>
-      <h3>
+      <h4>
         {vendor.vendorId ? (
           <Link to={"/vendors/" + vendor.vendorId}>{vendor.businessName}</Link>
         ) : (
           vendor.businessName
         )}
-      </h3>
+      </h4>
       {vendor.description && <p>{vendor.description}</p>}
       {vendor.products && (
         <div className="poppin-vendor-products">

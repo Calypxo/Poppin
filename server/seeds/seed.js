@@ -13,19 +13,30 @@ const Event = require("../models/Event");
 const Announcement = require("../models/Announcement");
 const VendorCall = require("../models/VendorCall");
 const VendorApplication = require("../models/VendorApplication");
+const { seedVendorLineups } = require("./vendorLineups");
 
 // Needed because of the DNS issue we encountered earlier
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 async function seedDatabase() {
   try {
+    const options = process.argv.slice(2);
+    if (options.some((option) => option !== "--vendor-lineups"))
+      throw new Error("Usage: npm run seed [-- --vendor-lineups]");
+    if (options.includes("--vendor-lineups")) {
+      await mongoose.connect(process.env.MONGO_URI, { serverSelectionTimeoutMS: 15000 });
+      await seedVendorLineups();
+      console.log("Vendor lineups seeded. Existing accounts, events and review decisions preserved.");
+      await mongoose.disconnect();
+      return;
+    }
     if (
       !process.env.DEMO_PASSWORD ||
       process.env.DEMO_PASSWORD.length < 8 ||
       Buffer.byteLength(process.env.DEMO_PASSWORD) > 72
     )
       throw new Error(
-        "Set DEMO_PASSWORD to 8?72 bytes for the optional empty-database seed",
+        "Set DEMO_PASSWORD to 8–72 bytes for the optional empty-database seed",
       );
     await mongoose.connect(process.env.MONGO_URI);
 
@@ -47,10 +58,10 @@ async function seedDatabase() {
     );
     if (existing.some(Boolean))
       throw new Error(
-        "Seed requires an empty database. Use a separate demo database to preserve existing records.",
+        "Default seed requires an empty database. Use npm run seed -- --vendor-lineups to add lineup fixtures to existing poster events without replacing records.",
       );
 
-    // Existing databases are never cleared or seeded.
+    // The default full seed never clears or replaces existing records.
     // Categories
     const categories = await Category.insertMany([
       {
@@ -297,6 +308,8 @@ async function seedDatabase() {
     await VendorApplication.insertMany(applications);
 
     console.log("Vendor applications created");
+
+    await seedVendorLineups({ bootstrap: true, passwordHash });
 
     console.log("");
     console.log("Popp'in database seeded successfully!");

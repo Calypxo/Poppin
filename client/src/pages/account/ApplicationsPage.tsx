@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import useResource from "../../hooks/useResource";
 import type { VendorApplicationListItem } from "../../types/vendorApplication";
+import type { Event } from "../../types/event";
 import ResourceState from "../../components/shared/ResourceState";
 import VendorApplicationCard from "../../components/vendors/VendorApplicationCard";
 import { PageContainer, PageHeader } from "../../components/layout/Page";
@@ -14,7 +15,7 @@ import { ButtonLink } from "../../components/ui/Button";
 import Alert from "../../components/ui/Alert";
 import Tabs from "../../components/ui/Tabs";
 import { useAuth } from "../../auth/context";
-import { CheckCheck, Clock3, Send } from "lucide-react";
+import { CheckCheck, Clock3, Send, CircleX, Store, Ticket } from "lucide-react";
 export default function ApplicationsPage() {
   const { eventId } = useParams();
   const { user } = useAuth();
@@ -26,6 +27,16 @@ export default function ApplicationsPage() {
   const resource = useResource<VendorApplicationListItem[]>(
     `/vendor-applications?view=${organizer ? "incoming" : "outgoing"}`,
   );
+  const managedEvents = useResource<Event[]>(organizer ? "/events/mine" : null);
+  const capacity = managedEvents.data?.filter((event) => !eventId || event._id === eventId)
+    .reduce((totals, event) => ({
+      total: totals.total + (event.managementStats?.totalSlots || 0),
+      remaining: totals.remaining + (event.managementStats?.remainingSlots || 0),
+    }), { total: 0, remaining: 0 });
+  function reload() {
+    resource.reload();
+    if (organizer) managedEvents.reload();
+  }
   const applications =
     resource.data?.filter(
       (application) =>
@@ -66,7 +77,7 @@ export default function ApplicationsPage() {
         <Alert variant="success">{location.state.message}</Alert>
       )}
       {scopedApplications && (
-        <div className="poppin-account-metrics">
+        <div className={`poppin-account-metrics ${organizer ? "application-review-metrics" : ""}`}>
           <div>
             <Send size={22} aria-hidden="true" />
             <span>Total applications</span>
@@ -94,8 +105,16 @@ export default function ApplicationsPage() {
               }
             </strong>
           </div>
+          {organizer && (
+            <>
+              <div><CircleX size={22} aria-hidden="true" /><span>Rejected</span><strong>{scopedApplications.filter((application) => application.status === "rejected").length}</strong></div>
+              <div><Store size={22} aria-hidden="true" /><span>Total spaces</span><strong>{capacity && !managedEvents.loading && !managedEvents.error ? capacity.total : "—"}</strong></div>
+              <div><Ticket size={22} aria-hidden="true" /><span>Remaining spaces</span><strong>{capacity && !managedEvents.loading && !managedEvents.error ? capacity.remaining : "—"}</strong></div>
+            </>
+          )}
         </div>
       )}
+      {organizer && <ResourceState loading={managedEvents.loading} error={managedEvents.error} reload={managedEvents.reload} />}
       {!eventId && user?.organizerId && (
         <Tabs
           label="Application activity"
@@ -147,7 +166,7 @@ export default function ApplicationsPage() {
               key={application._id}
               application={application}
               review={organizer}
-              reload={resource.reload}
+              reload={reload}
             />
           ))}
         </div>

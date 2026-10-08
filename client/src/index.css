@@ -6,6 +6,7 @@
 @import "./styles/discovery.css";
 @import "./styles/weekend-edit.css";
 @import "./styles/experience.css";
+@import "./styles/lineup.css";
 
 * {
   box-sizing: border-box;
