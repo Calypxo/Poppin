@@ -193,7 +193,7 @@
   border-radius: 14px;
   padding: 12px;
   background: var(--surface);
-  box-shadow: 0 20px 35px #0a332316;
+  box-shadow: 0 20px 35px #33272a16;
   transform: rotate(-3deg);
   transition:
     transform 0.35s,
@@ -202,7 +202,7 @@
 .spotlight-ticket:hover,
 .spotlight-ticket:focus-visible {
   transform: rotate(0deg) translateY(-4px);
-  box-shadow: 0 26px 40px #0a332321;
+  box-shadow: 0 26px 40px #33272a21;
 }
 .spotlight-poster {
   height: 357px;
@@ -269,7 +269,7 @@
   background: var(--pink);
   border: 6px solid var(--color-paper);
   transform: rotate(12deg);
-  box-shadow: 0 1px 0 #0a332310;
+  box-shadow: 0 1px 0 #33272a10;
   pointer-events: none;
 }
 .spotlight-stamp > span {
@@ -322,8 +322,8 @@
     transform 0.2s;
 }
 .spotlight-arrows button:hover:not(:disabled) {
-  background: var(--forest);
-  color: var(--color-paper);
+  background: var(--pink);
+  color: var(--color-ink);
   transform: translateY(-2px);
 }
 .spotlight-arrows button:disabled {
@@ -618,8 +618,8 @@
     transform 0.2s;
 }
 .home-category-list button[aria-pressed="true"] {
-  background: var(--forest);
-  color: var(--color-paper);
+  background: var(--pink);
+  color: var(--color-ink);
   border-color: var(--forest);
 }
 .home-category-list button[aria-pressed="false"]:hover {
@@ -649,7 +649,7 @@
 }
 .event-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 16px 30px #0a332312;
+  box-shadow: 0 16px 30px #33272a12;
 }
 .event-card-link {
   display: block;
@@ -683,7 +683,7 @@
   width: 52px;
   border: 1px solid var(--poppin-line);
   border-radius: 11px;
-  box-shadow: 0 4px 10px #0a33230d;
+  box-shadow: 0 4px 10px #33272a0d;
   padding: 8px 5px;
   line-height: 1.05;
 }
@@ -926,7 +926,7 @@
   justify-content: space-between;
   font-size: 12px;
   font-weight: 700;
-  border-top: 1px solid #0a33232b;
+  border-top: 1px solid #33272a2b;
   margin-top: 30px;
   padding-top: 16px;
 }
@@ -989,7 +989,7 @@
   border-radius: 14px;
   background: var(--forest);
   color: var(--color-paper);
-  box-shadow: 0 20px 30px #0a332324;
+  box-shadow: 0 20px 30px #33272a24;
 }
 .organize-ticket > span {
   display: block;

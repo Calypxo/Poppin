@@ -115,7 +115,7 @@
   animation: weekend-ticket-in 350ms ease backwards;
 }
 .weekend-ticket:nth-child(2) { --ticket-accent: var(--color-sage); animation-delay: 45ms; }
-.weekend-ticket:nth-child(3) { --ticket-accent: color-mix(in srgb, var(--midnight) 8%, var(--color-paper)); animation-delay: 90ms; }
+.weekend-ticket:nth-child(3) { --ticket-accent: var(--color-paper); animation-delay: 90ms; }
 .weekend-ticket:hover, .weekend-ticket:focus-within {
   transform: translateY(-3px);
   border-color: var(--moss);

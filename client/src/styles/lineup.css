@@ -8,7 +8,7 @@
 .lineup-categories { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
 .lineup-categories button { display: inline-flex; align-items: center; gap: 9px; min-height: 42px; padding: 9px 14px; border: 1px solid var(--poppin-line); border-radius: 100px; font-size: 12px; color: var(--forest); background: var(--surface); transition: background 180ms ease, color 180ms ease; }
 .lineup-categories button:hover { background: var(--poppin-pink-wash); }
-.lineup-categories button[aria-pressed="true"] { background: var(--forest); color: var(--color-paper); border-color: var(--forest); }
+.lineup-categories button[aria-pressed="true"] { background: var(--pink); color: var(--color-ink); border-color: var(--color-ink); }
 .lineup-categories button > span { font-size: 10px; opacity: .8; }
 .lineup-results { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin: 18px 0 30px; font-size: 12px; color: var(--poppin-muted); }
 .lineup-results button { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; color: var(--forest); text-decoration: underline; text-underline-offset: 3px; }
@@ -23,8 +23,8 @@
 .lineup-group .poppin-lineup-card { display: flex; flex-direction: column; border-top: 3px solid var(--moss); box-shadow: 0 4px 0 color-mix(in srgb, var(--forest) 4%, transparent); }
 .lineup-group .poppin-lineup-card:nth-child(3n + 2) { border-top-color: var(--pink); }
 .lineup-group .poppin-lineup-card:nth-child(3n + 3) { border-top-color: var(--midnight); }
-.lineup-group .poppin-lineup-card:nth-child(3n + 2) .poppin-business-avatar { background: color-mix(in srgb, var(--moss) 22%, var(--color-paper)); }
-.lineup-group .poppin-lineup-card:nth-child(3n + 3) .poppin-business-avatar { background: color-mix(in srgb, var(--midnight) 12%, var(--color-paper)); }
+.lineup-group .poppin-lineup-card:nth-child(3n + 2) .poppin-business-avatar { background: var(--mint); }
+.lineup-group .poppin-lineup-card:nth-child(3n + 3) .poppin-business-avatar { background: var(--color-paper); }
 .poppin-lineup-card h4 { overflow-wrap: anywhere; }
 .lineup-group .poppin-vendor-products { margin-top: auto; padding-top: 16px; }
 .lineup-group .poppin-lineup-card > p:not(.poppin-eyebrow) { margin-bottom: 22px; }
