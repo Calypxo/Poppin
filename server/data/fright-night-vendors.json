@@ -1,0 +1,63 @@
+{
+  "eventTitle": "Fright Night",
+  "organizer": "The Lokal Hype",
+  "source": "client/public/event-gallery/fright-night/merchant-lineup.jpg",
+  "vendors": [
+    {
+      "key": "timan-photobooth",
+      "businessName": "Timan Photobooth",
+      "category": "Creative Services",
+      "products": "Photobooth",
+      "description": "Photobooth service in the Fright Night merchant lineup."
+    },
+    {
+      "key": "thrift-venture",
+      "businessName": "Thrift Venture",
+      "category": "Fashion & Thrift",
+      "products": "Thrift clothing",
+      "description": "Clothing finds from the poster's thrift selection."
+    },
+    {
+      "key": "restyle-co",
+      "businessName": "Restyle Co",
+      "category": "Fashion & Thrift",
+      "products": "Thrift clothing",
+      "description": "A thrift merchant joining the Fright Night market."
+    },
+    {
+      "key": "krixtal-scentiments",
+      "businessName": "Krixtal Scentiments",
+      "category": "Creative Goods",
+      "products": "Scents",
+      "description": "Listed in the scents section of the Fright Night merchant poster."
+    },
+    {
+      "key": "berry-brush-studio",
+      "businessName": "Berry & Brush Studio",
+      "category": "Food & Drinks",
+      "products": "Food",
+      "description": "The food merchant featured on the Fright Night lineup poster."
+    },
+    {
+      "key": "crafters-cottage",
+      "businessName": "Crafters Cottage",
+      "category": "Creative Goods",
+      "products": "Toys, anik-anik and good finds",
+      "description": "Part of the poster's toys, anik-anik and good finds selection."
+    },
+    {
+      "key": "river-side-wood-carving",
+      "businessName": "River-Side Wood Carving",
+      "category": "Art & Creative",
+      "products": "Wood carvings",
+      "description": "Wood carving finds from the Fright Night merchant lineup."
+    },
+    {
+      "key": "pocket-critters",
+      "businessName": "Pocket Critters",
+      "category": "Creative Goods",
+      "products": "Toys, anik-anik and good finds",
+      "description": "One of the poster's merchants for toys, anik-anik and good finds."
+    }
+  ]
+}

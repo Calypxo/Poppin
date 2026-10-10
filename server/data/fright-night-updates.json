@@ -1,0 +1,27 @@
+{
+  "organizer": "The Lokal Hype",
+  "eventTitle": "Fright Night",
+  "posts": [
+    {
+      "title": "Meet the merchants of Fright Night!",
+      "type": "lineup",
+      "content": "👻 MEET THE MERCHANTS OF FRIGHT NIGHT! 🎃\nFrom spooky finds to unique local brands, these merchants are ready to haunt Nepo Quad, Angeles City, Pampanga this October 2–4. 🕷️🛍️\nSee you at Fright Night! 👻",
+      "images": ["fright-night/merchant-lineup.jpg"]
+    },
+    {
+      "title": "Day 1 was the GOAT!",
+      "type": "general",
+      "content": "Day 1 was the GOAT! 👻🔥\nCome through today at Nepo Quad for Fright Night, a Halloween-themed flea market happening from 3:00 PM to 10:00 PM!\nThrift, food, finds, spooky vibes, and more. See you there! 🎃",
+      "images": [
+        "fright-night/day-1-01.jpg",
+        "fright-night/day-1-02.jpg",
+        "fright-night/day-1-03.jpg",
+        "fright-night/day-1-04.jpg",
+        "fright-night/day-1-05.jpg"
+      ]
+    }
+  ],
+  "source": "https://www.facebook.com/TheLokalHype",
+  "credit": "The Lokal Hype; captions, poster, merchant lineup and five numbered Day 1 photos supplied by the user from Downloads on 2026-10-11.",
+  "dateNote": "The poster has no year; 2026 matches the project's demo calendar. Source post publication dates were not supplied, so updates use their import time. The required organizer email uses an example.invalid placeholder because no contact email was supplied."
+}

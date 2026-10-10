@@ -28,3 +28,4 @@ Thumbs.db
 # Local poster import upload receipts
 scripts/.poster-upload-cache.json
 scripts/.kulitan-lineup-upload-cache.json
+scripts/.fright-night-upload-cache.json

@@ -1,6 +1,13 @@
 {
   "organizers": [
     {
+      "name": "The Lokal Hype",
+      "city": "Angeles City",
+      "email": "the-lokal-hype@example.invalid",
+      "description": "Organizer of Fright Night, a Halloween-themed flea market at Nepo Quad, Angeles City, Pampanga.",
+      "socialMedia": "https://www.facebook.com/TheLokalHype"
+    },
+    {
       "name": "Moderno Market",
       "city": "City of San Fernando",
       "email": "moderno-market@example.invalid"
@@ -60,6 +67,18 @@
     }
   ],
   "events": [
+    {
+      "title": "Fright Night",
+      "organizer": "The Lokal Hype",
+      "venue": "Nepo Quad",
+      "poster": "fright-night.jpg",
+      "start": "2026-10-02",
+      "end": "2026-10-04",
+      "startTime": "15:00",
+      "endTime": "22:00",
+      "categories": ["Flea Market", "Fashion & Thrift", "Food & Drinks"],
+      "description": "BOO! YOU ARE INVITED. 👻\n\nStep into the FRIGHT NIGHT at Nepo Quad, Angeles City, Pampanga this October 2–4. Come for the market. Stay for the scares. 🕷️🖤\n\nBring your friends. See you at Fright Night.\n\n#local #smallbusinesssupportingsmallbusiness #pampangabazaar #halloweekend"
+    },
     {
       "title": "Kulitan: Matcha × Coffee",
       "organizer": "Kulitan Flea Market",
