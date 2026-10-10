@@ -1,3 +1,11 @@
+.poppin-save-event[aria-pressed="true"] {
+  /* Deepen hibiscus slightly for readable small white labels. */
+  background: color-mix(in srgb, var(--color-hibiscus) 90%, var(--color-ink));
+  color: var(--color-surface);
+}
+.poppin-save-event[aria-pressed="true"]:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--color-hibiscus) 80%, var(--color-ink));
+}
 .event-card-save {
   position: relative;
   z-index: 3;
