@@ -108,7 +108,7 @@ fieldset.poppin-field legend {
   position: relative;
   display: inline-flex;
   align-items: center;
-  width: min(240px, 100%);
+  width: min(180px, 100%);
   min-height: 44px;
   text-decoration: none;
 }

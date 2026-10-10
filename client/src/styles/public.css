@@ -235,7 +235,7 @@ button:disabled {
   display: inline-flex;
   align-items: center;
   flex-shrink: 0;
-  width: 220px;
+  width: 160px;
   min-height: 44px;
 }
 .poppin-brand-logo {
@@ -376,7 +376,7 @@ button:disabled {
   margin: 58px 0 35px;
 }
 .footer-wordmark > .poppin-brand-logo {
-  max-width: 1080px;
+  max-width: 420px;
 }
 .footer-bottom {
   border-top: 1px solid var(--poppin-line);
@@ -498,7 +498,7 @@ button:disabled {
     gap: 22px;
   }
   .brand {
-    width: 180px;
+    width: 140px;
   }
   .site-nav {
     min-height: 72px;
