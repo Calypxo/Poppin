@@ -1,0 +1,54 @@
+.event-card-save {
+  position: relative;
+  z-index: 3;
+  padding: 0 22px 22px;
+}
+.event-card-save:empty {
+  display: none;
+}
+.event-card-save .poppin-ui-button {
+  width: 100%;
+  min-height: 44px;
+}
+.poppin-event-save-actions {
+  margin-top: 22px;
+}
+.poppin-event-save-actions .poppin-ui-button {
+  min-height: 44px;
+}
+.poppin-saved-summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+  margin-bottom: 24px;
+}
+.poppin-saved-summary:focus {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 6px;
+  border-radius: 4px;
+}
+.poppin-saved-grid {
+  align-items: start;
+}
+.poppin-saved-unavailable {
+  display: grid;
+  justify-items: start;
+  gap: 18px;
+}
+.poppin-saved-unavailable h3 {
+  font-size: 23px;
+}
+.poppin-saved-unavailable p {
+  color: var(--poppin-muted);
+  font-size: 14px;
+  line-height: 1.75;
+}
+@media (max-width: 639px) {
+  .event-card-save {
+    padding: 0 18px 18px;
+  }
+  .poppin-event-save-actions .poppin-ui-button {
+    width: 100%;
+  }
+}

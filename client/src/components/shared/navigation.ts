@@ -6,6 +6,7 @@ export function navigation(user: User | null) {
     { to: "/feed", label: "Events & updates" },
     { to: "/opportunities", label: "Opportunities" },
   ];
+  if (user) links.push({ to: "/saved-events", label: "Saved Events" });
   if (user?.organizerId) {
     links.push({ to: "/my-events", label: "My events" });
     links.push({ to: "/events/new", label: "Create event" });

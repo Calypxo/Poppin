@@ -4,6 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "test": "node --test tests/*.test.js",
     "dev": "node --watch app.js",
     "start": "node app.js",
     "seed": "node seeds/seed.js"
@@ -21,5 +22,8 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.10.4",
     "multer": "^2.4.0"
+  },
+  "devDependencies": {
+    "mongodb-memory-server": "^11.3.0"
   }
 }

@@ -22,7 +22,7 @@ export function eventStatus(event: Event) {
   if (event.status === "draft") return "Draft";
   if (event.status === "cancelled") return "Cancelled";
   if (event.eventState === "ongoing") return "Happening now";
-  if (event.eventState === "completed") return "Past event";
+  if (event.eventState === "completed") return "Completed";
   if (event.eventState === "upcoming" && event.daysUntilStart !== undefined) {
     if (event.daysUntilStart === 0) return "Happening today";
     return `In ${event.daysUntilStart} ${event.daysUntilStart === 1 ? "day" : "days"}`;

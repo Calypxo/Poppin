@@ -5,6 +5,8 @@ import AuthProvider from "../auth/AuthProvider";
 import ProtectedRoute from "../auth/ProtectedRoute";
 import PublicLayout from "../components/public/PublicLayout";
 import HomePage from "../pages/public/HomePage";
+import SavedEventsProvider from "../saved-events/SavedEventsProvider";
+const SavedEventsPage = lazy(() => import("../pages/account/SavedEventsPage"));
 const DiscoverPage = lazy(() => import("../pages/public/DiscoverPage"));
 const EventDetailsPage = lazy(() => import("../pages/public/EventDetailsPage"));
 const VendorApplicationPage = lazy(
@@ -42,6 +44,7 @@ export default function AppRouter() {
     <BrowserRouter>
       <AuthProvider>
         <UIProvider>
+          <SavedEventsProvider>
           <Routes>
             <Route element={<PublicLayout />}>
               <Route path="/" element={<HomePage />} />
@@ -60,6 +63,7 @@ export default function AppRouter() {
               <Route path="/login" element={<AuthPage />} />
               <Route path="/register" element={<AuthPage registering />} />
               <Route element={<ProtectedRoute />}>
+                <Route path="/saved-events" element={<SavedEventsPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/profile/edit" element={<EditProfilePage />} />
                 <Route
@@ -142,6 +146,7 @@ export default function AppRouter() {
               <Route path="*" element={<NotFoundPage />} />
             </Route>
           </Routes>
+          </SavedEventsProvider>
         </UIProvider>
       </AuthProvider>
     </BrowserRouter>

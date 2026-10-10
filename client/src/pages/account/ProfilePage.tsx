@@ -48,6 +48,9 @@ export default function ProfilePage({
           <ButtonLink size="sm" to="/discover">
             Discover events ↗
           </ButtonLink>
+          <ButtonLink variant="secondary" size="sm" to="/saved-events">
+            Saved Events
+          </ButtonLink>
         </ProfileHeader>
         <div className="poppin-account-home">
           <Card className="poppin-account-bio">

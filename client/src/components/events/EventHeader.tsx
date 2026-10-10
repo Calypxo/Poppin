@@ -5,6 +5,7 @@ import OrganizerIdentity from "../shared/OrganizerIdentity";
 import { EventPoster } from "../home/EventPresentation";
 import { eventDate } from "../home/eventFormatting";
 import { calendarHours } from "../home/weeklyCalendar";
+import SaveEventButton from "./SaveEventButton";
 
 export default function EventHeader({ event }: { event: Event }) {
   const firstDay = eventDate(event.startDate);
@@ -70,6 +71,9 @@ export default function EventHeader({ event }: { event: Event }) {
           {event.categories.map((category) => (
             <span key={category._id}>{category.name}</span>
           ))}
+        </div>
+        <div className="poppin-event-save-actions">
+          <SaveEventButton event={event} />
         </div>
       </div>
     </header>

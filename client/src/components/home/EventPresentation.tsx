@@ -14,6 +14,7 @@ import { eventDate, eventLocation, eventStatus } from "./eventFormatting";
 import StatusBadge from "../shared/StatusBadge";
 import { Skeleton, EmptyState, ErrorState } from "../ui/States";
 import useSurfaceMotion from "../../hooks/useSurfaceMotion";
+import SaveEventButton from "../events/SaveEventButton";
 
 export function EventPoster({
   event,
@@ -232,10 +233,12 @@ export function EditorialEventCard({
   event,
   large = false,
   variant = "standard",
+  onRemoved,
 }: {
   event: Event;
   large?: boolean;
   variant?: "standard" | "compact" | "featured" | "social";
+  onRemoved?: () => void;
 }) {
   const motion = useSurfaceMotion<HTMLElement>();
   return (
@@ -272,6 +275,9 @@ export function EditorialEventCard({
           </div>
         </div>
       </Link>
+      <div className="event-card-save">
+        <SaveEventButton event={event} onRemoved={onRemoved} />
+      </div>
     </article>
   );
 }
