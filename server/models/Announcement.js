@@ -3,6 +3,15 @@ const mongoose = require("mongoose");
 const announcementSchema = new mongoose.Schema(
   {
     imageUrl: { type: String, default: "" },
+    imageUrls: {
+      type: [String],
+      default: [],
+      validate: {
+        validator: (urls) =>
+          urls.length <= 12 && new Set(urls).size === urls.length,
+        message: "Use up to 12 different post images",
+      },
+    },
     event: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Event",

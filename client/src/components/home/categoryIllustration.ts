@@ -9,11 +9,11 @@ export function categoryIllustration(name: string): WatercolorMotif {
   if (/\b(music|vinyl)\b/.test(label)) return "vinyl-reference";
   if (/\b(toys?|hobbies|collectibles)\b/.test(label)) return "dumpling-squishy";
   if (/\b(arts?|crafts?|creative|workshops?)\b/.test(label))
-    return "craft-booth";
+    return "woven-bracelets";
   if (/\b(photo|photography|camera)\b/.test(label)) return "camera-reference";
   if (/\b(flowers?|garden)\b/.test(label)) return "flower-bouquet";
   if (/\b(accessories|jewelry|beauty)\b/.test(label)) return "woven-bracelets";
   if (/\b(shopping|shop|bazaar|market)\b/.test(label))
-    return "flower-market-booth";
+    return "flower-bouquet";
   return "camera-reference";
 }

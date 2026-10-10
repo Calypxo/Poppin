@@ -210,16 +210,27 @@ textarea.poppin-input {
   bottom: max(20px, env(safe-area-inset-bottom));
   width: min(390px, calc(100vw - 32px));
   display: grid;
+  justify-items: end;
   gap: 10px;
   pointer-events: none;
 }
 .poppin-toast {
+  width: fit-content;
+  max-width: 100%;
   pointer-events: auto;
   border-radius: 14px;
   box-shadow: 0 12px 34px #33272a26;
 }
 .poppin-toast .poppin-alert {
   margin: 0;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  line-height: 1.5;
+}
+.poppin-toast .poppin-alert-icon {
+  width: 20px;
+  height: 20px;
 }
 .poppin-modal {
   position: fixed;

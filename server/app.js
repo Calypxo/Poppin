@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config({ path: require("path").join(__dirname, ".env") });
 
 const dns = require("dns");
 const express = require("express");
@@ -55,6 +55,7 @@ app.use(express.json());
 // Routes
 app.use("/api/health", healthRoutes);
 app.use("/api/events", eventRoutes);
+app.use("/api/saved-events", require("./routes/savedEvents"));
 app.use("/api/organizers", organizerRoutes);
 app.use("/api/venues", venueRoutes);
 app.use("/api/categories", categoryRoutes);
@@ -80,6 +81,7 @@ mongoose
   .then(async () => {
     // The user/event unique index must exist before accepting concurrent applications.
     await require("./models/VendorApplication").init();
+    await require("./models/SavedEvent").init();
     console.log("Connected to MongoDB");
 
     app.listen(PORT, () => {

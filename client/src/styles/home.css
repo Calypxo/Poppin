@@ -637,6 +637,8 @@
   row-gap: 38px;
 }
 .event-card {
+  display: flex;
+  flex-direction: column;
   min-width: 0;
   background: var(--surface);
   border: 1px solid var(--poppin-line);
@@ -652,7 +654,8 @@
   box-shadow: 0 16px 30px #33272a12;
 }
 .event-card-link {
-  display: block;
+  display: flex;
+  flex-direction: column;
 }
 .event-card-media {
   position: relative;
@@ -722,19 +725,32 @@
   justify-content: space-between;
   gap: 10px;
   margin-bottom: 13px;
+  height: 28px;
+  min-width: 0;
 }
 .event-card-topline > span:first-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.09em;
   font-weight: 700;
   line-height: 1.4;
 }
+.event-card-topline .poppin-status { flex-shrink: 0; white-space: nowrap; }
 .event-card-content h3 {
   font-size: 22px;
   line-height: 1.2;
   letter-spacing: -0.035em;
   overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  height: 2.4em;
+  margin: 0;
 }
 .event-card-content > p {
   display: flex;
@@ -744,10 +760,20 @@
   line-height: 1.65;
   color: var(--poppin-muted);
   margin-top: 12px;
-  min-height: 36px;
+  height: 3.3em;
+  margin-bottom: 0;
+}
+.event-card-content > p > span {
+  min-width: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
 }
 .event-card-content > p > svg {
   margin-top: 2px;
+  flex-shrink: 0;
 }
 .event-card-bottom {
   display: flex;
@@ -760,6 +786,7 @@
   font-size: 11px;
 }
 .event-card-bottom > span:first-child {
+  min-width: 0;
   color: var(--poppin-muted);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1172,7 +1199,7 @@
     font-size: 17px;
   }
   .poppin-event-compact .event-card-topline {
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 5px;
   }
   .poppin-event-compact .event-card-bottom {

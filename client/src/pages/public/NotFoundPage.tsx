@@ -1,4 +1,5 @@
-import { ArrowLeft, ArrowUpRight, Compass } from "lucide-react";
+import { ArrowLeft, ArrowUpRight } from "lucide-react";
+import { WatercolorSticker } from "../../components/public/MarketDecorations";
 import { ButtonLink } from "../../components/ui/Button";
 import { PageContainer } from "../../components/layout/Page";
 
@@ -6,7 +7,7 @@ export default function NotFoundPage() {
   return (
     <PageContainer className="poppin-not-found">
       <div className="poppin-not-found-number" aria-hidden="true">
-        4<Compass />4
+        4<WatercolorSticker motif="map-pin" eager />4
       </div>
       <p className="poppin-eyebrow">A SMALL DETOUR</p>
       <h1>This spot isn’t on the map.</h1>

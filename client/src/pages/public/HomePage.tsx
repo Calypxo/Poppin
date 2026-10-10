@@ -6,7 +6,6 @@ import {
   Compass,
   MapPin,
   Search,
-  Store,
   Ticket,
 } from "lucide-react";
 import useHomeEvents from "../../hooks/useHomeEvents";
@@ -27,6 +26,20 @@ import { useAuth } from "../../auth/context";
 import Button from "../../components/ui/Button";
 import TextReveal from "../../components/ui/TextReveal";
 import useSurfaceMotion from "../../hooks/useSurfaceMotion";
+import { LocalFindsIllustrations, WatercolorSticker } from "../../components/public/MarketDecorations";
+import MarketStillLife from "../../components/public/MarketStillLife";
+import OrganizerHighlights from "../../components/social/OrganizerHighlights";
+
+// Group catalog aliases for browsing while preserving the original event categories.
+const categoryGroups = [
+  { id: "markets", label: "Markets", matches: /market|bazaar/i },
+  { id: "food", label: "Food & drinks", matches: /food|drink|coffee|matcha|dessert|pastr/i },
+  { id: "fashion", label: "Fashion & thrift", matches: /fashion|thrift|accessor|clothing/i },
+  { id: "community", label: "Community", matches: /community|organization/i },
+  { id: "creative", label: "Art & crafts", matches: /art|craft|creative|workshop/i },
+  { id: "more", label: "More finds", matches: /./ },
+];
+const categoryGroup = (name: string) => categoryGroups.find(group => group.matches.test(name))?.id || "more";
 
 export default function HomePage() {
   const { events, featured, categories, retry } = useHomeEvents();
@@ -78,10 +91,14 @@ export default function HomePage() {
   const displayed = (
     category
       ? events.data.filter((event) =>
-          event.categories?.some((item) => item._id === category),
+          event.categories?.some((item) => categoryGroup(item.name) === category),
         )
       : ordered
   ).slice(0, 6);
+  const availableGroups = categoryGroups.filter(group =>
+    categories.data.some(item => categoryGroup(item.name) === group.id)
+    || events.data.some(event => event.categories?.some(item => categoryGroup(item.name) === group.id)),
+  );
   const cities = new Set(
     events.data.map((event) => event.venue?.city).filter(Boolean),
   );
@@ -188,6 +205,7 @@ export default function HomePage() {
           </div>
           <div
             className="home-category-list"
+            role="group"
             aria-label="Filter events by category"
           >
             <button
@@ -195,16 +213,16 @@ export default function HomePage() {
               aria-pressed={!category}
               onClick={() => setCategory("")}
             >
-              All happenings <Asterisk size={14} aria-hidden="true" />
+              All events
             </button>
-            {categories.data.map((item) => (
+            {availableGroups.map((item) => (
               <button
-                key={item._id}
+                key={item.id}
                 type="button"
-                aria-pressed={category === item._id}
-                onClick={() => setCategory(item._id)}
+                aria-pressed={category === item.id}
+                onClick={() => setCategory(item.id)}
               >
-                {item.name}
+                {item.label}
               </button>
             ))}
           </div>
@@ -215,6 +233,9 @@ export default function HomePage() {
             </p>
           )}
         </Reveal>
+        {!events.loading && !events.error && <p className="sr-only" role="status">
+          {displayed.length} events shown{category ? ` in ${categoryGroups.find(group => group.id === category)?.label}` : ""}.
+        </p>}
         {events.loading || featured.loading ? (
           <EventLoading />
         ) : (category ? events.error : events.error && featured.error) ? (
@@ -234,6 +255,7 @@ export default function HomePage() {
           />
         )}
       </section>
+      <OrganizerHighlights events={events.data} home />
       <WeekendEdit events={events.data} loading={events.loading} error={events.error} retry={retry} />
       <section className="home-community poppin-container">
         <Reveal>
@@ -251,7 +273,6 @@ export default function HomePage() {
           </div>
           <div className="community-grid">
             <Link to="/discover" className="community-card community-explore interactive-surface" {...exploreMotion}>
-              <Compass size={33} aria-hidden="true" />
               <span className="community-number">01 / EXPLORE</span>
               <h3>
                 Find your
@@ -261,12 +282,12 @@ export default function HomePage() {
               <p>
                 Around the corner or across the city. Follow your curiosity.
               </p>
+              <LocalFindsIllustrations />
               <span className="community-card-action">
                 Discover events <ArrowUpRight size={25} aria-hidden="true" />
               </span>
             </Link>
             <Link to="/opportunities" className="community-card community-sell interactive-surface" {...vendorMotion}>
-              <Store size={33} aria-hidden="true" />
               <span className="community-number">02 / SET UP SHOP</span>
               <h3>
                 Small business.
@@ -276,6 +297,7 @@ export default function HomePage() {
               <p>
                 Bring what you make, find your crowd, and make it a market day.
               </p>
+              <MarketStillLife />
               <span className="community-card-action">
                 Find a vendor spot <ArrowUpRight size={25} aria-hidden="true" />
               </span>
@@ -305,7 +327,7 @@ export default function HomePage() {
             </div>
             <div className="organize-art" aria-hidden="true">
               <div className="organize-circle">
-                <Asterisk size={140} strokeWidth={1.4} />
+                <WatercolorSticker motif="flower-bouquet" />
               </div>
               <div className="organize-ticket">
                 <span>THE NEXT BIG THING</span>

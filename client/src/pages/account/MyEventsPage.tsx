@@ -1,8 +1,11 @@
 ﻿import { useState } from "react";
 import api from "../../api/client";
+import { Link } from "react-router-dom";
 import useResource, { errorMessage } from "../../hooks/useResource";
 import type { Event } from "../../types/event";
-import EventCard from "../../components/events/EventCard";
+import { EventPoster } from "../../components/home/EventPresentation";
+import { eventDate, eventLocation } from "../../components/home/eventFormatting";
+import StatusBadge from "../../components/shared/StatusBadge";
 import ResourceState from "../../components/shared/ResourceState";
 import { PageContainer, PageHeader } from "../../components/layout/Page";
 import Button, { ButtonLink } from "../../components/ui/Button";
@@ -10,7 +13,7 @@ import Alert from "../../components/ui/Alert";
 import DropdownMenu from "../../components/ui/DropdownMenu";
 import Tabs from "../../components/ui/Tabs";
 import { useUI } from "../../components/ui/context";
-import { ArrowUpRight, CalendarDays, FileText, Users } from "lucide-react";
+import { ArrowUpRight, CalendarDays, FileText, MapPin, Users } from "lucide-react";
 export default function MyEventsPage() {
   const resource = useResource<Event[]>("/events/mine");
   const [error, setError] = useState("");
@@ -71,7 +74,7 @@ export default function MyEventsPage() {
         eyebrow="ORGANIZER WORKSPACE"
         title="My events"
         description="From your first idea to opening day. Everything you’re bringing to life, in one place."
-        motif="craft-booth"
+        motif="printed-shirt"
         actions={
           <>
             <ButtonLink to="/events/new">Create an event ↗</ButtonLink>
@@ -150,33 +153,61 @@ export default function MyEventsPage() {
         <div className="poppin-managed-events-grid">
           {events.map((event) => (
             <article className="poppin-managed-event" key={event._id}>
-              <EventCard event={event} />
-              {event.managementStats && (
-                <dl
-                  className="poppin-management-counts"
-                  aria-label={`${event.title} applications and capacity`}
-                >
-                  <div>
-                    <dt>Applications</dt>
-                    <dd>{event.managementStats.totalApplications}</dd>
-                  </div>
-                  <div>
-                    <dt>Pending</dt>
-                    <dd>{event.managementStats.pendingApplications}</dd>
-                  </div>
-                  <div>
-                    <dt>Accepted vendors</dt>
-                    <dd>{event.managementStats.acceptedVendors}</dd>
-                  </div>
-                  <div>
-                    <dt>Remaining slots</dt>
-                    <dd>
-                      {event.managementStats.remainingSlots} /{" "}
-                      {event.managementStats.totalSlots}
-                    </dd>
-                  </div>
-                </dl>
-              )}
+              <Link
+                to={`/events/${event._id}`}
+                className="poppin-managed-event-poster"
+                aria-label={`View ${event.title}`}
+              >
+                <EventPoster event={event} contain />
+                <span aria-hidden="true"><ArrowUpRight size={18} /></span>
+              </Link>
+              <div className="poppin-managed-event-summary">
+                <div className="poppin-managed-event-topline">
+                  <StatusBadge
+                    status={event.status === "published" && event.eventState === "completed"
+                      ? "Completed" : event.status}
+                  />
+                  <span title={event.categories?.[0]?.name}>
+                    {event.categories?.[0]?.name || "Local event"}
+                  </span>
+                </div>
+                <h2>
+                  <Link to={`/events/${event._id}`} title={event.title}>{event.title}</Link>
+                </h2>
+                <p>
+                  <CalendarDays size={14} aria-hidden="true" />
+                  <span>{eventDate(event.startDate, { month: "short", day: "numeric", year: "numeric" })}</span>
+                </p>
+                <p>
+                  <MapPin size={14} aria-hidden="true" />
+                  <span title={eventLocation(event)}>{eventLocation(event)}</span>
+                </p>
+              </div>
+              <dl
+                className="poppin-management-counts"
+                aria-label={`${event.title} applications and capacity${event.managementStats ? "" : ": statistics unavailable"}`}
+              >
+                <div>
+                  <dt>Applications</dt>
+                  <dd>{event.managementStats?.totalApplications ?? "—"}</dd>
+                </div>
+                <div>
+                  <dt>Pending</dt>
+                  <dd>{event.managementStats?.pendingApplications ?? "—"}</dd>
+                </div>
+                <div>
+                  <dt>Accepted</dt>
+                  <dd>{event.managementStats?.acceptedVendors ?? "—"}</dd>
+                </div>
+                <div>
+                  <dt>Slots left</dt>
+                  <dd>
+                    {event.managementStats ? <>
+                      {event.managementStats.remainingSlots} <small>/ {event.managementStats.totalSlots}</small>
+                    </> : "—"}
+                  </dd>
+                </div>
+              </dl>
               <div className="poppin-actions poppin-managed-event-actions">
                 {event.status !== "cancelled" && (
                   <ButtonLink

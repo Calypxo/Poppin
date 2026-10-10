@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
-import type { WatercolorMotif } from "../public/MarketDecorations";
-import { Asterisk } from "lucide-react";
+import { WatercolorSticker, type WatercolorMotif } from "../public/MarketDecorations";
 import TextReveal from "../ui/TextReveal";
 
 export function PageContainer({
@@ -25,6 +24,7 @@ export function PageHeader({
   title,
   description,
   actions,
+  motif = "flower-bouquet",
   featured = false,
 }: {
   eyebrow: string;
@@ -50,10 +50,9 @@ export function PageHeader({
         {description && <p>{description}</p>}
         {actions && <div className="poppin-actions">{actions}</div>}
       </div>
-      <div className="page-heading-emblem" aria-hidden="true">
-        <span>GOOD THINGS</span>
-        <Asterisk className="page-heading-flower" size={70} strokeWidth={1.2} />
-        <span>HAPPEN HERE</span>
+      <div className="poppin-heading-art" aria-hidden="true">
+        <WatercolorSticker motif={motif} eager />
+        <span>little local favorites</span>
       </div>
     </header>
   );

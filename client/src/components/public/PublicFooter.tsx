@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
-import { ArrowUpRight, Asterisk, MapPin } from "lucide-react";
+import { ArrowUpRight, MapPin } from "lucide-react";
 import { useAuth } from "../../auth/context";
+import BrandLogo from "../shared/BrandLogo";
 
 export default function PublicFooter() {
   const { user } = useAuth();
@@ -41,9 +42,7 @@ export default function PublicFooter() {
           </div>
         </div>
         <div className="footer-wordmark" aria-hidden="true">
-          popp
-          <Asterisk />
-          in<span>.</span>
+          <BrandLogo />
         </div>
         <div className="footer-bottom">
           <span>© {new Date().getFullYear()} POPP'IN</span>

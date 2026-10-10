@@ -7,6 +7,8 @@ import OrganizerIdentity from "./OrganizerIdentity";
 import Card from "../ui/Card";
 import { ButtonLink } from "../ui/Button";
 import DropdownMenu from "../ui/DropdownMenu";
+import PostImageGallery from "./PostImageGallery";
+import { announcementImages } from "../../utils/announcementImages";
 
 export default function EventPostCard({
   post,
@@ -64,16 +66,9 @@ export default function EventPostCard({
           })}
         </time>
       </div>
+      <PostImageGallery images={announcementImages(post)} title={post.title} description={post.event.title} />
       <h3>{post.title}</h3>
       <p className="poppin-preserve-lines">{post.content}</p>
-      {post.imageUrl && (
-        <img
-          className="poppin-update-image"
-          src={post.imageUrl}
-          alt={post.title}
-          loading="lazy"
-        />
-      )}
       <div className="poppin-update-footer">
         <ButtonLink
           size="sm"

@@ -1,6 +1,7 @@
 import { useId, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowUpRight, Asterisk, Clock3, MapPin, MoveUpRight, Ticket } from "lucide-react";
+import { ArrowUpRight, Clock3, MapPin, MoveUpRight, Ticket } from "lucide-react";
+import { WatercolorSticker } from "../public/MarketDecorations";
 import type { Event } from "../../types/event";
 import Button from "../ui/Button";
 import { EmptyState, ErrorState, LoadingState } from "../ui/States";
@@ -71,7 +72,8 @@ export default function WeekendEdit({ events, loading, error, retry }: {
                 <div><Ticket size={26} /><strong>Starts here.</strong></div>
                 <span>PAMPANGA, PH <MoveUpRight size={15} /></span>
               </div>
-              <Asterisk className="weekend-edit-flower" size={82} strokeWidth={1.5} />
+              <WatercolorSticker motif="matcha-latte" className="weekend-edit-drink" />
+              <WatercolorSticker motif="croissant" className="weekend-edit-pastry" />
             </div>
             <span className="weekend-edit-footnote"><span /> Local plans. Real connections.</span>
           </div>

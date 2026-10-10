@@ -6,7 +6,6 @@ import {
   ArrowUpRight,
   Asterisk,
   MapPin,
-  Ticket,
 } from "lucide-react";
 import type { Event } from "../../types/event";
 import { ActionLink } from "../public/PublicPrimitives";
@@ -14,6 +13,9 @@ import { eventDate, eventLocation, eventStatus } from "./eventFormatting";
 import StatusBadge from "../shared/StatusBadge";
 import { Skeleton, EmptyState, ErrorState } from "../ui/States";
 import useSurfaceMotion from "../../hooks/useSurfaceMotion";
+import SaveEventButton from "../events/SaveEventButton";
+import { LocalFindsIllustrations, WatercolorSticker } from "../public/MarketDecorations";
+import { categoryIllustration } from "./categoryIllustration";
 
 export function EventPoster({
   event,
@@ -21,7 +23,7 @@ export function EventPoster({
   eager = false,
   contain = false,
 }: {
-  event: { title: string; posterUrl?: string };
+  event: { title: string; posterUrl?: string; categories?: { name: string }[] };
   className?: string;
   eager?: boolean;
   contain?: boolean;
@@ -38,7 +40,7 @@ export function EventPoster({
     />
   ) : (
     <div className={`event-poster-fallback ${className}`}>
-      <Asterisk size={58} aria-hidden="true" />
+      <WatercolorSticker motif={categoryIllustration(event.categories?.[0]?.name || "local market")} eager={eager} />
       <strong>{event.title}</strong>
       <span>GOOD THINGS ARE COMING</span>
     </div>
@@ -129,6 +131,10 @@ export function HeroPosterCollage({
     );
   return (
     <section className="hero-poster-stage" aria-label="Event spotlight">
+      <div className="hero-watercolors" aria-hidden="true">
+        <WatercolorSticker motif="flower-bouquet" className="hero-bouquet" eager />
+        <WatercolorSticker motif="matcha-latte" className="hero-matcha" eager />
+      </div>
       <div className="spotlight-frame" aria-hidden="true" />
       <span className="spotlight-label">
         <Asterisk size={16} aria-hidden="true" /> THE LOCAL SPOTLIGHT
@@ -216,7 +222,7 @@ export function HeroPosterCollage({
         </>
       ) : (
         <div className="hero-placeholder">
-          <Ticket size={66} aria-hidden="true" />
+          <LocalFindsIllustrations />
           <h2>
             Something good
             <br />
@@ -232,10 +238,12 @@ export function EditorialEventCard({
   event,
   large = false,
   variant = "standard",
+  onRemoved,
 }: {
   event: Event;
   large?: boolean;
   variant?: "standard" | "compact" | "featured" | "social";
+  onRemoved?: () => void;
 }) {
   const motion = useSurfaceMotion<HTMLElement>();
   return (
@@ -259,10 +267,10 @@ export function EditorialEventCard({
             <span>{event.categories?.[0]?.name || "Local event"}</span>
             <StatusBadge status={eventStatus(event)} />
           </div>
-          <h3>{event.title}</h3>
+          <h3 title={event.title}>{event.title}</h3>
           <p>
             <MapPin size={14} aria-hidden="true" />
-            {eventLocation(event)}
+            <span title={eventLocation(event)}>{eventLocation(event)}</span>
           </p>
           <div className="event-card-bottom">
             <span>{event.organizer?.name || "Local organizer"}</span>
@@ -272,6 +280,9 @@ export function EditorialEventCard({
           </div>
         </div>
       </Link>
+      <div className="event-card-save">
+        <SaveEventButton event={event} onRemoved={onRemoved} />
+      </div>
     </article>
   );
 }

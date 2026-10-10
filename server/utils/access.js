@@ -46,6 +46,10 @@ async function readableEvent(user, event) {
       if (error.status !== 403) throw error;
     }
   }
+  // People who saved an event can still read it after cancellation.
+  if (user && event.status === "cancelled" &&
+    await require("../models/SavedEvent").exists({ user: user._id, event: event._id }))
+    return;
   // A confirmed vendor must still be able to read their cancelled booking.
   if (user && event.status === "cancelled") {
     const {

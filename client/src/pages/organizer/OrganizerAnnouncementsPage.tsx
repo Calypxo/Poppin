@@ -14,7 +14,8 @@ import {
 import type { Announcement } from "../../types/announcement";
 import type { Event } from "../../types/event";
 import FormField from "../../components/forms/FormField";
-import ImageUploader from "../../components/forms/ImageUploader";
+import PostImageUploader from "../../components/forms/PostImageUploader";
+import { announcementImages } from "../../utils/announcementImages";
 import ResourceState from "../../components/shared/ResourceState";
 import EventPostCard from "../../components/shared/EventPostCard";
 import { PageHeader } from "../../components/layout/Page";
@@ -46,10 +47,10 @@ export default function OrganizerAnnouncementsPage() {
       title: "",
       content: "",
       type: "announcement",
-      imageUrl: "",
+      imageUrls: [],
     },
   });
-  const image = useWatch({ control, name: "imageUrl" });
+  const images = useWatch({ control, name: "imageUrls" });
   const selectedEvents =
     events.data?.filter((event) => !eventId || event._id === eventId) || [];
   const posts =
@@ -68,20 +69,22 @@ export default function OrganizerAnnouncementsPage() {
         title: post.title,
         content: post.content,
         type: post.type,
-        imageUrl: post.imageUrl || "",
+        imageUrls: announcementImages(post),
       });
     }
   }, [edit, resource.data, eventId, reset]);
   async function save(data: AnnouncementFormData, publish: boolean) {
+    if (busy) return;
     setError("");
     setMessage("");
     try {
       if (editingId)
         await api.patch(`/posts/${editingId}`, {
           ...data,
+          imageUrl: data.imageUrls[0] || "",
           isPublished: publish,
         });
-      else await api.post("/posts", { ...data, isPublished: publish });
+      else await api.post("/posts", { ...data, imageUrl: data.imageUrls[0] || "", isPublished: publish });
       setMessage(publish ? "Your update is live." : "Draft saved.");
       toast.success(
         publish
@@ -94,7 +97,7 @@ export default function OrganizerAnnouncementsPage() {
         title: "",
         content: "",
         type: "announcement",
-        imageUrl: "",
+        imageUrls: [],
       });
       resource.reload();
     } catch (err) {
@@ -193,11 +196,13 @@ export default function OrganizerAnnouncementsPage() {
                 ))}
               </Select>
             </FormField>
-            <ImageUploader
-              label="Post image (optional)"
-              value={image || ""}
-              onChange={(value) => setValue("imageUrl", value)}
+            <PostImageUploader
+              key={editingId || "new"}
+              value={images || []}
+              onChange={(value) => setValue("imageUrls", value, { shouldDirty: true, shouldValidate: true })}
               onBusy={setBusy}
+              disabled={isSubmitting}
+              error={errors.imageUrls?.message}
             />
             <div className="poppin-actions poppin-form-footer">
               <Button type="submit" disabled={busy || isSubmitting}>
@@ -214,6 +219,7 @@ export default function OrganizerAnnouncementsPage() {
               {editingId && (
                 <Button
                   type="button"
+                  disabled={busy || isSubmitting}
                   onClick={() => {
                     setParams({});
                     reset({
@@ -221,7 +227,7 @@ export default function OrganizerAnnouncementsPage() {
                       title: "",
                       content: "",
                       type: "announcement",
-                      imageUrl: "",
+                      imageUrls: [],
                     });
                   }}
                 >

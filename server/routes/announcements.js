@@ -16,7 +16,33 @@ const populate = (query) =>
     path: "event",
     populate: { path: "organizer", select: "name logoUrl user city" },
   });
-const fields = ["title", "content", "type", "imageUrl", "isPublished"];
+const fields = ["title", "content", "type", "isPublished"];
+function postImages(body) {
+  if (Object.hasOwn(body, "imageUrls")) {
+    if (!Array.isArray(body.imageUrls))
+      fail(400, "Post images must be an array");
+    if (body.imageUrls.length > 12)
+      fail(400, "Use up to 12 post images");
+    if (
+      body.imageUrls.some(
+        (url) => typeof url !== "string" || !url || !imageUrl(url),
+      )
+    )
+      fail(400, "Use uploaded post images");
+    if (new Set(body.imageUrls).size !== body.imageUrls.length)
+      fail(400, "Each post image must be different");
+    return { imageUrls: body.imageUrls, imageUrl: body.imageUrls[0] || "" };
+  }
+  if (Object.hasOwn(body, "imageUrl")) {
+    if (typeof body.imageUrl !== "string" || !imageUrl(body.imageUrl))
+      fail(400, "Use an uploaded post image");
+    return {
+      imageUrl: body.imageUrl,
+      imageUrls: body.imageUrl ? [body.imageUrl] : [],
+    };
+  }
+  return {};
+}
 router.get("/mine", requireAuth, async (req, res) =>
   res.json(
     await populate(
@@ -81,9 +107,7 @@ async function save(req, res, creating) {
   )
     fail(400, "A post cannot be moved to another event");
   const wasPublished = post.isPublished;
-  Object.assign(post, pick(req.body, fields));
-  if (post.imageUrl && !imageUrl(post.imageUrl))
-    fail(400, "Use an uploaded post image");
+  Object.assign(post, pick(req.body, fields), postImages(req.body));
   if (post.isPublished && event.status !== "published")
     fail(400, "Publish the event before publishing updates");
   if (post.isPublished && (creating || !wasPublished))

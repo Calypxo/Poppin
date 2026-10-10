@@ -94,10 +94,12 @@ export default function VendorApplicationPage() {
       {!loading && !loadError && call.data && (
         <div className="poppin-editor-layout">
           <aside className="poppin-editor-aside poppin-application-context">
-            <span className="poppin-feature-icon">
-              <Store size={26} aria-hidden="true" />
-            </span>
-            <p className="poppin-eyebrow">YOU’RE APPLYING TO</p>
+            <div className="poppin-application-context-heading">
+              <span className="poppin-feature-icon">
+                <Store size={22} aria-hidden="true" />
+              </span>
+              <p className="poppin-eyebrow">YOU’RE APPLYING TO</p>
+            </div>
             <h2>{call.data.event.title}</h2>
             <p>{call.data.description}</p>
             <div className="poppin-context-detail">

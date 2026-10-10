@@ -1,7 +1,8 @@
 import { z } from "zod";
+import { MAX_POST_IMAGES } from "../utils/announcementImages";
 
 export const announcementSchema = z.object({
-  imageUrl: z.string(),
+  imageUrls: z.array(z.string().min(1)).max(MAX_POST_IMAGES, `Add up to ${MAX_POST_IMAGES} images to one update.`),
   event: z.string().min(1, "Please select an event"),
 
   title: z.string().min(3, "Title must be at least 3 characters"),

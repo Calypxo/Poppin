@@ -22,6 +22,7 @@ export default function OpportunitiesPage() {
         eyebrow="SMALL BUSINESS. BIG POSSIBILITIES."
         title="Find your next market."
         featured
+        motif="woven-bracelets"
         description="Put your work out there. Discover local events looking for businesses like yours."
         actions={
           user ? (

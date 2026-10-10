@@ -1,7 +1,8 @@
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { Ellipsis } from "lucide-react";
 import IconButton from "./IconButton";
+import Button from "./Button";
 interface MenuItem {
   label: string;
   to?: string;
@@ -12,14 +13,21 @@ interface MenuItem {
 export default function DropdownMenu({
   label = "More actions",
   items,
+  triggerContent,
+  triggerClassName = "",
+  className = "",
 }: {
   label?: string;
   items: MenuItem[];
+  triggerContent?: ReactNode;
+  triggerClassName?: string;
+  className?: string;
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const id = useId();
+  const Trigger = triggerContent ? Button : IconButton;
   useEffect(() => {
     if (!open) return;
     ref.current
@@ -32,9 +40,11 @@ export default function DropdownMenu({
     return () => document.removeEventListener("pointerdown", outside);
   }, [open]);
   return (
-    <div ref={ref} className="poppin-dropdown relative">
-      <IconButton
+    <div ref={ref} className={`poppin-dropdown relative ${className}`}>
+      <Trigger
         ref={trigger}
+        variant="ghost"
+        className={triggerClassName}
         aria-label={label}
         aria-haspopup="menu"
         aria-controls={open ? id : undefined}
@@ -47,8 +57,8 @@ export default function DropdownMenu({
           }
         }}
       >
-        <Ellipsis size={20} aria-hidden="true" />
-      </IconButton>
+        {triggerContent || <Ellipsis size={20} aria-hidden="true" />}
+      </Trigger>
       {open && (
         <div
           id={id}

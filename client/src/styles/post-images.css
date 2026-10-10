@@ -1,0 +1,37 @@
+.poppin-post-gallery { margin: 20px 0; min-width: 0; }
+.poppin-post-gallery-grid { display: flex; gap: 8px; width: 100%; min-width: 0; padding: 0 0 8px; margin: 0; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scrollbar-width: thin; scrollbar-color: var(--poppin-line) transparent; border-radius: 16px; list-style: none; }
+.poppin-post-gallery-grid::-webkit-scrollbar { height: 6px; }
+.poppin-post-gallery-grid::-webkit-scrollbar-thumb { background: var(--poppin-line); border-radius: 100px; }
+.poppin-post-gallery-grid > li { flex: 0 0 clamp(160px, 27%, 210px); min-width: 0; scroll-snap-align: start; }
+.poppin-post-gallery-grid .poppin-image-preview { aspect-ratio: 3 / 4; border: 0; border-radius: 16px; padding: 0; cursor: zoom-in; }
+.poppin-post-gallery-grid .poppin-image-expand { display: none; }
+.poppin-post-gallery-caption { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 8px; color: var(--poppin-muted); font-size: 12px; line-height: 1.5; }
+.poppin-post-gallery-caption > span { min-width: 0; }
+.poppin-post-gallery-controls { display: flex; flex-shrink: 0; gap: 6px; }
+.poppin-post-gallery-controls .poppin-icon-button { width: 44px; height: 44px; min-height: 44px; padding: 0; border-radius: 50%; }
+.poppin-post-upload-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 0; margin: 0; list-style: none; }
+.poppin-post-upload-grid > li { min-width: 0; }
+.poppin-post-uploader { min-width: 0; margin-block: 24px; }
+.poppin-post-uploader-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.poppin-post-uploader-heading strong { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; }
+.poppin-post-uploader-heading > span { white-space: nowrap; color: var(--poppin-muted); font-size: 12px; }
+.poppin-post-uploader > .poppin-field-help { margin-block: 10px 16px; }
+.poppin-post-upload-grid { margin-bottom: 18px; }
+.poppin-post-upload-grid > li { overflow: hidden; border: 1px solid var(--poppin-line); border-radius: 12px; background: var(--surface); }
+.poppin-post-upload-grid .poppin-image-preview, .poppin-post-pending-image { aspect-ratio: 1 / 1; padding: 8px; border-radius: 0; background: var(--surface-muted); }
+.poppin-post-pending-image > img { width: 100%; height: 100%; object-fit: contain; }
+.poppin-post-upload-caption { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 8px 6px 12px; min-height: 56px; font-size: 12px; border-top: 1px solid var(--poppin-line); }
+.poppin-post-upload-caption > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.poppin-post-upload-caption > svg { flex-shrink: 0; }
+.poppin-post-upload-caption .poppin-icon-button { width: 44px; height: 44px; min-height: 44px; padding: 0; }
+.poppin-post-upload-status { margin: 10px 0 0; font-size: 12px; line-height: 1.6; color: var(--poppin-muted); }
+.poppin-post-upload-status:empty { display: none; }
+.poppin-post-uploader .poppin-alert { margin-top: 14px; overflow-wrap: anywhere; }
+.poppin-post-uploader .poppin-alert ul { margin: 8px 0; padding-left: 18px; list-style: disc; }
+.poppin-post-uploader .poppin-alert p { margin: 8px 0 0; }
+@media (max-width: 479px) {
+  .poppin-post-upload-grid { gap: 8px; }
+  .poppin-post-upload-grid .poppin-image-expand { right: 6px; bottom: 6px; padding: 7px; }
+  .poppin-post-upload-grid .poppin-image-expand > span { display: none; }
+  .poppin-post-upload-caption { padding: 5px 6px; gap: 4px; font-size: 11px; }
+}
