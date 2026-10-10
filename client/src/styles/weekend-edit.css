@@ -18,7 +18,7 @@
   font-weight: 600;
 }
 .weekend-edit-intro h2 > span {
-  background: linear-gradient(transparent 78%, var(--pink) 78%, var(--pink) 93%, transparent 93%);
+  background: linear-gradient(transparent 78%, var(--color-tangerine) 78%, var(--color-tangerine) 93%, transparent 93%);
 }
 .weekend-edit-intro > p {
   max-width: 285px;
@@ -93,7 +93,7 @@
   border-radius: 14px;
   background: var(--surface);
 }
-.weekend-periods .poppin-ui-button { min-height: 40px; box-shadow: none; }
+.weekend-periods .poppin-ui-button { min-height: 44px; box-shadow: none; }
 .weekend-results-heading {
   display: flex;
   align-items: center;
@@ -114,7 +114,7 @@
   transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
   animation: weekend-ticket-in 350ms ease backwards;
 }
-.weekend-ticket:nth-child(2) { --ticket-accent: var(--color-sage); animation-delay: 45ms; }
+.weekend-ticket:nth-child(2) { --ticket-accent: color-mix(in srgb, var(--mint) 42%, var(--color-paper)); animation-delay: 45ms; }
 .weekend-ticket:nth-child(3) { --ticket-accent: var(--color-paper); animation-delay: 90ms; }
 .weekend-ticket:hover, .weekend-ticket:focus-within {
   transform: translateY(-3px);
@@ -165,7 +165,8 @@
 .weekend-ticket-copy { min-width: 0; }
 .weekend-ticket-category { font-size: 8px; line-height: 1.5; letter-spacing: 0.1em; font-weight: 700; text-transform: uppercase; color: var(--midnight); }
 .weekend-ticket-copy h3 { margin: 5px 0 8px; font-size: 17px; line-height: 1.3; letter-spacing: -0.035em; font-weight: 600; overflow-wrap: anywhere; }
-.weekend-ticket-copy p { display: flex; gap: 5px; margin: 4px 0 0; color: var(--poppin-muted); font-size: 10px; line-height: 1.55; }
+.weekend-ticket-copy p { display: flex; gap: 5px; margin: 4px 0 0; color: var(--poppin-muted); font-size: 10px; line-height: 1.55; overflow-wrap: anywhere; }
+.weekend-ticket-copy p > span { min-width: 0; }
 .weekend-ticket-copy p > svg { flex-shrink: 0; margin-top: 1px; }
 .weekend-ticket-arrow { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--poppin-line); transition: background 180ms ease; }
 .weekend-ticket:hover .weekend-ticket-arrow { background: var(--ticket-accent); }
@@ -189,7 +190,7 @@
   .weekend-edit-intro > p { max-width: 370px; margin-bottom: 0; }
   .weekend-edit-art, .weekend-edit-footnote { display: none; }
   .weekend-periods { display: flex; }
-  .weekend-periods .poppin-ui-button { flex: 1; padding-inline: 8px; font-size: 11px; }
+  .weekend-periods .poppin-ui-button { flex: 1; min-width: 0; padding-inline: 8px; font-size: 11px; }
   .weekend-ticket-link { grid-template-columns: 49px 58px minmax(0, 1fr); gap: 11px; padding-right: 12px; }
   .weekend-ticket-date > strong { font-size: 29px; }
   .weekend-ticket-poster { height: 88px; }

@@ -15,21 +15,6 @@ export interface OrganizerHighlight {
 // The existing posters are supplied project assets; do not infer missing years.
 export const organizerHighlights: OrganizerHighlight[] = [
   {
-    id: "weekend-club-opening",
-    organizer: "The Weekend Club",
-    title: "The Weekend Club anniversary",
-    description: "A look inside the anniversary gathering at Orchard Community Place, with local brands, games and community.",
-    location: "San Fernando, Pampanga",
-    image: "/event-gallery/weekend-club-opening.jpg",
-    imageAlt: "Visitors browsing local sellers beneath The Weekend Club anniversary sign at Orchard Community Place",
-    kind: "Market moment",
-    eventTitles: ["The Weekend Club Anniversary"],
-    source: {
-      label: "POD PH / One Pampanga · Oct 9, 2026",
-      url: "https://onepampanga.com/news/today-s-the-day-pampanga-the-weekend-club-anniversary-one-year-of-fun-opens-today-at-4-00-pm",
-    },
-  },
-  {
     id: "kulitan-youthfest",
     organizer: "Kulitan Flea Market",
     title: "Angeles City Youthfest",

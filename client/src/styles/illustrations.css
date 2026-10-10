@@ -1,9 +1,9 @@
-/* Watercolor finds share the same cream, pink and mint palette as the controls. */
+/* Watercolor finds sit on warm paper, pear and rose washes. */
 .poppin-watercolor-cutout {
   object-fit: contain;
   pointer-events: none;
   user-select: none;
-  filter: drop-shadow(0 5px 4px #33272a0d);
+  filter: drop-shadow(0 5px 4px color-mix(in srgb, var(--color-ink) 5%, transparent));
 }
 
 .poppin-heading-art {
@@ -82,7 +82,7 @@
 
 /* Two little collections, rather than generic icons, introduce the community. */
 .community-explore { background: color-mix(in srgb, var(--mint) 32%, var(--surface)); border-top-color: var(--mint); }
-.community-sell { background: color-mix(in srgb, var(--color-blush) 32%, var(--surface)); }
+.community-sell { background: color-mix(in srgb, var(--color-blush) 32%, var(--surface)); border-top-color: var(--color-tangerine); }
 .community-card h3 { margin-top: 20px; }
 .community-card > p { max-width: 340px; }
 .community-card-action { margin-top: 12px; min-height: 44px; }

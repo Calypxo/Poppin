@@ -48,7 +48,12 @@ fieldset.poppin-field legend {
   align-items: center;
   gap: 10px;
   font-size: 14px;
+  min-width: 0;
   overflow-wrap: anywhere;
+}
+.poppin-contact-row > a,
+.poppin-contact-row > span {
+  min-width: 0;
 }
 .poppin-contact-row svg {
   flex-shrink: 0;
@@ -58,7 +63,7 @@ fieldset.poppin-field legend {
 /* One welcoming account, with room for every way to take part. */
 .poppin-page.poppin-auth-layout {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   max-width: 1160px;
   padding: 0;
   margin-top: 52px;
@@ -459,7 +464,7 @@ fieldset.poppin-field legend {
   max-width: 760px;
   padding: 42px;
   background: var(--surface);
-  border-top: 3px solid var(--pink);
+  border-top: 3px solid var(--color-tangerine);
 }
 .poppin-setup-prompt > .poppin-feature-icon {
   margin-bottom: 25px;
@@ -666,7 +671,7 @@ fieldset.poppin-field legend {
   padding: 28px;
   border: 1px solid var(--poppin-line);
   border-radius: 16px;
-  border-top: 3px solid var(--pink);
+  border-top: 3px solid var(--color-tangerine);
 }
 .poppin-application-context-heading {
   display: flex;
@@ -679,7 +684,7 @@ fieldset.poppin-field legend {
   width: 42px;
   height: 42px;
   border-radius: 10px;
-  background: var(--surface-muted);
+  background: color-mix(in srgb, var(--color-pink) 35%, var(--surface));
 }
 .poppin-application-context-heading > .poppin-eyebrow {
   margin: 0;
@@ -760,7 +765,8 @@ fieldset.poppin-field legend {
 }
 .poppin-account-metrics > div {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: minmax(0, 1fr) auto;
+  min-width: 0;
   gap: 17px 12px;
   align-items: center;
   background: var(--surface);
@@ -789,7 +795,7 @@ fieldset.poppin-field legend {
   border-top: 2px solid var(--moss);
 }
 .poppin-account-metrics > div:nth-child(3) {
-  border-top: 2px solid var(--pink);
+  border-top: 2px solid var(--color-tangerine);
 }
 .poppin-management-toolbar {
   display: flex;
@@ -822,7 +828,7 @@ fieldset.poppin-field legend {
   padding: 12px;
   border-radius: 12px;
   overflow: hidden;
-  background: var(--mint);
+  background: color-mix(in srgb, var(--mint) 36%, var(--color-paper));
 }
 .poppin-managed-event-poster > img { display: block; }
 .poppin-managed-event-poster > span {
@@ -893,8 +899,8 @@ fieldset.poppin-field legend {
 }
 .poppin-management-counts dt {
   font-size: 10px;
-  line-height: 14px;
-  height: 14px;
+  line-height: 1.4;
+  height: 2.8em;
   color: var(--poppin-muted);
   margin-bottom: 6px;
 }
@@ -1025,7 +1031,7 @@ fieldset.poppin-field legend {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  min-height: 36px;
+  min-height: 44px;
   padding: 4px 0;
   margin-top: 3px;
   border: 0;

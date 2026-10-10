@@ -1,5 +1,7 @@
 /* Shared controls and feedback for every public, account and management page. */
 .poppin-ui-button {
+  max-width: 100%;
+  min-width: 0;
   min-height: 46px;
   padding: 12px 20px;
   border: 1px solid var(--color-ink);
@@ -9,6 +11,7 @@
   font: 600 14px/1.4 var(--font-body);
   text-decoration: none;
   white-space: normal;
+  overflow-wrap: anywhere;
   text-align: center;
   transition:
     transform 0.2s,
@@ -18,8 +21,8 @@
 }
 .poppin-ui-button:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px #33272a19;
-  background: var(--poppin-pink-wash);
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--color-ink) 10%, transparent);
+  background: color-mix(in srgb, var(--pink) 78%, var(--surface));
 }
 .poppin-ui-button:active:not(:disabled) {
   transform: translateY(0);
@@ -54,10 +57,10 @@
   border-color: var(--danger);
 }
 .poppin-ui-button-danger:hover:not(:disabled) {
-  background: color-mix(in srgb, var(--poppin-pink-wash) 80%, var(--pink));
+  background: color-mix(in srgb, var(--poppin-pink-wash) 80%, var(--surface));
 }
 .poppin-ui-button-sm {
-  min-height: 40px;
+  min-height: 44px;
   padding: 9px 15px;
   font-size: 12px;
 }
@@ -95,15 +98,19 @@
 }
 .poppin-input:focus {
   border-color: var(--forest);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--pink) 30%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-ink) 12%, transparent);
   outline: none;
+}
+.poppin-input:focus-visible {
+  outline: 2px solid var(--forest);
+  outline-offset: 3px;
 }
 .poppin-input[aria-invalid="true"] {
   border-color: var(--danger);
-  background: var(--poppin-pink-wash);
+  background: color-mix(in srgb, var(--poppin-pink-wash) 30%, var(--surface));
 }
 .poppin-input:disabled {
-  background: var(--color-sage);
+  background: var(--surface-muted);
   color: var(--poppin-muted);
   cursor: not-allowed;
 }
@@ -182,20 +189,32 @@ textarea.poppin-input {
   color: var(--color-ink);
 }
 .poppin-alert-info {
-  background: var(--surface-muted);
+  background: color-mix(in srgb, var(--color-pear) 12%, var(--color-paper));
+  border-color: var(--moss);
 }
 .poppin-alert-success {
-  background: var(--color-sage);
+  background: color-mix(in srgb, var(--color-pear) 35%, var(--color-paper));
+  color: var(--moss);
   border-color: var(--moss);
 }
 .poppin-alert-error {
-  background: var(--poppin-pink-wash);
-  border-color: var(--pink);
+  background: color-mix(in srgb, var(--color-hibiscus) 12%, var(--color-paper));
+  border-color: var(--color-hibiscus);
   color: var(--danger);
 }
 .poppin-alert-warning {
-  background: var(--color-paper);
+  background: color-mix(in srgb, var(--color-lemon) 40%, var(--color-paper));
+  color: var(--color-ink);
   border-color: var(--moss);
+}
+.poppin-alert-info .poppin-alert-icon {
+  color: var(--moss);
+}
+.poppin-alert-warning .poppin-alert-icon {
+  color: color-mix(in srgb, var(--color-tangerine) 65%, var(--color-ink));
+}
+.poppin-alert-error .poppin-alert-icon {
+  color: var(--color-hibiscus);
 }
 .poppin-alert-icon {
   width: 25px;
@@ -219,7 +238,7 @@ textarea.poppin-input {
   max-width: 100%;
   pointer-events: auto;
   border-radius: 14px;
-  box-shadow: 0 12px 34px #33272a26;
+  box-shadow: 0 12px 34px color-mix(in srgb, var(--color-ink) 15%, transparent);
 }
 .poppin-toast .poppin-alert {
   margin: 0;
@@ -246,10 +265,10 @@ textarea.poppin-input {
   font: 15px/1.65 var(--font-body);
   border: 1px solid var(--poppin-line);
   border-radius: 24px;
-  box-shadow: 0 30px 100px #33272a50;
+  box-shadow: 0 30px 100px color-mix(in srgb, var(--color-ink) 31%, transparent);
 }
 .poppin-modal::backdrop {
-  background: #33272ab3;
+  background: color-mix(in srgb, var(--color-ink) 70%, transparent);
   backdrop-filter: blur(5px);
 }
 .poppin-modal-sm {
@@ -329,10 +348,13 @@ textarea.poppin-input {
 }
 .poppin-error-state {
   padding: 28px;
-  border: 1px solid var(--pink);
+  border: 1px solid var(--danger);
   border-radius: 20px;
   background: var(--poppin-pink-wash);
   margin-block: 24px;
+}
+.poppin-error-state p:not(.poppin-empty-title) {
+  color: var(--danger);
 }
 .poppin-error-state button {
   margin-top: 18px;
@@ -344,7 +366,8 @@ textarea.poppin-input {
   padding: 5px 11px;
   font: 600 10px/1.5 var(--font-body);
   letter-spacing: 0.015em;
-  background: var(--color-sage);
+  background: var(--surface-muted);
+  color: var(--color-ink);
   border: 1px solid var(--poppin-line);
   border-radius: 100px;
   white-space: normal;
@@ -353,27 +376,28 @@ textarea.poppin-input {
 .poppin-status-published,
 .poppin-status-open,
 .poppin-status-ongoing {
-  background: var(--color-sage);
-  color: var(--forest);
-  border-color: var(--moss);
+  background: var(--color-success);
+  color: var(--color-success-ink);
+  border-color: var(--color-success-border);
 }
 .poppin-status-rejected,
 .poppin-status-cancelled {
   background: var(--poppin-pink-wash);
   color: var(--danger);
-  border-color: var(--pink);
+  border-color: var(--danger);
 }
 .poppin-status-pending,
 .poppin-status-draft {
-  background: var(--color-paper);
-  color: var(--forest);
+  background: color-mix(in srgb, var(--color-warning) 45%, var(--surface));
+  color: var(--color-ink);
   border-color: var(--moss);
 }
 .poppin-status-withdrawn,
 .poppin-status-completed,
 .poppin-status-closed {
-  background: var(--color-sage);
+  background: var(--surface-muted);
   color: var(--poppin-muted);
+  border-color: var(--poppin-line);
 }
 .poppin-tablist {
   display: flex;
@@ -404,13 +428,16 @@ textarea.poppin-input {
 .poppin-tablist button[aria-selected="true"] {
   background: var(--pink);
   color: var(--color-ink);
-  box-shadow: 0 2px 5px #33272a0d;
+  box-shadow: 0 2px 5px color-mix(in srgb, var(--color-ink) 5%, transparent);
 }
 .poppin-tablist button:hover {
   color: var(--forest);
 }
 .poppin-tablist button[aria-selected="true"]:hover {
   color: var(--color-ink);
+}
+.poppin-tablist button:focus-visible {
+  outline-offset: -3px;
 }
 .poppin-dropdown-menu {
   position: absolute;
@@ -423,7 +450,7 @@ textarea.poppin-input {
   background: var(--surface);
   border: 1px solid var(--poppin-line);
   border-radius: 14px;
-  box-shadow: 0 12px 32px #33272a20;
+  box-shadow: 0 12px 32px color-mix(in srgb, var(--color-ink) 13%, transparent);
 }
 .poppin-dropdown-menu :is(button, a) {
   display: block;
@@ -438,6 +465,7 @@ textarea.poppin-input {
   font-weight: 500;
   color: var(--color-ink);
   text-decoration: none;
+  overflow-wrap: anywhere;
   box-shadow: none;
 }
 .poppin-dropdown-menu :is(button, a):hover {
@@ -446,10 +474,16 @@ textarea.poppin-input {
 .poppin-dropdown-menu .poppin-menu-danger {
   color: var(--danger);
 }
+.poppin-dropdown-menu .poppin-menu-danger:hover {
+  background: var(--poppin-pink-wash);
+}
+.poppin-dropdown-menu :is(button, a):focus-visible {
+  outline-offset: -3px;
+}
 .poppin-image-uploader {
   display: grid;
   gap: 12px;
-  background: var(--color-sage);
+  background: color-mix(in srgb, var(--mint) 24%, var(--surface));
   padding: 24px;
   border: 1px dashed var(--moss);
   border-radius: 16px;
@@ -485,7 +519,7 @@ textarea.poppin-input {
   font-size: 13px;
 }
 .poppin-checkbox-grid label:has(input:checked) {
-  background: var(--color-sage);
+  background: color-mix(in srgb, var(--mint) 30%, var(--surface));
   border-color: var(--moss);
 }
 @media (max-width: 639px) {

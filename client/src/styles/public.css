@@ -11,13 +11,25 @@
   font-display: swap;
 }
 @theme {
-  --color-paper: #faeee7;
-  --color-ink: #33272a;
-  --color-paragraph: #594a4e;
-  --color-pink: #ff8ba7;
-  --color-blush: #ffc6c7;
-  --color-mint: #c3f0ca;
-  --color-surface: #fffffe;
+  /* Moss & Citrus. Legacy accent names keep existing components in sync. */
+  --color-paper: #fff8ec;
+  --color-ink: #2e331c;
+  --color-paragraph: #54601b;
+  --color-lemon: #fed16d;
+  --color-rose: #efb8a9;
+  --color-pear: #b1b26a;
+  --color-tangerine: #f67d26;
+  --color-hibiscus: #db4453;
+  --color-pink: var(--color-lemon);
+  --color-blush: var(--color-rose);
+  --color-mint: var(--color-pear);
+  --color-surface: #ffffff;
+  --color-success: #c3f0ca;
+  --color-success-ink: #2d3529;
+  --color-success-border: #525a4b;
+  --color-danger: #8a3029;
+  --color-warning: var(--color-lemon);
+  --color-on-dark: var(--color-paper);
   --color-olive: var(--color-ink);
   --color-moss: var(--color-paragraph);
   --color-midnight: var(--color-ink);
@@ -36,9 +48,10 @@
   --midnight: var(--color-midnight);
   --surface: var(--color-surface);
   --surface-muted: color-mix(in srgb, var(--color-paper) 96%, var(--forest));
-  --danger: #8a3029;
+  --danger: var(--color-danger);
   --on-moss: var(--color-ink);
-  --shadow: 0 4px 0 #33272a05, 0 18px 36px #33272a08;
+  --shadow: 0 4px 0 color-mix(in srgb, var(--color-ink) 2%, transparent),
+    0 18px 36px color-mix(in srgb, var(--color-ink) 4%, transparent);
   --radius: 18px;
 }
 ::selection {
@@ -147,7 +160,7 @@ button:disabled {
   color: var(--midnight);
 }
 .page-heading-flower {
-  color: var(--color-pink);
+  color: var(--color-tangerine);
   flex-shrink: 0;
 }
 .poppin-eyebrow {
@@ -164,7 +177,7 @@ button:disabled {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: currentColor;
+  background: var(--color-hibiscus);
 }
 .poppin-heading {
   font-size: clamp(32px, 4vw, 52px);
@@ -304,7 +317,7 @@ button:disabled {
   border-radius: 12px;
 }
 .site-join:hover {
-  background: var(--poppin-pink-wash);
+  background: color-mix(in srgb, var(--color-lemon) 75%, var(--surface));
 }
 .site-account-avatar {
   display: grid;
@@ -338,7 +351,7 @@ button:disabled {
   letter-spacing: -0.06em;
 }
 .footer-top h2 span {
-  color: var(--midnight);
+  color: var(--color-hibiscus);
 }
 .footer-cta {
   display: inline-flex;

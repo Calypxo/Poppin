@@ -123,14 +123,19 @@
   align-items: center;
   gap: 8px;
   max-width: 100%;
+  min-height: 44px;
   padding: 8px 10px;
   border: 1px solid var(--poppin-line);
   border-radius: 8px;
-  background: var(--surface);
+  background: color-mix(in srgb, var(--color-mint) 22%, var(--surface));
   color: var(--color-ink);
   font-size: 12px;
   text-align: left;
   overflow-wrap: anywhere;
+}
+.poppin-active-filters > button:not(.poppin-ui-button):hover {
+  background: color-mix(in srgb, var(--color-pink) 35%, var(--surface));
+  border-color: var(--color-moss);
 }
 .poppin-active-filters > button > svg {
   flex-shrink: 0;
@@ -238,7 +243,7 @@
   overflow: hidden;
   border: 1px solid var(--poppin-line);
   border-radius: 18px;
-  background: var(--surface);
+  background: color-mix(in srgb, var(--color-pink) 14%, var(--surface));
   box-shadow: 0 10px 30px color-mix(in srgb, var(--color-ink) 5%, transparent);
 }
 .poppin-event-hero-poster > img {
@@ -331,7 +336,7 @@
 }
 .poppin-event-categories > span {
   padding: 7px 10px;
-  background: var(--poppin-pink-wash);
+  background: color-mix(in srgb, var(--color-blush) 38%, var(--surface));
   border: 1px solid var(--poppin-line);
   border-radius: 7px;
   color: var(--color-ink);
@@ -401,8 +406,8 @@
   padding: 28px;
   border: 1px solid var(--poppin-line);
   border-radius: 18px;
-  background: var(--surface);
-  border-top: 3px solid var(--color-pink);
+  background: color-mix(in srgb, var(--color-pink) 10%, var(--surface));
+  border-top: 3px solid var(--color-tangerine);
 }
 .poppin-event-invite h2,
 .poppin-event-invite p {
@@ -420,7 +425,7 @@
   height: 46px;
   border: 1px solid var(--poppin-line);
   border-radius: 12px;
-  background: transparent;
+  background: color-mix(in srgb, var(--color-pink) 35%, var(--surface));
   color: var(--color-midnight);
 }
 .poppin-event-updates > .poppin-section-heading,
@@ -527,7 +532,7 @@
   height: 240px;
   padding: 18px;
   overflow: hidden;
-  background: var(--surface-muted);
+  background: color-mix(in srgb, var(--color-mint) 16%, var(--color-paper));
   border-bottom: 1px solid var(--poppin-line);
 }
 .poppin-opportunity-cover > img {
@@ -632,7 +637,7 @@
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: var(--color-midnight);
+  background: var(--color-moss);
 }
 .poppin-opportunity-actions {
   display: flex;
@@ -791,7 +796,7 @@
   border: 1px solid var(--poppin-line);
   border-radius: 18px;
   background: var(--surface);
-  border-top: 3px solid var(--color-pink);
+  border-top: 3px solid var(--color-tangerine);
 }
 .poppin-join-steps > div {
   display: flex;
@@ -806,7 +811,7 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: transparent;
+  background: color-mix(in srgb, var(--color-pink) 35%, var(--surface));
   border: 1px solid var(--poppin-line);
   color: var(--color-midnight);
 }
@@ -913,6 +918,7 @@
   font-size: 15px;
   line-height: 1.85;
   max-width: 68ch;
+  overflow-wrap: anywhere;
 }
 .poppin-update-image {
   display: block;
@@ -1092,7 +1098,7 @@
   background: var(--color-paper);
   font-size: 14px;
   line-height: 1.7;
-  border-left: 3px solid var(--color-pink);
+  border-left: 3px solid var(--color-tangerine);
 }
 .poppin-application-note > strong {
   display: block;

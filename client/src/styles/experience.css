@@ -80,7 +80,7 @@
 }
 .site-account-trigger:hover:not(:disabled),
 .site-account-trigger[aria-expanded="true"],
-.site-account-trigger.is-current { background: var(--color-blush); border-color: var(--color-ink); transform: none; box-shadow: none; }
+.site-account-trigger.is-current { background: color-mix(in srgb, var(--color-pear) 35%, var(--color-paper)); border-color: var(--moss); transform: none; box-shadow: none; }
 .site-account-trigger > svg { transition: transform 180ms ease; }
 .site-account-trigger[aria-expanded="true"] > svg { transform: rotate(180deg); }
 .site-account-dropdown .poppin-dropdown-menu { min-width: 215px; }
@@ -88,7 +88,7 @@
 .site-create-event { min-height: 44px; white-space: nowrap; }
 .site-join { box-shadow: 0 3px 0 color-mix(in srgb, var(--forest) 17%, transparent); }
 .mobile-nav { animation: poppin-menu-in 220ms ease backwards; }
-.mobile-nav .site-nav-link.is-active { color: var(--forest); background: var(--poppin-pink-wash); }
+.mobile-nav .site-nav-link.is-active { color: var(--forest); background: var(--pink); }
 .mobile-nav .site-nav-link { padding-inline: 12px; }
 .mobile-nav-group { display: grid; }
 .mobile-nav-group + .mobile-nav-group { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--poppin-line); }
@@ -177,15 +177,15 @@
 .spotlight-picker [aria-pressed="true"] .spotlight-picker-dot { background: var(--color-ink); opacity: 1; }
 .spotlight-controls { width: min(490px, 100%); margin-top: 15px; justify-content: space-between; gap: 14px; }
 .spotlight-hint { flex: 1; text-align: center; font-size: 10px; }
-.spotlight-arrows button { width: 35px; height: 35px; }
+.spotlight-arrows button { width: 44px; height: 44px; }
 .hero-facts { border-top-style: dashed; font-size: 11px; padding-block: 24px; }
 @keyframes poppin-poster-in { from { opacity: 0; translate: 0 10px; } to { opacity: 1; translate: 0; } }
 
 /* Poster-led cards, with consistent content spacing across browse/profile pages. */
 .event-card { padding: 0; border-radius: 20px; box-shadow: 0 3px 0 color-mix(in srgb, var(--forest) 4%, transparent); }
-.event-card-media { height: 330px; margin: 10px 10px 0; border-radius: 13px; padding: 20px; background: var(--mint); }
+.event-card-media { height: 330px; margin: 10px 10px 0; border-radius: 13px; padding: 20px; background: color-mix(in srgb, var(--mint) 42%, var(--color-paper)); }
 .poppin-discover-grid > :nth-child(3n + 2) .event-card-media,
-.poppin-discover-grid > .event-card:nth-child(3n + 2) .event-card-media { background: var(--poppin-pink-wash); }
+.poppin-discover-grid > .event-card:nth-child(3n + 2) .event-card-media { background: color-mix(in srgb, var(--color-blush) 46%, var(--color-paper)); }
 .poppin-discover-grid > :nth-child(3n + 3) .event-card-media,
 .poppin-discover-grid > .event-card:nth-child(3n + 3) .event-card-media { background: var(--color-paper); }
 .event-card-media > img { filter: drop-shadow(0 7px 8px color-mix(in srgb, var(--forest) 12%, transparent)); }
@@ -199,7 +199,7 @@
 .event-card:focus-within { box-shadow: 0 12px 28px color-mix(in srgb, var(--forest) 12%, transparent); }
 .home-category-list button { border-radius: 100px; min-height: 42px; }
 .home-section-top .section-heading { position: relative; }
-.home-section-top .section-heading::before { content: ""; width: 38px; height: 3px; border-radius: 3px; background: var(--pink); display: block; margin-bottom: 18px; }
+.home-section-top .section-heading::before { content: ""; width: 38px; height: 3px; border-radius: 3px; background: var(--color-tangerine); display: block; margin-bottom: 18px; }
 .community-card { border-radius: 23px; padding: 40px; min-height: 340px; }
 .community-explore { background: var(--mint); }
 .community-sell { background: var(--poppin-pink-wash); }
@@ -235,7 +235,7 @@
 .poppin-record-card { transition: border-color 180ms ease, box-shadow 180ms ease; }
 .poppin-record-card[data-pointer-active="true"] { border-color: color-mix(in srgb, var(--moss) 65%, var(--poppin-line)); box-shadow: 0 8px 24px color-mix(in srgb, var(--forest) 7%, transparent); }
 .poppin-opportunity-kicker { gap: 14px; }
-.footer-top h2 span { color: var(--forest); text-decoration: underline; text-decoration-color: var(--pink); text-decoration-thickness: 0.1em; text-underline-offset: 0.07em; }
+.footer-top h2 span { color: var(--forest); text-decoration: underline; text-decoration-color: var(--color-tangerine); text-decoration-thickness: 0.1em; text-underline-offset: 0.07em; }
 .footer-cta { font-weight: 600; }
 
 @media (max-width: 1199px) {

@@ -26,8 +26,8 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--moss);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--moss) 12%, transparent);
+  background: var(--color-hibiscus);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-hibiscus) 12%, transparent);
 }
 .hero-copy h1 {
   font-size: clamp(62px, 6.1vw, 88px);
@@ -49,12 +49,12 @@
   right: -8px;
   bottom: 2px;
   height: 20%;
-  background: var(--pink);
+  background: var(--color-tangerine);
   transform: rotate(-1.4deg);
   border-radius: 1px 8px 2px 5px;
 }
 .hero-period {
-  color: var(--midnight);
+  color: var(--color-hibiscus);
 }
 .hero-copy > p {
   max-width: 385px;
@@ -72,10 +72,12 @@
 .hero-calendar-link {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  font-size: 12px;
+  gap: 10px;
+  font-size: 15px;
   font-weight: 600;
-  padding: 10px 0;
+  line-height: 1.4;
+  padding: 15px 0;
+  min-height: 54px;
 }
 .hero-calendar-link:hover {
   color: var(--midnight);
@@ -115,13 +117,14 @@
   color: var(--poppin-muted);
 }
 .hero-search button {
-  width: 42px;
-  min-height: 42px;
+  width: 44px;
+  min-height: 44px;
   padding: 9px;
   flex-shrink: 0;
 }
 .hero-shortcuts {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
@@ -193,7 +196,7 @@
   border-radius: 14px;
   padding: 12px;
   background: var(--surface);
-  box-shadow: 0 20px 35px #33272a16;
+  box-shadow: 0 20px 35px color-mix(in srgb, var(--color-ink) 9%, transparent);
   transform: rotate(-3deg);
   transition:
     transform 0.35s,
@@ -202,7 +205,7 @@
 .spotlight-ticket:hover,
 .spotlight-ticket:focus-visible {
   transform: rotate(0deg) translateY(-4px);
-  box-shadow: 0 26px 40px #33272a21;
+  box-shadow: 0 26px 40px color-mix(in srgb, var(--color-ink) 13%, transparent);
 }
 .spotlight-poster {
   height: 357px;
@@ -269,7 +272,7 @@
   background: var(--pink);
   border: 6px solid var(--color-paper);
   transform: rotate(12deg);
-  box-shadow: 0 1px 0 #33272a10;
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--color-ink) 6%, transparent);
   pointer-events: none;
 }
 .spotlight-stamp > span {
@@ -345,6 +348,7 @@
 }
 .hero-facts {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   gap: 22px;
   border-top: 1px solid var(--poppin-line);
@@ -354,11 +358,13 @@
 }
 .hero-facts > span {
   display: flex;
+  min-width: 0;
   align-items: center;
   gap: 9px;
 }
 .hero-facts svg {
   color: var(--midnight);
+  flex-shrink: 0;
 }
 @media (max-width: 1199px) {
   .hero-layout {
@@ -372,7 +378,7 @@
     gap: 12px;
   }
   .hero-calendar-link {
-    font-size: 11px;
+    font-size: 13px;
   }
   .hero-actions .poppin-ui-button-lg {
     padding-inline: 19px;
@@ -479,7 +485,9 @@
     min-height: 49px;
   }
   .hero-calendar-link {
-    font-size: 11px;
+    font-size: 13px;
+    padding: 13px 0;
+    min-height: 49px;
   }
   .hero-search {
     max-width: none;
@@ -546,7 +554,7 @@
   letter-spacing: -0.015em;
 }
 .modern-marquee-track svg {
-  color: var(--pink);
+  color: var(--color-hibiscus);
 }
 .modern-marquee.is-paused .modern-marquee-track,
 .modern-marquee:hover .modern-marquee-track {
@@ -557,8 +565,8 @@
   right: 12px;
   top: 50%;
   transform: translateY(-50%);
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   display: grid;
   place-items: center;
@@ -651,7 +659,7 @@
 }
 .event-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 16px 30px #33272a12;
+  box-shadow: 0 16px 30px color-mix(in srgb, var(--color-ink) 7%, transparent);
 }
 .event-card-link {
   display: flex;
@@ -686,7 +694,7 @@
   width: 52px;
   border: 1px solid var(--poppin-line);
   border-radius: 11px;
-  box-shadow: 0 4px 10px #33272a0d;
+  box-shadow: 0 4px 10px color-mix(in srgb, var(--color-ink) 5%, transparent);
   padding: 8px 5px;
   line-height: 1.05;
 }
@@ -849,7 +857,7 @@
 }
 .event-loading-card {
   padding: 15px;
-  background: var(--color-sage) !important;
+  background: color-mix(in srgb, var(--mint) 24%, var(--color-paper)) !important;
 }
 .event-loading-card > div {
   height: 250px;
@@ -910,7 +918,6 @@
 .community-explore {
   background: var(--surface);
   color: var(--forest);
-  color: var(--forest);
   border-top: 3px solid var(--moss);
 }
 .community-sell {
@@ -953,7 +960,7 @@
   justify-content: space-between;
   font-size: 12px;
   font-weight: 700;
-  border-top: 1px solid #33272a2b;
+  border-top: 1px solid var(--poppin-line);
   margin-top: 30px;
   padding-top: 16px;
 }
@@ -1006,7 +1013,7 @@
   place-items: center;
   transform: rotate(-15deg);
   border: 1px solid var(--pink);
-  color: var(--pink);
+  color: var(--moss);
 }
 .organize-ticket {
   position: relative;
@@ -1016,7 +1023,7 @@
   border-radius: 14px;
   background: var(--forest);
   color: var(--color-paper);
-  box-shadow: 0 20px 30px #33272a24;
+  box-shadow: 0 20px 30px color-mix(in srgb, var(--color-ink) 14%, transparent);
 }
 .organize-ticket > span {
   display: block;

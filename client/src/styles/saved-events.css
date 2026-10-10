@@ -18,6 +18,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  min-width: 0;
   font-size: 20px;
   margin-bottom: 24px;
 }
@@ -26,13 +27,21 @@
   outline-offset: 6px;
   border-radius: 4px;
 }
+.poppin-saved-summary > svg {
+  flex-shrink: 0;
+  color: var(--color-moss);
+}
 .poppin-saved-grid {
-  align-items: start;
+  align-items: stretch;
 }
 .poppin-saved-unavailable {
   display: grid;
   justify-items: start;
   gap: 18px;
+  align-content: center;
+  min-width: 0;
+  background: color-mix(in srgb, var(--color-mint) 9%, var(--surface));
+  overflow-wrap: anywhere;
 }
 .poppin-saved-unavailable h3 {
   font-size: 23px;
