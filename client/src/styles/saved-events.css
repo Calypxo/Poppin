@@ -2,9 +2,7 @@
   position: relative;
   z-index: 3;
   padding: 0 22px 22px;
-}
-.event-card-save:empty {
-  display: none;
+  min-height: 66px;
 }
 .event-card-save .poppin-ui-button {
   width: 100%;
@@ -47,6 +45,7 @@
 @media (max-width: 639px) {
   .event-card-save {
     padding: 0 18px 18px;
+    min-height: 62px;
   }
   .poppin-event-save-actions .poppin-ui-button {
     width: 100%;

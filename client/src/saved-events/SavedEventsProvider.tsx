@@ -21,11 +21,17 @@ function SavedEventsSession({ userId, children }: { userId?: string; children: R
   const [error, setError] = useState("");
   const [pendingIds, setPendingIds] = useState<ReadonlySet<string>>(new Set());
   const [version, setVersion] = useState(0);
+  const requestedVersion = useRef(0);
   const busy = useRef(new Set<string>());
   const mounted = useRef(false);
   const { toast } = useUI();
   const reload = useCallback(() => {
-    if (!busy.current.size) setVersion((value) => value + 1);
+    if (!busy.current.size) {
+      requestedVersion.current += 1;
+      setLoading(true);
+      setError("");
+      setVersion(requestedVersion.current);
+    }
   }, []);
 
   useEffect(() => {
@@ -34,18 +40,20 @@ function SavedEventsSession({ userId, children }: { userId?: string; children: R
   }, []);
 
   useEffect(() => {
-    if (!userId) return;
+    // A page can request a refresh before the session's first effect runs.
+    // Only the most recent request may start or update the visible state.
+    if (!userId || version !== requestedVersion.current) return;
     const controller = new AbortController();
     async function load() {
       setLoading(true);
       setError("");
       try {
         const response = await api.get<SavedEvent[]>("/saved-events", { signal: controller.signal });
-        if (!controller.signal.aborted) setEntries(response.data);
+        if (!controller.signal.aborted && version === requestedVersion.current) setEntries(response.data);
       } catch (err) {
-        if (!controller.signal.aborted) setError(errorMessage(err));
+        if (!controller.signal.aborted && version === requestedVersion.current) setError(errorMessage(err));
       } finally {
-        if (!controller.signal.aborted) setLoading(false);
+        if (!controller.signal.aborted && version === requestedVersion.current) setLoading(false);
       }
     }
     void load();

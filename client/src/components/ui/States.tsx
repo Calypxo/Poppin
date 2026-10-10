@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
-import type { WatercolorMotif } from "../public/MarketDecorations";
-import { CalendarSearch } from "lucide-react";
+import { WatercolorSticker, type WatercolorMotif } from "../public/MarketDecorations";
 import Button from "./Button";
 export function Skeleton({
   className = "",
@@ -50,6 +49,7 @@ export function EmptyState({
   title = "A little room for what’s next",
   description,
   action,
+  motif = "map-pin",
 }: {
   title?: string;
   description?: string;
@@ -58,8 +58,8 @@ export function EmptyState({
 }) {
   return (
     <div className="poppin-empty-state">
-      <span className="poppin-state-icon">
-        <CalendarSearch size={30} aria-hidden="true" />
+      <span className="poppin-state-art" aria-hidden="true">
+        <WatercolorSticker motif={motif} />
       </span>
       <div>
         <p className="poppin-empty-title">{title}</p>

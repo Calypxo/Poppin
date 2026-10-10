@@ -25,6 +25,7 @@ export interface Announcement {
     | "important";
 
   imageUrl?: string;
+  imageUrls?: string[];
   isPublished: boolean;
 
   publishedAt: string | null;

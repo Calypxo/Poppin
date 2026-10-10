@@ -14,7 +14,7 @@ export default function SavedEventsPage() {
   const focusList = () => heading.current?.focus();
 
   return <PageContainer className="poppin-saved-page">
-    <PageHeader eyebrow="YOUR NEXT GOOD PLANS" title="Saved Events"
+    <PageHeader eyebrow="YOUR NEXT GOOD PLANS" title="Saved Events" motif="flower-bouquet"
       description="Keep the events you love close. Completed and cancelled plans stay here until you remove them."
       actions={<ButtonLink variant="outline" to="/discover">Discover events ↗</ButtonLink>} />
     <h2 ref={heading} tabIndex={-1} className="poppin-saved-summary" aria-live="polite" aria-atomic="true">
@@ -23,7 +23,7 @@ export default function SavedEventsPage() {
     </h2>
     {loading ? <LoadingState label="Gathering your saved events…" />
       : error ? <ErrorState title="Your saved plans need a moment." description={error} onRetry={reload} />
-      : !entries.length ? <EmptyState title="Your next good plan starts here."
+      : !entries.length ? <EmptyState title="Your next good plan starts here." motif="matcha-latte"
         description="Tap Save event on a card or event page. Your picks will be waiting here."
         action={<ButtonLink to="/discover">Find an event</ButtonLink>} />
       : <div className="poppin-discover-grid poppin-saved-grid">

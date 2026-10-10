@@ -34,6 +34,14 @@ export default function VendorOpportunityCard({
           Math.max(0, (remaining / Math.max(1, call.totalSlots)) * 100),
         );
   const requirements = [...new Set(call.requirements)];
+  const location = [call.event.title, call.event.venue?.city]
+    .filter(Boolean)
+    .join(" · ");
+  const boothFee = new Intl.NumberFormat("en-PH", {
+    style: "currency",
+    currency: "PHP",
+    maximumFractionDigits: 0,
+  }).format(call.boothFee);
   return (
     <Card
       className={
@@ -60,10 +68,17 @@ export default function VendorOpportunityCard({
             status={availability?.availability.status || call.status}
           />
         </div>
-        <h2>{call.title}</h2>
-        {call.event.organizer && (
-          <OrganizerIdentity organizer={call.event.organizer} />
-        )}
+        <h2 title={call.title}>{call.title}</h2>
+        <div
+          className="poppin-opportunity-organizer"
+          title={call.event.organizer?.name}
+        >
+          {call.event.organizer ? (
+            <OrganizerIdentity organizer={call.event.organizer} />
+          ) : (
+            <span>Organizer to be announced</span>
+          )}
+        </div>
         <p
           className={
             detailed
@@ -76,12 +91,10 @@ export default function VendorOpportunityCard({
         <Link
           className="poppin-opportunity-event"
           to={"/events/" + call.event._id}
+          title={location}
         >
           <MapPin size={15} aria-hidden="true" />
-          <span>
-            {call.event.title}
-            {call.event.venue?.city ? " · " + call.event.venue.city : ""}
-          </span>
+          <span>{location}</span>
         </Link>
         <dl className="poppin-recruitment-facts">
           <div>
@@ -89,31 +102,33 @@ export default function VendorOpportunityCard({
               <CalendarClock size={14} aria-hidden="true" />
               Apply by
             </dt>
-            <dd>{eventDate(call.applicationDeadline)}</dd>
+            <dd title={eventDate(call.applicationDeadline)}>
+              {eventDate(call.applicationDeadline)}
+            </dd>
           </div>
           <div>
             <dt>Booth fee</dt>
-            <dd>
-              {new Intl.NumberFormat("en-PH", {
-                style: "currency",
-                currency: "PHP",
-                maximumFractionDigits: 0,
-              }).format(call.boothFee)}
-            </dd>
+            <dd title={boothFee}>{boothFee}</dd>
           </div>
-          {call.boothSize && (
+          {(call.boothSize || !detailed) && (
             <div>
               <dt>Booth size</dt>
-              <dd>{call.boothSize}</dd>
+              <dd title={call.boothSize || "Not specified"}>
+                {call.boothSize || "Not specified"}
+              </dd>
             </div>
           )}
         </dl>
-        {remaining !== undefined && (
+        {(remaining !== undefined || !detailed) && (
           <div className="poppin-capacity-summary">
             <div>
-              <span>Available spaces</span>
+              <span>
+                {remaining === undefined
+                  ? "Capacity to be confirmed"
+                  : "Available spaces"}
+              </span>
               <strong>
-                {remaining} / {call.totalSlots}
+                {remaining === undefined ? "—" : `${remaining} / ${call.totalSlots}`}
               </strong>
             </div>
             <div className="poppin-capacity-track" aria-hidden="true">

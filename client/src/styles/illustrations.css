@@ -1,0 +1,186 @@
+/* Watercolor finds share the same cream, pink and mint palette as the controls. */
+.poppin-watercolor-cutout {
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 5px 4px #33272a0d);
+}
+
+.poppin-heading-art {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: 0 0 190px;
+  width: 190px;
+  height: 190px;
+  isolation: isolate;
+}
+.poppin-heading-art::before {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  z-index: -1;
+  border-radius: 48% 52% 43% 57%;
+  background: color-mix(in srgb, var(--mint) 55%, var(--color-paper));
+  border: 1px dashed var(--poppin-line);
+  transform: rotate(-12deg);
+}
+.poppin-heading-art > img { width: 150px; height: 150px; transform: rotate(8deg); }
+.poppin-heading-art > span {
+  position: absolute;
+  bottom: 0;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  transform: rotate(-5deg);
+}
+.poppin-heading-featured { min-height: 230px; }
+.poppin-heading-featured .poppin-heading-art { flex-basis: 230px; width: 230px; height: 210px; }
+.poppin-heading-featured .poppin-heading-art > img { width: 185px; height: 165px; }
+.poppin-auth-form .poppin-heading-art { display: none; }
+
+/* Keep decoration outside the spotlight's title, picker and controls. */
+.hero-watercolors { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
+.hero-watercolors > img { position: absolute; }
+.hero-bouquet { width: 110px; height: 135px; right: 0; top: -4px; transform: rotate(18deg); }
+.hero-matcha { width: 85px; height: 130px; left: 0; bottom: 185px; transform: rotate(-12deg); }
+.hero-poster-stage:has(.hero-placeholder) .hero-watercolors { display: none; }
+.hero-placeholder .poppin-watercolor-finds { width: min(350px, 100%); height: 205px; margin: 0 auto 20px; }
+.hero-placeholder .poppin-find-caption { display: none; }
+
+/* Compact filters keep the illustrations in the spotlight and community sections. */
+.home-category-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-block: 24px 32px;
+}
+.home-category-list button {
+  height: 44px;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--poppin-line);
+  border-radius: 100px;
+  background: var(--surface);
+  color: var(--color-ink);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: center;
+  white-space: nowrap;
+  transition: background 180ms ease, border-color 180ms ease;
+}
+.home-category-list button[aria-pressed="true"] {
+  background: var(--pink);
+  border-color: var(--color-ink);
+  color: var(--color-ink);
+}
+.home-category-list button[aria-pressed="false"]:hover { background: var(--mint); border-color: var(--color-ink); }
+
+.event-poster-fallback > .poppin-watercolor-cutout { width: 140px; height: 155px; max-height: 48%; }
+.weekend-ticket-poster .event-poster-fallback > img { width: 48px; height: 48px; }
+
+/* Two little collections, rather than generic icons, introduce the community. */
+.community-explore { background: color-mix(in srgb, var(--mint) 32%, var(--surface)); border-top-color: var(--mint); }
+.community-sell { background: color-mix(in srgb, var(--color-blush) 32%, var(--surface)); }
+.community-card h3 { margin-top: 20px; }
+.community-card > p { max-width: 340px; }
+.community-card-action { margin-top: 12px; min-height: 44px; }
+.poppin-watercolor-finds, .poppin-watercolor-tastes {
+  position: relative;
+  width: 100%;
+  height: 210px;
+  margin-top: 24px;
+  isolation: isolate;
+  pointer-events: none;
+}
+.poppin-watercolor-finds::before {
+  content: "";
+  position: absolute;
+  inset: 25px 12px 25px;
+  z-index: -1;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--mint) 48%, transparent);
+}
+.poppin-watercolor-finds > img, .poppin-watercolor-tastes > img { position: absolute; }
+.poppin-find-cardigan { width: 140px; height: 170px; left: 0; top: 0; transform: rotate(-12deg); }
+.poppin-find-shoes { width: 130px; height: 105px; left: 22%; bottom: 20px; transform: rotate(6deg); }
+.poppin-find-bouquet { width: 105px; height: 165px; right: 16%; top: 0; transform: rotate(12deg); }
+.poppin-find-camera { width: 145px; height: 110px; right: 0; bottom: 20px; transform: rotate(-8deg); }
+.poppin-find-clip { width: 60px; height: 55px; left: 39%; top: 25px; transform: rotate(18deg); }
+.poppin-find-caption { position: absolute; bottom: 0; left: 0; width: 100%; text-align: center; font-size: 10px; color: var(--poppin-muted); }
+.poppin-taste-cloth { width: 85%; height: 185px; left: 7%; top: 15px; opacity: 0.45; transform: rotate(-7deg); }
+.poppin-taste-bilao { width: 57%; height: 140px; left: 3%; bottom: 8px; transform: rotate(-8deg); }
+.poppin-taste-matcha { width: 100px; height: 155px; right: 21%; top: 0; transform: rotate(8deg); }
+.poppin-taste-croissant { width: 145px; height: 110px; right: 0; bottom: 0; transform: rotate(-12deg); }
+
+.weekend-edit { background: color-mix(in srgb, var(--mint) 18%, var(--color-paper)); }
+.weekend-edit-art { width: 300px; min-height: 215px; padding-top: 65px; margin-top: 25px; }
+.weekend-mini-ticket { width: 240px; max-width: 90%; }
+.weekend-edit-drink { position: absolute; width: 86px; height: 130px; top: -7px; right: 0; transform: rotate(12deg); }
+.weekend-edit-pastry { position: absolute; width: 110px; height: 90px; bottom: -5px; right: -5px; z-index: 2; transform: rotate(-10deg); }
+.organize-circle { width: 250px; height: 250px; background: var(--mint); border-style: dashed; border-color: var(--poppin-line); }
+.organize-circle > img { width: 200px; height: 265px; transform: rotate(20deg); }
+
+.poppin-empty-state { background: var(--surface); border-color: var(--poppin-line); }
+.poppin-state-art { display: grid; place-items: center; flex: 0 0 120px; width: 120px; height: 120px; border-radius: 50%; background: color-mix(in srgb, var(--mint) 40%, var(--color-paper)); }
+.poppin-state-art > img { width: 100px; height: 110px; transform: rotate(-8deg); }
+.poppin-empty-state > div { min-width: 0; }
+
+.poppin-auth-story { gap: 24px; }
+.poppin-auth-art { display: flex; align-items: end; justify-content: center; gap: 6px; height: 140px; margin-top: -8px; pointer-events: none; }
+.poppin-auth-art > img:nth-child(1) { width: 75px; height: 120px; transform: rotate(-12deg); }
+.poppin-auth-art > img:nth-child(2) { width: 120px; height: 100px; margin-left: -14px; transform: rotate(8deg); }
+.poppin-auth-art > img:nth-child(3) { width: 105px; height: 145px; margin-left: -12px; transform: rotate(15deg); }
+.poppin-not-found-number > img { width: clamp(90px, 15vw, 155px); height: clamp(110px, 18vw, 185px); margin-inline: 4px; transform: rotate(-8deg); }
+
+@media (max-width: 899px) {
+  .poppin-heading-art { flex-basis: 145px; width: 145px; height: 160px; }
+  .poppin-heading-art > img { width: 125px; height: 130px; }
+  .poppin-heading-featured .poppin-heading-art { flex-basis: 160px; width: 160px; height: 180px; }
+  .poppin-heading-featured .poppin-heading-art > img { width: 140px; height: 145px; }
+  .hero-bouquet { width: 90px; height: 115px; }
+  .hero-matcha { width: 65px; height: 110px; left: 4px; }
+  .poppin-watercolor-finds, .poppin-watercolor-tastes { height: 190px; }
+  .poppin-find-cardigan { width: 110px; height: 145px; }
+  .poppin-find-shoes { width: 110px; height: 90px; left: 16%; }
+  .poppin-find-bouquet { width: 90px; height: 145px; right: 11%; }
+  .poppin-find-camera { width: 120px; height: 90px; }
+  .poppin-find-clip { width: 45px; height: 45px; }
+  .poppin-taste-matcha { right: 15%; width: 80px; height: 140px; }
+  .poppin-taste-croissant { width: 115px; height: 100px; }
+}
+@media (max-width: 639px) {
+  .poppin-page-heading { position: relative; gap: 12px; }
+  .poppin-page-heading .poppin-eyebrow { max-width: calc(100% - 76px); min-height: 54px; margin-bottom: 8px; }
+  .poppin-heading-art, .poppin-heading-featured .poppin-heading-art { position: absolute; right: 0; top: 0; width: 72px; height: 72px; }
+  .poppin-heading-art::before { inset: 3px; }
+  .poppin-heading-art > img, .poppin-heading-featured .poppin-heading-art > img { width: 65px; height: 65px; }
+  .poppin-heading-art > span { display: none; }
+  .poppin-heading-featured { min-height: 0; }
+  .poppin-auth-form .poppin-page-heading .poppin-eyebrow { max-width: none; min-height: 0; }
+  .home-category-list { gap: 7px; }
+  .home-category-list button { font-size: 11px; padding-inline: 14px; }
+  .hero-bouquet { top: 4px; right: 3px; width: 85px; height: 110px; }
+  .hero-matcha { bottom: 190px; }
+  .community-card { padding: 26px; }
+  .community-card h3 { font-size: 36px; }
+  .poppin-watercolor-finds, .poppin-watercolor-tastes { max-width: 390px; margin-inline: auto; }
+  .poppin-state-art { flex-basis: 90px; width: 90px; height: 90px; }
+  .poppin-state-art > img { width: 75px; height: 80px; }
+  .poppin-empty-state { gap: 16px; padding: 24px; }
+  .poppin-auth-story { padding: 24px; gap: 16px; }
+  .poppin-auth-brand, .poppin-auth-edition, .poppin-auth-story .poppin-auth-message > p:last-child { display: none; }
+  .poppin-auth-story .poppin-eyebrow { margin: 0; font-size: 8px; }
+  .poppin-auth-story h2 { font-size: 32px; line-height: 1.08; letter-spacing: -0.05em; margin: 12px 0 0; }
+  .poppin-auth-art { height: 75px; margin: 0; }
+  .poppin-auth-art > img:nth-child(1) { height: 65px; width: 45px; }
+  .poppin-auth-art > img:nth-child(2) { height: 65px; width: 85px; }
+  .poppin-auth-art > img:nth-child(3) { height: 80px; width: 65px; }
+}
+@media (max-width: 379px) {
+  .poppin-empty-state { flex-direction: column; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-category-list button { transition: none; }
+}

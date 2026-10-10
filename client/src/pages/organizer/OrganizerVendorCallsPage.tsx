@@ -173,7 +173,7 @@ export default function OrganizerVendorCallsPage() {
         eyebrow="BUILD YOUR EVENT LINEUP"
         title="Vendor recruitment"
         description="Invite the makers, bakers and local favorites that make your event special."
-        motif="flower-market-booth"
+        motif="woven-bracelets"
       />
       <ResourceState {...events} />
       <ResourceState {...categories} />

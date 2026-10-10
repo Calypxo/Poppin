@@ -11,8 +11,10 @@ import { useAuth, type SessionResponse } from "../../auth/context";
 import FormField from "../../components/forms/FormField";
 import { errorMessage } from "../../hooks/useResource";
 import { PageHeader } from "../../components/layout/Page";
-import { ArrowUpRight, CalendarDays, Compass, Store } from "lucide-react";
+import { CalendarDays, Compass, Store } from "lucide-react";
 import { useUI } from "../../components/ui/context";
+import { WatercolorSticker } from "../../components/public/MarketDecorations";
+import BrandLogo from "../../components/shared/BrandLogo";
 
 export default function AuthPage({
   registering = false,
@@ -50,8 +52,8 @@ export default function AuthPage({
         className="poppin-auth-story"
         aria-label="Discover local events with POPP'IN"
       >
-        <Link className="poppin-auth-brand" to="/">
-          POPP’IN <ArrowUpRight size={24} />
+        <Link className="poppin-auth-brand" to="/" aria-label="POPP'IN home">
+          <BrandLogo />
         </Link>
         <div className="poppin-auth-message">
           <p className="poppin-eyebrow">YOUR NEXT GOOD PLAN STARTS HERE</p>
@@ -64,6 +66,11 @@ export default function AuthPage({
             Markets, makers and moments worth showing up for. Get closer to
             what’s happening around Pampanga.
           </p>
+        </div>
+        <div className="poppin-auth-art" aria-hidden="true">
+          <WatercolorSticker motif="matcha-latte" />
+          <WatercolorSticker motif="croissant" />
+          <WatercolorSticker motif="flower-bouquet" />
         </div>
         <div className="poppin-auth-benefits">
           <div>

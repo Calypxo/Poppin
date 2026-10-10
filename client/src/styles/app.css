@@ -107,12 +107,10 @@ fieldset.poppin-field legend {
 .poppin-auth-brand {
   position: relative;
   display: inline-flex;
-  justify-content: space-between;
   align-items: center;
-  font: 700 27px/1 var(--font-display);
-  letter-spacing: -1.5px;
+  width: min(240px, 100%);
+  min-height: 44px;
   text-decoration: none;
-  color: var(--forest);
 }
 .poppin-auth-message {
   position: relative;
@@ -670,10 +668,26 @@ fieldset.poppin-field legend {
   border-radius: 16px;
   border-top: 3px solid var(--pink);
 }
+.poppin-application-context-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.poppin-application-context-heading > .poppin-feature-icon {
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: var(--surface-muted);
+}
+.poppin-application-context-heading > .poppin-eyebrow {
+  margin: 0;
+}
 .poppin-application-context > h2 {
   font-size: 29px;
   letter-spacing: -1px;
-  margin-top: 12px;
+  margin-top: 0;
 }
 .poppin-context-detail {
   display: flex;
@@ -715,15 +729,26 @@ fieldset.poppin-field legend {
   letter-spacing: -0.8px;
 }
 .poppin-context-requirements h3 {
+  margin: 0 0 12px;
   font-size: 14px;
   font-weight: 600;
 }
 .poppin-context-requirements ul {
-  padding-left: 17px;
-  font-size: 12px;
-  line-height: 1.8;
+  display: grid;
+  gap: 8px;
+  list-style: disc;
+  padding-left: 18px;
+  font-size: 13px;
+  line-height: 1.65;
   color: var(--poppin-muted);
-  margin-bottom: 24px;
+  margin: 0 0 24px;
+}
+.poppin-context-requirements li {
+  padding-left: 2px;
+  overflow-wrap: anywhere;
+}
+.poppin-context-requirements li::marker {
+  color: var(--color-ink);
 }
 
 /* Management summaries are derived from real records. */
@@ -775,43 +800,136 @@ fieldset.poppin-field legend {
 }
 .poppin-managed-events-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  align-items: start;
-  gap: 25px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
 }
 .poppin-managed-event {
+  display: grid;
+  grid-template-columns: 170px minmax(0, 1fr);
+  gap: 16px 24px;
+  padding: 20px;
   min-width: 0;
   background: var(--surface);
   border: 1px solid var(--poppin-line);
   border-radius: 16px;
 }
-.poppin-managed-event > .event-card {
-  border: 0;
-  box-shadow: none;
-  border-radius: 16px 16px 0 0;
+.poppin-managed-event-poster {
+  position: relative;
+  grid-row: 1 / 4;
+  display: block;
+  min-width: 0;
+  height: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--mint);
+}
+.poppin-managed-event-poster > img { display: block; }
+.poppin-managed-event-poster > span {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--pink);
+}
+.poppin-managed-event-summary { min-width: 0; }
+.poppin-managed-event-topline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 28px;
+  margin-bottom: 10px;
+}
+.poppin-managed-event-topline .poppin-status { flex-shrink: 0; text-transform: capitalize; }
+.poppin-managed-event-topline > span:last-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--poppin-muted);
+  font-size: 10px;
+}
+.poppin-managed-event-summary h2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  height: 2.5em;
+  font-size: 23px;
+  line-height: 1.25;
+  letter-spacing: -0.035em;
+  margin: 0 0 10px;
+}
+.poppin-managed-event-summary h2 a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.poppin-managed-event-summary > p {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 20px;
+  color: var(--poppin-muted);
+  font-size: 12px;
+  margin: 0;
+}
+.poppin-managed-event-summary > p > svg { flex-shrink: 0; }
+.poppin-managed-event-summary > p > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .poppin-management-counts {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
-  border-top: 1px solid var(--poppin-line);
-  padding: 20px 22px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  min-width: 0;
+  padding: 12px 14px;
   margin: 0;
   background: var(--color-paper);
+  border-radius: 10px;
 }
 .poppin-management-counts dt {
   font-size: 10px;
+  line-height: 14px;
+  height: 14px;
   color: var(--poppin-muted);
   margin-bottom: 6px;
 }
 .poppin-management-counts dd {
-  font: 600 19px/1 var(--font-display);
+  font: 600 19px/20px var(--font-display);
+  height: 20px;
   margin: 0;
+  white-space: nowrap;
 }
+.poppin-management-counts dd small { font: 400 12px/20px var(--font-body); color: var(--poppin-muted); }
 .poppin-managed-event .poppin-managed-event-actions {
-  padding: 18px 20px;
-  border-top: 1px solid var(--poppin-line);
+  flex-wrap: nowrap;
+  height: 44px;
+  gap: 8px;
   margin-top: 0;
+}
+.poppin-managed-event-actions > .poppin-dropdown { margin-left: auto; }
+.poppin-managed-event:has([aria-expanded="true"]) { position: relative; z-index: 5; }
+.poppin-managed-event-poster .event-poster-fallback { min-height: 0; padding: 8px; gap: 10px; }
+.poppin-managed-event-poster .event-poster-fallback strong { display: none; }
+.poppin-managed-event-poster .event-poster-fallback > img { max-height: 90%; }
+.poppin-managed-event-poster .event-poster-fallback > span { display: none; }
+@media (max-width: 639px) {
+  .poppin-managed-event { grid-template-columns: 88px minmax(0, 1fr); gap: 14px; padding: 16px; }
+  .poppin-managed-event-poster { grid-row: 1; padding: 6px; height: 148px; }
+  .poppin-managed-event-summary h2 { font-size: 18px; }
+  .poppin-managed-event-topline { gap: 7px; }
+  .poppin-managed-event-topline > span:last-child { font-size: 9px; }
+  .poppin-managed-event-summary > p { font-size: 10px; }
+  .poppin-management-counts, .poppin-managed-event-actions { grid-column: 1 / -1; }
+  .poppin-management-counts { padding: 12px 10px; gap: 6px; }
+  .poppin-management-counts dt { font-size: 9px; }
+  .poppin-management-counts dd { font-size: 17px; }
+  .poppin-management-counts dd small { font-size: 10px; }
+  .poppin-managed-event-actions > .poppin-ui-button { min-height: 44px; }
 }
 .poppin-application-list {
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1052,9 +1170,6 @@ fieldset.poppin-field legend {
   .poppin-catalog-records {
     grid-template-columns: minmax(0, 1fr);
   }
-  .poppin-managed-events-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
   .poppin-record-card.poppin-activity-card {
     padding: 26px;
   }
@@ -1164,9 +1279,6 @@ fieldset.poppin-field legend {
   }
   .poppin-auth-story h2 {
     font-size: 42px;
-  }
-  .poppin-auth-brand {
-    font-size: 23px;
   }
   .poppin-auth-story .poppin-eyebrow {
     font-size: 9px;

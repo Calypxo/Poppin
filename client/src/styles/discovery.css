@@ -512,7 +512,7 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 24px;
-  align-items: start;
+  align-items: stretch;
 }
 .poppin-opportunity-card {
   overflow: hidden;
@@ -642,6 +642,115 @@
 }
 .poppin-opportunity-actions .poppin-ui-button {
   flex: 1 1 auto;
+}
+/* Listing cards reserve the same space for short, long and missing content. */
+.poppin-opportunity-card:not(.poppin-opportunity-detailed) {
+  display: flex;
+  flex-direction: column;
+}
+.poppin-opportunity-card:not(.poppin-opportunity-detailed) .poppin-opportunity-cover {
+  flex-shrink: 0;
+}
+.poppin-opportunity-card:not(.poppin-opportunity-detailed) .poppin-opportunity-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+.poppin-opportunity-card:not(.poppin-opportunity-detailed) .poppin-opportunity-body > * {
+  flex-shrink: 0;
+}
+.poppin-opportunity-card:not(.poppin-opportunity-detailed) .poppin-opportunity-kicker {
+  height: 28px;
+  flex-wrap: nowrap;
+}
+.poppin-opportunity-card:not(.poppin-opportunity-detailed) .poppin-opportunity-kicker .poppin-status {
+  white-space: nowrap;
+}
+.poppin-opportunity-card:not(.poppin-opportunity-detailed) h2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  height: 2.44em;
+}
+.poppin-opportunity-card:not(.poppin-opportunity-detailed) .poppin-opportunity-organizer {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  height: 44px;
+  color: var(--poppin-muted);
+  font-size: 13px;
+}
+.poppin-opportunity-card:not(.poppin-opportunity-detailed) .poppin-organizer-identity {
+  width: 100%;
+}
+.poppin-opportunity-card:not(.poppin-opportunity-detailed) .poppin-organizer-identity > span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.poppin-opportunity-description {
+  height: 5.4em;
+}
+.poppin-opportunity-card:not(.poppin-opportunity-detailed) .poppin-opportunity-event {
+  height: 3.2em;
+}
+.poppin-opportunity-card:not(.poppin-opportunity-detailed) .poppin-opportunity-event > span {
+  min-width: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+.poppin-opportunity-card:not(.poppin-opportunity-detailed) .poppin-recruitment-facts > div {
+  min-width: 0;
+}
+.poppin-opportunity-card:not(.poppin-opportunity-detailed) .poppin-recruitment-facts dd {
+  height: 1.65em;
+  line-height: 1.65;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.poppin-opportunity-card:not(.poppin-opportunity-detailed) .poppin-capacity-summary {
+  height: 34px;
+}
+.poppin-opportunity-card:not(.poppin-opportunity-detailed) .poppin-opportunity-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  height: 44px;
+  padding-top: 0;
+  margin-top: auto;
+}
+.poppin-opportunity-card:not(.poppin-opportunity-detailed) .poppin-opportunity-actions .poppin-ui-button {
+  height: 44px;
+  min-height: 44px;
+  min-width: 0;
+  padding: 6px;
+  gap: 6px;
+  line-height: 1.2;
+}
+.poppin-opportunity-card:not(.poppin-opportunity-detailed) .poppin-opportunity-actions > :only-child {
+  grid-column: 1 / -1;
+}
+.poppin-opportunity-cover .event-poster-fallback {
+  padding: 12px;
+  gap: 10px;
+}
+.poppin-opportunity-cover .event-poster-fallback strong {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  font-size: 22px;
+}
+.poppin-opportunity-cover .event-poster-fallback > img {
+  width: 90px;
+  height: 90px;
 }
 .poppin-opportunity-detailed {
   max-width: 850px;
@@ -839,6 +948,9 @@
 .poppin-feed-event > article {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+}
+.poppin-feed-recruitment {
+  min-width: 0;
 }
 .poppin-feed-recruitment .poppin-opportunity-card {
   display: grid;

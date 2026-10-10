@@ -15,8 +15,28 @@ async function signIn(page: Page, email = "viewer@example.test", redirect = "/fe
 }
 
 async function openAccountMenu(page: Page) {
+  if (await page.getByRole("button", { name: "Close navigation" }).isVisible()) return;
   const menu = page.getByRole("button", { name: "Open navigation" });
-  if (await menu.isVisible()) await menu.click();
+  if (await menu.isVisible()) {
+    await menu.click();
+    return;
+  }
+  const account = page.getByRole("button", { name: "Account menu" });
+  if (await account.getAttribute("aria-expanded") !== "true") await account.click();
+}
+
+function accountAction(page: Page, name: string) {
+  const header = page.locator(".site-header");
+  return header.getByRole("link", { name, exact: true })
+    .or(header.getByRole("menuitem", { name, exact: true }))
+    .or(header.getByRole("button", { name, exact: true }));
+}
+
+async function logOut(page: Page) {
+  await openAccountMenu(page);
+  await accountAction(page, "Log out").click();
+  await page.getByRole("dialog", { name: "Log out?", exact: true })
+    .getByRole("button", { name: "Log out", exact: true }).click();
 }
 
 test.beforeEach(async ({ request }) => {
@@ -41,12 +61,11 @@ test("save with the keyboard, persist through reload and sign-in, then remove", 
   await page.locator("article.event-card").filter({ hasText: "Future community market" }).getByRole("link").click();
   await expect(page.getByRole("button", { name: removeName, exact: true })).toBeEnabled();
   await openAccountMenu(page);
-  await page.getByRole("link", { name: "Saved Events", exact: true }).click();
+  await accountAction(page, "Saved Events").click();
   await expect(page.getByRole("heading", { name: "Future community market", exact: true })).toBeVisible();
   await page.reload();
   await expect(page.getByRole("button", { name: removeName, exact: true })).toBeEnabled();
-  await openAccountMenu(page);
-  await page.getByRole("button", { name: "Log out", exact: true }).click();
+  await logOut(page);
   await expect(page).toHaveURL(/\/login$/);
   await page.getByRole("textbox", { name: "Email", exact: true }).fill("viewer@example.test");
   await page.getByLabel("Password").fill(password);
@@ -136,8 +155,7 @@ test("switching accounts clears the previous user's saved list", async ({ page }
   await expect(page.getByRole("button", { name: removeName, exact: true })).toBeEnabled();
   await page.goto("/saved-events");
   await expect(page.getByRole("heading", { name: "Future community market", exact: true })).toBeVisible();
-  await openAccountMenu(page);
-  await page.getByRole("button", { name: "Log out", exact: true }).click();
+  await logOut(page);
   await expect(page).toHaveURL(/\/login$/);
   await page.getByRole("textbox", { name: "Email", exact: true }).fill("other@example.test");
   await page.getByLabel("Password").fill(password);
@@ -147,6 +165,45 @@ test("switching accounts clears the previous user's saved list", async ({ page }
   await expect(page.getByRole("heading", { name: "Future community market", exact: true })).toHaveCount(0);
 });
 
+test("logout requires confirmation and cancellation keeps the session", async ({ page }, info) => {
+  await signIn(page);
+  await page.goto("/saved-events");
+  await expect(page.getByRole("heading", { name: "0 saved events", exact: true })).toBeVisible();
+  const token = await page.evaluate(() => localStorage.getItem("poppin.session"));
+  expect(token).toBeTruthy();
+  await openAccountMenu(page);
+  const trigger = accountAction(page, "Log out");
+  const account = page.getByRole("button", { name: "Account menu" });
+  const returnFocus = await account.isVisible() ? account : trigger;
+  await trigger.focus();
+  await trigger.press("Enter");
+  const dialog = page.getByRole("dialog", { name: "Log out?", exact: true });
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole("button", { name: "Stay logged in" })).toBeFocused();
+  expect(await page.evaluate(() => localStorage.getItem("poppin.session"))).toBe(token);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  const box = await dialog.boundingBox();
+  expect(box!.x).toBeGreaterThanOrEqual(0);
+  expect(box!.x + box!.width).toBeLessThanOrEqual(page.viewportSize()!.width);
+  await page.screenshot({ path: info.outputPath("logout-confirmation.png") });
+  await dialog.getByRole("button", { name: "Stay logged in" }).press("Enter");
+  await expect(dialog).toHaveCount(0);
+  await expect(returnFocus).toBeFocused();
+  await expect(page).toHaveURL(/\/saved-events$/);
+  expect(await page.evaluate(() => localStorage.getItem("poppin.session"))).toBe(token);
+  await openAccountMenu(page);
+  await trigger.press("Enter");
+  await expect(dialog).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
+  await expect(returnFocus).toBeFocused();
+  await page.reload();
+  await expect(page.getByRole("heading", { name: "0 saved events", exact: true })).toBeVisible();
+  await logOut(page);
+  await expect(page).toHaveURL(/\/login$/);
+  expect(await page.evaluate(() => localStorage.getItem("poppin.session"))).toBeNull();
+});
+
 test("organizer navigation remains accessible at tablet widths", async ({ page }) => {
   await signIn(page, "host@example.test");
   for (const width of [1024, 1199, 1280]) {
@@ -154,13 +211,25 @@ test("organizer navigation remains accessible at tablet widths", async ({ page }
     const menu = page.getByRole("button", { name: "Open navigation" });
     if (await menu.isVisible()) {
       await menu.click();
-      await expect(page.getByRole("link", { name: "Saved Events", exact: true })).toBeVisible();
+      await expect(accountAction(page, "Saved Events")).toBeVisible();
       await page.getByRole("button", { name: "Close navigation" }).click();
     } else {
-      const nav = await page.getByRole("navigation", { name: "Main navigation" }).boundingBox();
+      const navigation = page.getByRole("navigation", { name: "Main navigation" });
+      await expect(navigation.getByRole("link")).toHaveCount(4);
+      await expect(navigation.getByRole("link", { name: "Create event", exact: true })).toHaveCount(0);
+      const nav = await navigation.boundingBox();
       const account = await page.locator(".site-account").boundingBox();
       expect(nav!.x + nav!.width).toBeLessThanOrEqual(account!.x);
       expect(account!.x + account!.width).toBeLessThanOrEqual(width);
+      await expect(page.locator(".site-account").getByRole("link", { name: "Create event", exact: true })).toBeVisible();
+      const trigger = page.getByRole("button", { name: "Account menu" });
+      await trigger.focus();
+      await trigger.press("ArrowDown");
+      await expect(page.getByRole("menuitem", { name: "Saved Events", exact: true })).toBeFocused();
+      await expect(page.getByRole("menuitem", { name: "My events", exact: true })).toBeVisible();
+      await page.keyboard.press("Escape");
+      await expect(trigger).toBeFocused();
     }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   }
 });

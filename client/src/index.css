@@ -8,6 +8,9 @@
 @import "./styles/experience.css";
 @import "./styles/lineup.css";
 @import "./styles/saved-events.css";
+@import "./styles/illustrations.css";
+@import "./styles/organizer-highlights.css";
+@import "./styles/post-images.css";
 
 * {
   box-sizing: border-box;

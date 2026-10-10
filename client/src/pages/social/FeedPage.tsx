@@ -21,6 +21,7 @@ import { PageContainer, PageHeader } from "../../components/layout/Page";
 import Button, { ButtonLink } from "../../components/ui/Button";
 import Alert from "../../components/ui/Alert";
 import { useUI } from "../../components/ui/context";
+import OrganizerHighlights from "../../components/social/OrganizerHighlights";
 
 export default function FeedPage() {
   const [page, setPage] = useState(1);
@@ -34,6 +35,7 @@ export default function FeedPage() {
         eyebrow="THE LATEST FROM YOUR LOCAL SCENE"
         title="What’s Popp’in."
         featured
+        motif="book-stack"
         description="Fresh events, news from the organizers and new places to bring your business."
         actions={
           user?.organizerId ? (
@@ -60,6 +62,7 @@ export default function FeedPage() {
           {actionError}
         </Alert>
       )}
+      <OrganizerHighlights events={resource.data?.items.map(item => item.event)} />
       <div className="poppin-news-layout">
         <div>
           <div className="poppin-stream-heading">

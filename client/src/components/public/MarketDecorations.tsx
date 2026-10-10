@@ -8,8 +8,6 @@ export type WatercolorMotif =
   | "bilao"
   | "lace-cardigan"
   | "leather-shoes"
-  | "craft-booth"
-  | "flower-market-booth"
   | "sandwich"
   | "camera-reference"
   | "map-pin"

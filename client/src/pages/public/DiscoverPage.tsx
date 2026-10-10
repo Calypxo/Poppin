@@ -76,6 +76,7 @@ export default function DiscoverPage() {
         eyebrow="GO WHERE THE GOOD THINGS ARE"
         title="Your next great find."
         featured
+        motif="camera-reference"
         description="Markets, pop-ups and unexpected favorites. Find something worth stepping out for in Pampanga."
       />
       <form
