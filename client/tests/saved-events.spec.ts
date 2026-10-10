@@ -6,6 +6,14 @@ const password = "SavedEventsDemo123!";
 const saveName = "Save Future community market to Saved Events";
 const removeName = "Remove Future community market from Saved Events";
 
+function removalDialog(page: Page) {
+  return page.getByRole("dialog", { name: "Remove saved event?", exact: true });
+}
+
+async function confirmRemoval(page: Page) {
+  await removalDialog(page).getByRole("button", { name: "Remove event", exact: true }).click();
+}
+
 async function signIn(page: Page, email = "viewer@example.test", redirect = "/feed") {
   await page.goto("/login");
   await page.getByRole("textbox", { name: "Email", exact: true }).fill(email);
@@ -75,10 +83,48 @@ test("save with the keyboard, persist through reload and sign-in, then remove", 
   await expect(remove).toBeEnabled();
   await remove.focus();
   await remove.press("Space");
+  await expect(removalDialog(page).getByRole("button", { name: "Keep saved", exact: true })).toBeFocused();
+  await removalDialog(page).getByRole("button", { name: "Remove event", exact: true }).focus();
+  await page.keyboard.press("Enter");
   await expect(page.getByText("Your next good plan starts here.", { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "0 saved events", exact: true })).toBeFocused();
   await page.goto("/events/" + eventId);
   await expect(page.getByRole("button", { name: saveName, exact: true })).toHaveAttribute("aria-pressed", "false");
+});
+
+test("saved-event removal requires confirmation on cards, details and the saved list", async ({ page }) => {
+  const deletes: string[] = [];
+  page.on("request", (request) => {
+    if (request.method() === "DELETE" && request.url().includes("/api/saved-events/"))
+      deletes.push(request.url());
+  });
+  await signIn(page);
+  await page.goto("/discover");
+  await page.getByRole("button", { name: saveName, exact: true }).click();
+  await expect(page.getByRole("button", { name: removeName, exact: true })).toBeEnabled();
+
+  for (const path of ["/discover", "/events/" + eventId, "/saved-events"]) {
+    await page.goto(path);
+    const remove = page.getByRole("button", { name: removeName, exact: true });
+    await remove.click();
+    await expect(removalDialog(page)).toContainText("Future community market");
+    await expect(removalDialog(page).getByRole("button", { name: "Keep saved", exact: true })).toBeFocused();
+    expect(deletes).toHaveLength(0);
+    if (path === "/events/" + eventId) await page.keyboard.press("Escape");
+    else await removalDialog(page).getByRole("button", { name: "Keep saved", exact: true }).click();
+    await expect(removalDialog(page)).toHaveCount(0);
+    await expect(remove).toHaveAttribute("aria-pressed", "true");
+    await expect(remove).toBeFocused();
+    expect(deletes).toHaveLength(0);
+  }
+  await page.reload();
+  await expect(page.getByRole("heading", { name: "1 saved event", exact: true })).toBeVisible();
+  await page.getByRole("button", { name: removeName, exact: true }).click();
+  await confirmRemoval(page);
+  await expect(page.getByRole("heading", { name: "0 saved events", exact: true })).toBeFocused();
+  expect(deletes).toHaveLength(1);
+  await page.reload();
+  await expect(page.getByRole("heading", { name: "0 saved events", exact: true })).toBeVisible();
 });
 
 test("guests are prompted to sign in and can save from event details", async ({ page }) => {
@@ -111,6 +157,12 @@ test("completed, cancelled and unavailable saves display correctly without overf
     expect(box!.x + box!.width).toBeLessThanOrEqual(page.viewportSize()!.width);
   }
   await page.screenshot({ path: info.outputPath("saved-events.png"), fullPage: true });
+  const unavailable = page.getByRole("button", { name: "Remove unavailable event from Saved Events", exact: true });
+  await unavailable.click();
+  await expect(removalDialog(page)).toContainText("Remove this unavailable event");
+  await removalDialog(page).getByRole("button", { name: "Keep saved", exact: true }).click();
+  await expect(unavailable).toBeFocused();
+  await expect(page.getByRole("heading", { name: "4 saved events", exact: true })).toBeVisible();
   await page.locator("article.event-card").filter({ hasText: "Cancelled neighbourhood market" }).getByRole("link").click();
   await expect(page.getByRole("heading", { name: "Cancelled neighbourhood market", exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "Remove Cancelled neighbourhood market from Saved Events", exact: true })).toBeEnabled();
@@ -141,10 +193,12 @@ test("loading, errors and failed writes allow retry without false saved state", 
   await page.unroute("**/api/saved-events/" + eventId);
   await page.route("**/api/saved-events/" + eventId, (route) => route.fulfill({ status: 503, json: { message: "Please try removing again." } }));
   await page.getByRole("button", { name: removeName, exact: true }).click();
+  await confirmRemoval(page);
   await expect(page.getByText("Please try removing again.", { exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: removeName, exact: true })).toHaveAttribute("aria-pressed", "true");
   await page.unroute("**/api/saved-events/" + eventId);
   await page.getByRole("button", { name: removeName, exact: true }).click();
+  await confirmRemoval(page);
   await expect(page.getByRole("button", { name: saveName, exact: true })).toBeEnabled();
 });
 

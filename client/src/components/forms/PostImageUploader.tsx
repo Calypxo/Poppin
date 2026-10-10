@@ -14,6 +14,11 @@ interface PendingImage {
   preview: string;
 }
 
+interface UploadIssue {
+  id: number;
+  message: string;
+}
+
 export default function PostImageUploader({
   value,
   onChange,
@@ -32,10 +37,11 @@ export default function PostImageUploader({
   const active = useRef(true);
   const uploading = useRef(false);
   const previews = useRef(new Set<string>());
+  const issueSequence = useRef(0);
   const [pending, setPending] = useState<PendingImage[]>([]);
   const [busy, setBusy] = useState(false);
   const [progress, setProgress] = useState("");
-  const [failures, setFailures] = useState<string[]>([]);
+  const [failures, setFailures] = useState<UploadIssue[]>([]);
   const { toast } = useUI();
 
   useEffect(() => {
@@ -52,22 +58,25 @@ export default function PostImageUploader({
   async function addImages(files: File[]) {
     if (uploading.current || disabled || !files.length) return;
     const available = MAX_POST_IMAGES - value.length;
-    const issues: string[] = [];
+    const issues: UploadIssue[] = [];
+    const addIssue = (message: string) => {
+      issues.push({ id: ++issueSequence.current, message });
+    };
     const accepted: PendingImage[] = [];
     for (const file of files) {
       if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
-        issues.push(`${file.name}: choose a JPG, PNG or WEBP image.`);
+        addIssue(`${file.name}: choose a JPG, PNG or WEBP image.`);
       } else if (file.size > 5 * 1024 * 1024) {
-        issues.push(`${file.name}: image must be 5 MB or less.`);
+        addIssue(`${file.name}: image must be 5 MB or less.`);
       } else if (accepted.length >= available) {
-        issues.push(`${file.name}: an update can have up to ${MAX_POST_IMAGES} images.`);
+        addIssue(`${file.name}: an update can have up to ${MAX_POST_IMAGES} images.`);
       } else {
         const preview = URL.createObjectURL(file);
         previews.current.add(preview);
         accepted.push({ file, preview });
       }
     }
-    setFailures(issues);
+    setFailures([...issues]);
     setProgress("");
     if (!accepted.length) return;
     uploading.current = true;
@@ -88,7 +97,7 @@ export default function PostImageUploader({
           uploaded += 1;
         } catch (uploadError) {
           if (!active.current) break;
-          issues.push(`${entry.file.name}: ${errorMessage(uploadError)}`);
+          addIssue(`${entry.file.name}: ${errorMessage(uploadError)}`);
           setFailures([...issues]);
         } finally {
           if (active.current) {
@@ -123,7 +132,7 @@ export default function PostImageUploader({
       {(value.length > 0 || pending.length > 0) && (
         <ol className="poppin-post-upload-grid" aria-label="Images in this update">
           {value.map((image, index) => (
-            <li key={`${image}-${index}`}>
+            <li key={image}>
               <ImagePreview src={image} alt={`Post image ${index + 1}`} title={`Post image ${index + 1}`} />
               <div className="poppin-post-upload-caption">
                 <span>Image {index + 1}</span>
@@ -158,7 +167,7 @@ export default function PostImageUploader({
       <p className="poppin-post-upload-status" role="status">{progress || (value.length >= MAX_POST_IMAGES ? "Image limit reached. Remove an image to add another." : "")}</p>
       {(failures.length > 0 || error) && <Alert variant="error">
         {error && <p>{error}</p>}
-        {failures.length > 0 && <><strong>Some images could not be added.</strong><ul>{failures.map((issue, index) => <li key={index}>{issue}</li>)}</ul><p>Your uploaded images are kept. Choose the failed images again to retry.</p></>}
+        {failures.length > 0 && <><strong>Some images could not be added.</strong><ul>{failures.map((issue) => <li key={issue.id}>{issue.message}</li>)}</ul><p>Your uploaded images are kept. Choose the failed images again to retry.</p></>}
       </Alert>}
     </section>
   );

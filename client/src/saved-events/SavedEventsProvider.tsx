@@ -24,7 +24,7 @@ function SavedEventsSession({ userId, children }: { userId?: string; children: R
   const requestedVersion = useRef(0);
   const busy = useRef(new Set<string>());
   const mounted = useRef(false);
-  const { toast } = useUI();
+  const { confirm, toast } = useUI();
   const reload = useCallback(() => {
     if (!busy.current.size) {
       requestedVersion.current += 1;
@@ -63,8 +63,20 @@ function SavedEventsSession({ userId, children }: { userId?: string; children: R
   async function change(eventId: string, event?: Event) {
     if (!userId || loading || error || busy.current.has(eventId)) return false;
     busy.current.add(eventId);
-    setPendingIds(new Set(busy.current));
     try {
+      if (!event) {
+        const title = entries.find((entry) => entry.eventId === eventId)?.event?.title;
+        const confirmed = await confirm({
+          title: "Remove saved event?",
+          description: title
+            ? `Remove "${title}" from your Saved Events?`
+            : "Remove this unavailable event from your Saved Events?",
+          confirmLabel: "Remove event",
+          cancelLabel: "Keep saved",
+        });
+        if (!confirmed || !mounted.current) return false;
+      }
+      setPendingIds((current) => new Set([...current, eventId]));
       if (event) await api.put("/saved-events/" + eventId);
       else await api.delete("/saved-events/" + eventId);
       if (!mounted.current) return false;
@@ -78,7 +90,11 @@ function SavedEventsSession({ userId, children }: { userId?: string; children: R
       return false;
     } finally {
       busy.current.delete(eventId);
-      if (mounted.current) setPendingIds(new Set(busy.current));
+      if (mounted.current) setPendingIds((current) => {
+        const next = new Set(current);
+        next.delete(eventId);
+        return next;
+      });
     }
   }
 

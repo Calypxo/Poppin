@@ -63,6 +63,7 @@ export default function VendorApplicationPage() {
   const loadError =
     call.error || categories.error || availability.error || applications.error;
   const acceptedCategories = call.data?.acceptedCategories || [];
+  const requirements = [...new Set(call.data?.requirements || [])];
   const options =
     categories.data?.filter(
       (category) =>
@@ -138,12 +139,12 @@ export default function VendorApplicationPage() {
                 <dd>{availability.data?.statistics.slotsRemaining ?? "—"}</dd>
               </div>
             </dl>
-            {call.data.requirements.length > 0 && (
+            {requirements.length > 0 && (
               <div className="poppin-context-requirements">
                 <h3>Before you apply</h3>
                 <ul>
-                  {call.data.requirements.map((requirement, index) => (
-                    <li key={index}>{requirement}</li>
+                  {requirements.map((requirement) => (
+                    <li key={requirement}>{requirement}</li>
                   ))}
                 </ul>
               </div>

@@ -44,8 +44,8 @@ export function PageHeader({
           {eyebrow}
         </span>
         <h1>
-          <TextReveal key={title} text={title.endsWith(".") ? title.slice(0, -1) : title} />
-          {!/[!?]$/.test(title) && <span className="heading-period">.</span>}
+          <TextReveal key={title} text={title.endsWith(".") ? title.slice(0, -1) : title}
+            suffix={!/[!?]$/.test(title) && <span className="heading-period">.</span>} />
         </h1>
         {description && <p>{description}</p>}
         {actions && <div className="poppin-actions">{actions}</div>}
