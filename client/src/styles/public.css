@@ -235,13 +235,14 @@ button:disabled {
   display: inline-flex;
   align-items: center;
   flex-shrink: 0;
-  width: 160px;
+  width: 132px;
   min-height: 44px;
 }
 .poppin-brand-logo {
   position: relative;
   display: block;
   width: 100%;
+  max-width: 160px;
   aspect-ratio: 3.2;
   overflow: hidden;
 }
@@ -375,9 +376,6 @@ button:disabled {
   align-items: center;
   margin: 58px 0 35px;
 }
-.footer-wordmark > .poppin-brand-logo {
-  max-width: 420px;
-}
 .footer-bottom {
   border-top: 1px solid var(--poppin-line);
   display: flex;
@@ -498,7 +496,7 @@ button:disabled {
     gap: 22px;
   }
   .brand {
-    width: 140px;
+    width: 120px;
   }
   .site-nav {
     min-height: 72px;

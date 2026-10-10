@@ -4,8 +4,8 @@ export default function BrandLogo() {
       <img
         src="/brand/poppin-ticket-logo.png"
         alt="POPP'IN"
-        width={1962}
-        height={801}
+        width={132}
+        height={54}
         decoding="async"
         draggable={false}
       />
