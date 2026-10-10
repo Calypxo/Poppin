@@ -107,9 +107,7 @@ Base URL: `http://localhost:3000/api`. JSON requests use `Content-Type: applicat
 
 Use actual MongoDB IDs in place of `<eventId>` and similar placeholders. Responses are shortened examples; `—` means no request body. Access is public, signed-in (Account), ownership-restricted (Owner), or dependent on publication status (Visibility).
 
-### Common create-request examples
-
-Table rows refer to these example JSON bodies. Replace IDs and contact details; choose dates appropriate to the demo and an open vendor call when applying.
+The API tables reference these five request examples. Replace placeholder IDs with actual IDs.
 
 **Event body**
 
