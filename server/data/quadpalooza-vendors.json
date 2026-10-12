@@ -1,0 +1,90 @@
+{
+  "eventTitle": "QUADPALOOZA",
+  "organizer": "11.11 Market",
+  "startDate": "2026-09-25T00:00:00.000Z",
+  "endDate": "2026-09-27T00:00:00.000Z",
+  "source": "User-supplied QUADPALOOZA brand directory: 11.11 Market/Post2/Line1.jpg through Line5.jpg",
+  "vendors": [
+    {
+      "key": "timan-photobooth",
+      "businessName": "Timan Photobooth",
+      "category": "Creative Services",
+      "products": "Photobooth sessions and photo keepsakes",
+      "description": "A photobooth experience featured in Quadpalooza's lifestyle, experience and activities lineup.",
+      "sourceImage": "Line2.jpg"
+    },
+    {
+      "key": "majicworks",
+      "businessName": "Majicworks",
+      "category": "Creative Services",
+      "products": "Tattoo art and designs",
+      "description": "Tattoo artwork and designs featured in the Quadpalooza brand directory.",
+      "sourceImage": "Line2.jpg"
+    },
+    {
+      "key": "vtg-malan",
+      "businessName": "VTG. Malan",
+      "category": "Fashion & Thrift",
+      "products": "Japanese-style clothing, skirts, pants and belts",
+      "description": "Clothing and accessory finds from the luxury-vintage selection, with Japanese-style outfits shown in the vendor feature.",
+      "sourceImage": "Line3.jpg"
+    },
+    {
+      "key": "crafters-cottage",
+      "businessName": "Crafters Cottage",
+      "category": "Arts & Crafts",
+      "products": "Crochet plushies, character keychains and handmade crafts",
+      "description": "Colorful crochet characters and handmade pieces featured in Quadpalooza's arts and crafts lineup.",
+      "sourceImage": "Line3.jpg"
+    },
+    {
+      "key": "mikkas-garden",
+      "businessName": "Mikka's Garden",
+      "category": "Creative Goods",
+      "products": "Flowers and floral arrangements",
+      "description": "A floral display featuring lilies, roses and mixed blooms in the Quadpalooza vendor feature.",
+      "sourceImage": "Line4.jpg"
+    },
+    {
+      "key": "kyodaishop-imported-finds",
+      "businessName": "Kyodaishop Imported Finds",
+      "category": "Fashion & Accessories",
+      "products": "Imported finds, tote bags, pouches and accessories",
+      "description": "An assortment of imported goods and everyday accessories from the beauty and fashion lineup.",
+      "sourceImage": "Line4.jpg"
+    },
+    {
+      "key": "jkevin-fashion-boutique",
+      "businessName": "JKevin Fashion Boutique",
+      "category": "Creative Goods",
+      "products": "Character toys, action figures and collectibles",
+      "description": "Character figures and collectible toys shown in the individual Quadpalooza vendor feature.",
+      "sourceImage": "Line5.jpg",
+      "sourceNote": "Business name follows the individual vendor feature in Line5.jpg; the directory in Line1.jpg has a different spelling."
+    },
+    {
+      "key": "le-parfum",
+      "businessName": "Le Parfum",
+      "category": "Creative Goods",
+      "products": "Perfumes and fragrances",
+      "description": "Fragrance finds featured in Quadpalooza's lifestyle, experience and activities selection.",
+      "sourceImage": "Line5.jpg"
+    },
+    {
+      "key": "thrift-venture",
+      "businessName": "Thrift Venture",
+      "category": "Fashion & Thrift",
+      "products": "Thrift and vintage fashion finds",
+      "description": "One of the luxury-vintage brands listed in the Quadpalooza brand directory.",
+      "sourceImage": "Line1.jpg"
+    },
+    {
+      "key": "bakers-champ",
+      "businessName": "Bakers Champ",
+      "category": "Food & Drinks",
+      "products": "Food and beverage offerings",
+      "description": "A food and beverage merchant listed in the Quadpalooza brand directory; individual menu items were not specified.",
+      "sourceImage": "Line1.jpg"
+    }
+  ]
+}
